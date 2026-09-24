@@ -94,7 +94,6 @@ for ep in range(args.epochs):
 
 model.load_state_dict(torch.load(ckpt, map_location=device))
 test, hist = scd.evaluate(model, data, te, device)
-os.remove(ckpt)  # disk is nearly full; the numbers below are what we keep
 train_min = (time.time() - t0) / 60
 print(f"[{args.tag}] TEST (best val epoch {best_ep}): OA {test['OA']:.2f} mIoU {test['mIoU']:.2f} "
       f"SeK {test['SeK']:.2f} Fscd {test['Fscd']:.2f}")
