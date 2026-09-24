@@ -1,0 +1,94 @@
+{
+ "n_pairs": 2968,
+ "change_pixel_ratio": 0.19941097578269773,
+ "T1_class_pixel_pct_of_all": {
+  "no-change": 80.059,
+  "non-veg ground": 8.555,
+  "tree": 6.489,
+  "low vegetation": 1.407,
+  "water": 0.276,
+  "building": 3.139,
+  "playground": 0.075
+ },
+ "T1_class_pct_of_changed": {
+  "non-veg ground": 42.9,
+  "tree": 32.54,
+  "low vegetation": 7.05,
+  "water": 1.38,
+  "building": 15.74,
+  "playground": 0.38
+ },
+ "T1_images_containing_class": {
+  "non-veg ground": 2801,
+  "tree": 2235,
+  "low vegetation": 1187,
+  "water": 506,
+  "building": 2393,
+  "playground": 111
+ },
+ "T2_class_pixel_pct_of_all": {
+  "no-change": 80.059,
+  "non-veg ground": 5.812,
+  "tree": 3.388,
+  "low vegetation": 1.714,
+  "water": 0.25,
+  "building": 8.61,
+  "playground": 0.168
+ },
+ "T2_class_pct_of_changed": {
+  "non-veg ground": 29.14,
+  "tree": 16.99,
+  "low vegetation": 8.6,
+  "water": 1.25,
+  "building": 43.18,
+  "playground": 0.84
+ },
+ "T2_images_containing_class": {
+  "non-veg ground": 2688,
+  "tree": 2013,
+  "low vegetation": 1413,
+  "water": 477,
+  "building": 2715,
+  "playground": 126
+ },
+ "transitions_pct": {
+  "non-veg ground -> building": 24.897,
+  "tree -> non-veg ground": 16.249,
+  "tree -> building": 12.319,
+  "non-veg ground -> tree": 12.282,
+  "building -> non-veg ground": 8.215,
+  "non-veg ground -> low vegetation": 4.647,
+  "building -> building": 4.231,
+  "low vegetation -> non-veg ground": 3.899,
+  "tree -> low vegetation": 3.146,
+  "building -> tree": 2.51,
+  "low vegetation -> tree": 1.558,
+  "low vegetation -> building": 1.521,
+  "building -> low vegetation": 0.679,
+  "tree -> water": 0.628,
+  "water -> tree": 0.581,
+  "non-veg ground -> playground": 0.567,
+  "water -> non-veg ground": 0.541,
+  "non-veg ground -> water": 0.508,
+  "playground -> non-veg ground": 0.241,
+  "tree -> playground": 0.201,
+  "water -> building": 0.146,
+  "water -> low vegetation": 0.109,
+  "playground -> building": 0.062,
+  "low vegetation -> water": 0.061,
+  "playground -> tree": 0.059,
+  "building -> water": 0.054,
+  "building -> playground": 0.053,
+  "low vegetation -> playground": 0.015,
+  "playground -> low vegetation": 0.015,
+  "water -> playground": 0.006,
+  "playground -> water": 0.001
+ },
+ "semantic_imbalance_ratio_max_over_min": 59.0,
+ "change_vs_nochange_ratio": 4.01,
+ "per_image_change_ratio": {
+  "min": 0.0,
+  "median": 0.16162872314453125,
+  "max": 0.962432861328125
+ }
+}

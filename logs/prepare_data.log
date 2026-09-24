@@ -1,0 +1,31 @@
+500 files (label1/01416.png)
+1000 files (label1/02243.png)
+1500 files (label1/03515.png)
+2000 files (label1/05546.png)
+2500 files (label1/08643.png)
+3000 files (label2/00071.png)
+3500 files (label2/01483.png)
+4000 files (label2/02322.png)
+4500 files (label2/03597.png)
+5000 files (label2/05669.png)
+5500 files (label2/08910.png)
+6000 files (im1/00139.png)
+6500 files (im1/01522.png)
+7000 files (im1/02374.png)
+7500 files (im1/03701.png)
+8000 files (im1/06010.png)
+8500 files (im1/09026.png)
+9000 files (im2/00211.png)
+9500 files (im2/01561.png)
+10000 files (im2/02481.png)
+10500 files (im2/04011.png)
+bsdtar: (null)
+Traceback (most recent call last):
+  File "/Users/chrishabh2002/Desktop/Second/prepare_data.py", line 83, in <module>
+    main()
+  File "/Users/chrishabh2002/Desktop/Second/prepare_data.py", line 67, in main
+    img = Image.open(io.BytesIO(tf.extractfile(m).read())).convert("RGB")
+                                ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.15/Frameworks/Python.framework/Versions/3.11/lib/python3.11/tarfile.py", line 692, in read
+    raise ReadError("unexpected end of data")
+tarfile.ReadError: unexpected end of data

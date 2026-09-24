@@ -1,0 +1,16 @@
+train/val/test = 2077/296/595  change ratio = 0.201
+[B_bisrnet_cb] ep 01 loss 2.4434 | val OA 75.54 mIoU 55.41 SeK 1.37 Fscd 37.34 | 1.1 min
+[B_bisrnet_cb] ep 02 loss 1.7948 | val OA 73.41 mIoU 57.30 SeK 7.23 Fscd 41.45 | 2.3 min
+[B_bisrnet_cb] ep 03 loss 1.6087 | val OA 79.61 mIoU 63.01 SeK 8.48 Fscd 45.00 | 3.4 min
+[B_bisrnet_cb] ep 04 loss 1.5216 | val OA 82.55 mIoU 65.38 SeK 11.55 Fscd 50.40 | 4.5 min
+[B_bisrnet_cb] ep 05 loss 1.4792 | val OA 83.02 mIoU 66.21 SeK 11.39 Fscd 49.89 | 5.6 min
+[B_bisrnet_cb] ep 06 loss 1.4651 | val OA 83.68 mIoU 67.06 SeK 12.98 Fscd 51.97 | 6.7 min
+[B_bisrnet_cb] ep 07 loss 1.4206 | val OA 83.96 mIoU 66.82 SeK 12.89 Fscd 52.27 | 7.8 min
+[B_bisrnet_cb] ep 08 loss 1.3954 | val OA 79.33 mIoU 64.11 SeK 10.68 Fscd 46.75 | 8.9 min
+[B_bisrnet_cb] ep 09 loss 1.3653 | val OA 82.62 mIoU 66.99 SeK 13.81 Fscd 52.50 | 10.0 min
+[B_bisrnet_cb] ep 10 loss 1.3317 | val OA 82.42 mIoU 66.67 SeK 13.79 Fscd 52.63 | 11.1 min
+[B_bisrnet_cb] ep 11 loss 1.3078 | val OA 83.94 mIoU 67.84 SeK 14.07 Fscd 53.26 | 12.3 min
+[B_bisrnet_cb] ep 12 loss 1.2894 | val OA 84.39 mIoU 67.60 SeK 13.92 Fscd 53.16 | 13.4 min
+[B_bisrnet_cb] ep 13 loss 1.2713 | val OA 84.53 mIoU 67.90 SeK 14.19 Fscd 53.55 | 14.5 min
+[B_bisrnet_cb] ep 14 loss 1.2410 | val OA 83.86 mIoU 67.95 SeK 14.61 Fscd 53.76 | 27.4 min
+[B_bisrnet_cb] ep 15 loss 1.2212 | val OA 83.97 mIoU 68.25 SeK 15.23 Fscd 54.33 | 28.5 min

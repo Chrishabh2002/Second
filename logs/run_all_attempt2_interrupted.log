@@ -1,0 +1,5 @@
+skip A_early_fusion_ce
+[A_sscd_ce] TEST (best val epoch 15): OA 85.92 mIoU 68.02 SeK 13.59 Fscd 52.48
+[A_bisrnet_ce] TEST (best val epoch 16): OA 85.75 mIoU 68.65 SeK 14.24 Fscd 53.36
+best architecture by val SeK: bisrnet
+[B_bisrnet_wce] TEST (best val epoch 19): OA 84.04 mIoU 68.42 SeK 14.52 Fscd 53.01
