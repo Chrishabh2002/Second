@@ -4,3 +4,4 @@ skip A_bisrnet_ce
 best architecture by val SeK: bisrnet
 skip B_bisrnet_wce
 [B_bisrnet_median] TEST (best val epoch 18): OA 83.13 mIoU 68.11 SeK 14.36 Fscd 51.82
+[B_bisrnet_cb] TEST (best val epoch 18): OA 83.39 mIoU 68.08 SeK 14.29 Fscd 52.40

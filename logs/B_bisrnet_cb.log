@@ -19,3 +19,5 @@ train/val/test = 2077/296/595  change ratio = 0.201
 [B_bisrnet_cb] ep 18 loss 1.1892 | val OA 83.59 mIoU 68.13 SeK 15.29 Fscd 54.24 | 32.2 min
 [B_bisrnet_cb] ep 19 loss 1.1830 | val OA 83.87 mIoU 68.33 SeK 15.22 Fscd 54.11 | 33.4 min
 [B_bisrnet_cb] ep 20 loss 1.1780 | val OA 83.54 mIoU 68.11 SeK 15.17 Fscd 53.96 | 34.5 min
+[B_bisrnet_cb] TEST (best val epoch 18): OA 83.39 mIoU 68.08 SeK 14.29 Fscd 52.40
+per-class IoU: {'no-change': 84.47, 'non-veg ground': 34.31, 'tree': 31.69, 'low vegetation': 19.91, 'water': 18.73, 'building': 47.14, 'playground': 31.61}
