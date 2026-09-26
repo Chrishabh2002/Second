@@ -351,17 +351,26 @@ def scd_metrics(hist):
 
 
 @torch.no_grad()
-def evaluate(model, data, idx, device, bs=16):
+def evaluate(model, data, idx, device, bs=16, crit=None):
+    """SCD metrics on idx; with crit, also the mean training loss (no augmentation) as 'loss'."""
     im1, im2, l1, l2 = data
     model.eval()
     hist = np.zeros((NUM_SEM + 1, NUM_SEM + 1), np.int64)
+    tot, n = 0.0, 0
     for i in range(0, len(idx), bs):
         b = idx[i:i + bs]
         x1, x2, y1, y2 = to_batch(im1, im2, l1, l2, b, device)
-        c, s1, s2, _ = model(x1, x2)
+        out = model(x1, x2)
+        if crit is not None:
+            tot += crit(out, y1, y2).item() * len(b)
+            n += len(b)
+        c, s1, s2, _ = out
         change = (torch.sigmoid(c.squeeze(1)) > 0.5).long()
         p1 = (s1.argmax(1) + 1) * change
         p2 = (s2.argmax(1) + 1) * change
         for p, y in ((p1, y1), (p2, y2)):
             hist += fast_hist(p.cpu().numpy().ravel(), y.cpu().numpy().ravel())
-    return scd_metrics(hist), hist
+    m = scd_metrics(hist)
+    if crit is not None:
+        m["loss"] = tot / n
+    return m, hist

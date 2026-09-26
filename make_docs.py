@@ -340,6 +340,282 @@ if qual:
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     save(fig, "qualitative.png")
 
+fig_md = lambda f, alt: f"![{alt}](docs/figures/{f})"
+# ----------------------------------------------------------------------------- diagnostics
+# (a) error breakdown of every main run, from its test confusion matrix
+def err_breakdown(conf):
+    C = conf.T.astype(float)  # stored rows=pred, cols=truth -> rows=truth, cols=pred
+    chg = C[1:].sum()
+    ok = np.trace(C[1:, 1:])
+    return {"correct": ok / chg * 100, "wrong_class": (C[1:, 1:].sum() - ok) / chg * 100,
+            "missed": C[1:, 0].sum() / chg * 100, "false_alarm": C[0, 1:].sum() / C[0].sum() * 100,
+            "precision": C[1:, 1:].sum() / C[:, 1:].sum() * 100, "recall": C[1:, 1:].sum() / chg * 100}
+
+
+for x in ALL:
+    x["err"] = err_breakdown(x["conf"])
+name_of = lambda x: f"{ARCH_SHORT[x['model']]} + {x['label']}"
+ER = A + B
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 0.4 * len(ER) + 1.6), sharey=True,
+                             gridspec_kw={"width_ratios": [3, 1.2]})
+y = np.arange(len(ER))
+left = np.zeros(len(ER))
+for k, c, lab in (("correct", BLUE, "Correct class"), ("wrong_class", AQUA, "Changed, wrong class"),
+                  ("missed", ORANGE, "Missed (predicted no-change)")):
+    v = np.array([x["err"][k] for x in ER])
+    a1.barh(y, v, 0.62, left=left, color=c, edgecolor=SURF, linewidth=1.5, label=lab)
+    for i in range(len(ER)):
+        if v[i] > 7:
+            a1.text(left[i] + v[i] / 2, i, f"{v[i]:.0f}%", ha="center", va="center", fontsize=8,
+                    color="white" if c == BLUE else INK)
+    left += v
+a1.set_yticks(y, [name_of(x) for x in ER])
+a1.invert_yaxis()
+a1.set_xlim(0, 100)
+a1.set_title("What happens to truly changed pixels (test)", fontsize=11)
+a1.legend(loc="upper center", bbox_to_anchor=(0.5, -0.06), ncol=3, fontsize=8.5)
+clean(a1)
+fa = [x["err"]["false_alarm"] for x in ER]
+a2.barh(y, fa, 0.62, color=INK2, edgecolor=SURF, linewidth=1.5)
+for i, v in enumerate(fa):
+    a2.text(v + max(fa) * 0.02, i, f"{v:.1f}%", va="center", fontsize=8, color=INK2)
+a2.set_xlim(0, max(fa) * 1.3)
+a2.set_title("False alarms (% of unchanged)", fontsize=11)
+clean(a2)
+fig.suptitle("Error breakdown of every model and technique", x=0.01, ha="left", fontweight="bold",
+             y=1.02)
+save(fig, "error_breakdown.png")
+
+# (b) cross-validation runs (results/cv/<tag>_f<k>.json)
+CV = {}
+for pth in sorted(glob.glob(os.path.join(R, "cv", "*_f[0-9].json"))):
+    r = json.load(open(pth))
+    CV.setdefault(r["tag"].rsplit("_f", 1)[0], []).append(r)
+CV_ORDER = ["A_early_fusion_ce", "A_sscd_ce", "A_bisrnet_ce", "B_bisrnet_combo", "B_bisrnet_dice",
+            "B_bisrnet_wce", "B_bisrnet_median", "B_bisrnet_cb", "B_bisrnet_focal",
+            "B_bisrnet_ce_rare", "B_bisrnet_combo_rare", "B_bisrnet_ohem"]
+
+
+def slope(v):
+    return float(np.polyfit(np.arange(len(v)), v, 1)[0])
+
+
+def cv_summary(tag, rs):
+    rs = sorted(rs, key=lambda r: r["args"]["fold"])
+    a = rs[0]["args"]
+    H = lambda k: np.array([[h[k] for h in r["history"]] for r in rs])  # folds x epochs
+    tr_s, va_s, tr_l, va_l = H("train_SeK"), H("SeK"), H("train_eval_loss"), H("val_loss")
+    be = [r["best_epoch"] - 1 for r in rs]
+    f = np.arange(len(rs))
+    gap_best = tr_s[f, be] - va_s[f, be]
+    gap_end = tr_s[:, -1] - va_s[:, -1]
+    loss_rise = (va_l[:, -1] - va_l.min(1)) / np.abs(va_l.min(1)) * 100
+    tail = [slope(v[-5:]) for v in va_s]
+    g, lr, sl = float(gap_end.mean()), float(loss_rise.mean()), float(np.mean(tail))
+    if lr > 10 and g > 3:
+        diag = "Overfitting"
+    elif sl > 0.15 and g < 2:
+        diag = "Underfitting (still improving)"
+    elif g > 3 or lr > 10:
+        diag = "Mild overfitting"
+    elif tr_s[:, -1].mean() < 5:
+        diag = "Failed to learn"
+    else:
+        diag = "Good fit"
+    if va_s.max() < 5:
+        diag = "Failed to learn"
+    return dict(tag=tag, model=a["model"], label=TECH[(a["loss"], a["sampler"])][0], k=a["folds"],
+                n=len(rs), test=np.array([r["test"]["SeK"] for r in rs]),
+                test_fscd=np.array([r["test"]["Fscd"] for r in rs]),
+                val=va_s[f, be], train=tr_s[f, be], gap_best=gap_best, gap_end=gap_end,
+                loss_rise=loss_rise, tail=np.array(tail), diag=diag, tr_s=tr_s, va_s=va_s,
+                tr_l=tr_l, va_l=va_l, n_train=rs[0]["n_train"], n_val=rs[0]["n_val"])
+
+
+cvs = [cv_summary(t, CV[t]) for t in CV_ORDER if t in CV and len(CV[t]) == CV[t][0]["args"]["folds"]]
+cv_partial = sorted(set(CV) - {c["tag"] for c in cvs})
+cvd = {c["tag"]: c for c in cvs}
+cname = lambda c: f"{ARCH_SHORT[c['model']]} + {c['label']}"
+pm = lambda v: f"{v.mean():.2f} ± {v.std(ddof=1):.2f}" if len(v) > 1 else f"{v.mean():.2f}"
+
+
+def paired(c, ref):
+    d = c["test"] - ref["test"]
+    return d, int((d > 0).sum())
+
+
+if cvs:
+    order = sorted(cvs, key=lambda c: -c["test"].mean())
+    # CV scores: mean ± std with each fold as a dot
+    fig, ax = plt.subplots(figsize=(8.5, 0.45 * len(order) + 1.4))
+    for i, c in enumerate(order):
+        m, s = c["test"].mean(), c["test"].std(ddof=1)
+        ax.plot([m - s, m + s], [i, i], color=BLUE, lw=2, solid_capstyle="round")
+        ax.scatter(c["test"], [i] * len(c["test"]), s=22, color=GRAY, zorder=3, edgecolor=SURF)
+        ax.scatter([m], [i], s=60, color=BLUE, zorder=4, edgecolor=SURF, linewidth=2)
+        ax.text(max(c["test"].max(), m + s) + 0.3, i, f"{m:.2f} ± {s:.2f}", va="center",
+                fontsize=8.5, color=INK2)
+    ax.set_yticks(range(len(order)), [cname(c) for c in order])
+    ax.invert_yaxis()
+    ax.set_xlabel("Test SeK (%) — dot = one fold, large dot = mean, line = ± 1 std")
+    ax.set_title(f"{order[0]['k']}-fold cross-validation: test SeK of each fold's model")
+    ax.set_xlim(min(0, min(c["test"].min() for c in order) - 1),
+                max(c["test"].max() for c in order) * 1.25)
+    clean(ax)
+    save(fig, "cv_scores.png")
+
+    # learning curves: train vs val SeK and loss, mean over folds, one panel per config
+    for key, fname, ylab in (("SeK", "learning_curves_sek.png", "SeK (%)"),
+                             ("loss", "learning_curves_loss.png", "loss")):
+        n = len(cvs)
+        cols = 4
+        rows_n = int(np.ceil(n / cols))
+        fig, axes = plt.subplots(rows_n, cols, figsize=(13, 2.6 * rows_n + 0.6), squeeze=False)
+        for ax, c in zip(axes.ravel(), cvs):
+            tr_v, va_v = (c["tr_s"], c["va_s"]) if key == "SeK" else (c["tr_l"], c["va_l"])
+            e = np.arange(1, tr_v.shape[1] + 1)
+            for v, col, lab in ((tr_v, ORANGE, "train"), (va_v, BLUE, "validation")):
+                mu, sd = v.mean(0), v.std(0)
+                ax.fill_between(e, mu - sd, mu + sd, color=col, alpha=0.15, lw=0)
+                ax.plot(e, mu, color=col, lw=2, label=lab)
+            ax.set_title(f"{cname(c)}\n{c['diag']}", fontsize=9, loc="left")
+            ax.tick_params(labelsize=8)
+            ax.spines[["top", "right"]].set_visible(False)
+            ax.grid(axis="x", visible=False)
+        for ax in axes.ravel()[n:]:
+            ax.set_visible(False)
+        axes[0, 0].legend(fontsize=8, loc="lower right" if key == "SeK" else "upper right")
+        fig.suptitle(f"Train vs. validation {ylab} per epoch (mean of {cvs[0]['k']} folds, band = ± 1 std)",
+                     x=0.01, ha="left", fontweight="bold")
+        fig.tight_layout()
+        save(fig, fname)
+
+    # generalisation gap at the selected epoch
+    fig, ax = plt.subplots(figsize=(8, 0.42 * len(cvs) + 1.3))
+    g = [c["gap_best"].mean() for c in cvs]
+    gs = [c["gap_best"].std(ddof=1) for c in cvs]
+    ax.barh(range(len(cvs)), g, 0.62, xerr=gs, color=BLUE, edgecolor=SURF, linewidth=1.5,
+            error_kw={"ecolor": INK2, "lw": 1, "capsize": 3})
+    for i, v in enumerate(g):
+        ax.text(max(v, 0) + gs[i] + 0.15, i, f"{v:.2f}", va="center", fontsize=8.5, color=INK2)
+    ax.axvline(0, color=INK2, lw=1)
+    ax.set_yticks(range(len(cvs)), [cname(c) for c in cvs])
+    ax.invert_yaxis()
+    ax.set_xlabel("Train SeK − validation SeK at the selected epoch (points)")
+    ax.set_title("Generalisation gap (bigger = more overfitting)")
+    clean(ax)
+    save(fig, "generalization_gap.png")
+
+
+def cv_table():
+    out = ["| Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | "
+           "Val-loss rise | Diagnosis | Beats reference in |",
+           "|---|---:|---:|---:|---:|---:|---:|---|---|"]
+    for c in sorted(cvs, key=lambda c: -c["test"].mean()):
+        ref = cvd.get("A_early_fusion_ce" if c["tag"].startswith("A_") else "A_bisrnet_ce")
+        if ref is None or ref is c:
+            win = "— (reference)"
+        else:
+            d, w = paired(c, ref)
+            win = f"{w}/{len(d)} folds ({d.mean():+.2f})"
+        out.append(f"| {cname(c)} | {pm(c['val'])} | **{pm(c['test'])}** | {pm(c['test_fscd'])} | "
+                   f"{pm(c['train'])} | {pm(c['gap_best'])} | {c['loss_rise'].mean():.1f}% | "
+                   f"{c['diag']} | {win} |")
+    return "\n".join(out)
+
+
+def err_table():
+    out = ["| Model / technique | Correct | Wrong class | Missed change | False alarm | "
+           "Change precision | Change recall |", "|---|---:|---:|---:|---:|---:|---:|"]
+    for x in ER:
+        e = x["err"]
+        out.append(f"| {name_of(x)} | {e['correct']:.1f}% | {e['wrong_class']:.1f}% | "
+                   f"{e['missed']:.1f}% | {e['false_alarm']:.1f}% | {e['precision']:.1f}% | "
+                   f"{e['recall']:.1f}% |")
+    return "\n".join(out)
+
+
+n_miss_big = sum(x["err"]["missed"] > x["err"]["wrong_class"] for x in ER)
+if cvs:
+    cv_best = max(cvs, key=lambda c: c["test"].mean())
+    ref_ce = cvd.get("A_bisrnet_ce")
+    verdict = [] if len(cvs) < 2 else [f"- **Best by cross-validation:** {cname(cv_best)}, test SeK {pm(cv_best['test'])} "
+               f"over {cv_best['k']} folds."]
+    if ref_ce is not None and cv_best is not ref_ce and cv_best["model"] == "bisrnet":
+        d, w = paired(cv_best, ref_ce)
+        verdict.append(f"- Against plain CE on the same model it wins in **{w} of {len(d)} folds** "
+                       f"(mean {d.mean():+.2f} SeK, std {d.std(ddof=1):.2f}). "
+                       + ("The gain is consistent across folds." if w == len(d) else
+                          "The gain is not consistent across folds, so treat it as uncertain."))
+    counts_d = {}
+    for c in cvs:
+        counts_d[c["diag"]] = counts_d.get(c["diag"], 0) + 1
+    verdict.append("- Fit diagnosis: " + ", ".join(f"{v}× {k.lower()}" for k, v in counts_d.items())
+                   + ".")
+    cv_md = f"""### Cross-validation ({cvs[0]['k']}-fold)
+
+The {cvs[0]['n_train'] + cvs[0]['n_val']:,} train+validation pairs are split into {cvs[0]['k']}
+folds ({cvs[0]['n_train']:,} train / {cvs[0]['n_val']:,} validation per fold). The 595-pair test split is
+never used for training or model selection. Each fold's best-validation model is scored on it.
+Because each fold trains on fewer pairs than the main runs (2,077), CV scores are a little lower;
+they are used to measure **stability and ranking**, not to replace the main-table numbers.
+
+""" + ("\n".join(verdict)) + f"""
+
+{cv_table()}
+
+{fig_md("cv_scores.png", "Cross-validation scores")}
+
+### Overfitting and underfitting
+
+Each epoch, the model is also scored on a fixed 296-pair subset of its own training data (no
+augmentation), next to the validation fold. Rules used for the diagnosis (averaged over folds):
+
+| Diagnosis | Rule |
+|---|---|
+| Overfitting | validation loss ends >10% above its minimum **and** train SeK − val SeK > 3 at the last epoch |
+| Mild overfitting | only one of the two conditions above |
+| Underfitting (still improving) | val SeK still rising (> 0.15 per epoch over the last 5 epochs) and gap < 2 |
+| Failed to learn | best val SeK < 5 |
+| Good fit | none of the above |
+
+Losses of different techniques are defined differently, so compare train and validation loss
+**within** a panel, not across panels.
+
+{fig_md("learning_curves_sek.png", "Train vs validation SeK")}
+
+{fig_md("learning_curves_loss.png", "Train vs validation loss")}
+
+{fig_md("generalization_gap.png", "Generalisation gap")}
+"""
+    if cv_partial:
+        cv_md += f"\n*Cross-validation still running for: {', '.join(cv_partial)}.*\n"
+else:
+    cv_md = "### Cross-validation\n\n*Cross-validation runs (`run_cv.sh`) are in progress.*\n"
+
+diag_md = f"""## Model diagnostics: errors, cross-validation and fit
+
+### Error breakdown (main runs, test split)
+
+Every changed pixel ends up in one of three buckets: correct class, wrong class, or missed (the
+model says *no-change*). Unchanged pixels that the model marks as changed are false alarms.
+
+{err_table()}
+
+{fig_md("error_breakdown.png", "Error breakdown")}
+
+- Missed changes are a bigger error than wrong classes in **{n_miss_big} of {len(ER)}** runs.
+- Imbalance handling finds more changes but also raises false alarms. Going from plain CE to {best['label']} on
+  {ARCH_SHORT[best_arch]}, change recall rises from {base['err']['recall']:.1f}% to
+  {best['err']['recall']:.1f}%, but change precision falls from {base['err']['precision']:.1f}% to
+  {best['err']['precision']:.1f}%, and false alarms go from {base['err']['false_alarm']:.1f}% to
+  {best['err']['false_alarm']:.1f}% of unchanged pixels. The net effect on SeK is still positive
+  ({base['SeK']:.2f} → {best['SeK']:.2f}).
+- OHEM shows the extreme end of this trade: {[x for x in ER if x['label'] == 'OHEM'][0]['err']['false_alarm'] if any(x['label'] == 'OHEM' for x in ER) else 0:.0f}% false alarms.
+
+{cv_md}"""
+
+
 # ----------------------------------------------------------------------------- tables
 def tbl(rows, first="Run"):
     out = [f"| {first} | OA | mIoU | **SeK** | Fscd | Change IoU | val SeK | best ep | train min |",
@@ -619,6 +895,7 @@ SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
 > results sit, not a claim to beat those methods. The main result here is the controlled
 > comparison inside this project.
 
+{diag_md}
 ## Reproduce
 
 ```bash
@@ -627,6 +904,7 @@ pip install torch torchvision numpy scipy pillow matplotlib gdown
 python prepare_data.py          # streams SECOND from Google Drive → data/SECOND_256 (needs bsdtar)
 python analyze_imbalance.py     # → results/imbalance_stats.json
 ./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
+./run_cv.sh                     # 3-fold cross-validation + train/val curves (~12 h on an M4)
 python make_docs.py             # → README.md, docs/*.md, docs/figures/*.png
 ```
 
@@ -644,6 +922,8 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 | [make_docs.py](make_docs.py) | Generates this README, `docs/` and all figures |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | Models, losses, metrics and training details |
 | [docs/RESULTS.md](docs/RESULTS.md) | Every table, per run |
+| [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |
+| [run_cv.sh](run_cv.sh) | 3-fold cross-validation of all 12 configurations |
 | [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md) | Problems hit while running on a laptop and their fixes |
 | `results/` | Per-run JSON (metrics, confusion matrix, training history), CSV summary |
 | `logs/` | Training logs |
@@ -721,5 +1001,16 @@ with open(os.path.join(R, "summary.csv"), "w") as f:
         f.write(f"{x['tag']},{x['model']},{x['label']},{x['OA']:.2f},{x['mIoU']:.2f},{x['SeK']:.2f},"
                 f"{x['Fscd']:.2f},{x['IoU_c']:.2f}," + ",".join(f"{v:.2f}" for v in x["pc"])
                 + f",{x['val']:.2f},{x['ep']},{x['mins']}\n")
+fold_md = ["# Diagnostics: fold-by-fold\n\nGenerated by `make_docs.py` from `results/cv/*.json`.\n",
+           diag_md.replace("docs/figures/", "figures/").replace("## Model diagnostics", "## Summary"),
+           "\n## Per fold\n"]
+for c in cvs:
+    fold_md.append(f"\n### {cname(c)}\n\n| fold | best epoch | train SeK | val SeK | test SeK | "
+                   "gap at end | val-loss rise | val-SeK slope (last 5 ep) |\n|---:|---:|---:|---:|---:|---:|---:|---:|\n")
+    for k in range(c["n"]):
+        be = int(np.argmax(c["va_s"][k]))
+        fold_md.append(f"| {k} | {be + 1} | {c['train'][k]:.2f} | {c['val'][k]:.2f} | {c['test'][k]:.2f} | "
+                       f"{c['gap_end'][k]:.2f} | {c['loss_rise'][k]:.1f}% | {c['tail'][k]:+.2f} |\n")
+open(os.path.join(D, "DIAGNOSTICS.md"), "w").write("".join(fold_md))
 print(f"README.md, docs/RESULTS.md and {len(os.listdir(FIG))} figures written "
       f"({len(ALL)} runs, pending: {pending or 'none'})")

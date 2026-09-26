@@ -252,6 +252,79 @@ Relative change against the CE baseline (Δ% for metrics, percentage points for 
 > results sit, not a claim to beat those methods. The main result here is the controlled
 > comparison inside this project.
 
+## Model diagnostics: errors, cross-validation and fit
+
+### Error breakdown (main runs, test split)
+
+Every changed pixel ends up in one of three buckets: correct class, wrong class, or missed (the
+model says *no-change*). Unchanged pixels that the model marks as changed are false alarms.
+
+| Model / technique | Correct | Wrong class | Missed change | False alarm | Change precision | Change recall |
+|---|---:|---:|---:|---:|---:|---:|
+| Early Fusion + CE (baseline) | 39.9% | 11.7% | 48.4% | 5.2% | 70.7% | 51.6% |
+| SSCD + CE (baseline) | 46.6% | 12.0% | 41.4% | 4.6% | 75.6% | 58.6% |
+| Bi-SRNet-lite + CE (baseline) | 49.2% | 12.8% | 38.0% | 5.4% | 73.4% | 62.0% |
+| Bi-SRNet-lite + WCE + Dice | 56.5% | 15.8% | 27.7% | 9.0% | 65.9% | 72.3% |
+| Bi-SRNet-lite + CE + Dice | 53.1% | 14.5% | 32.4% | 7.3% | 69.2% | 67.6% |
+| Bi-SRNet-lite + Weighted CE | 55.2% | 15.8% | 29.0% | 9.0% | 65.6% | 71.0% |
+| Bi-SRNet-lite + WCE + Dice + rare sampling | 54.6% | 15.6% | 29.8% | 8.6% | 66.3% | 70.2% |
+| Bi-SRNet-lite + Median-freq | 56.3% | 17.9% | 25.8% | 10.4% | 63.3% | 74.2% |
+| Bi-SRNet-lite + Class-balanced | 56.3% | 16.9% | 26.7% | 10.1% | 63.7% | 73.3% |
+| Bi-SRNet-lite + Focal | 60.9% | 17.4% | 21.7% | 13.4% | 58.5% | 78.3% |
+| Bi-SRNet-lite + CE + rare sampling | 50.6% | 12.8% | 36.5% | 6.5% | 70.1% | 63.5% |
+| Bi-SRNet-lite + OHEM | 59.0% | 31.4% | 9.6% | 60.5% | 26.5% | 90.4% |
+
+![Error breakdown](docs/figures/error_breakdown.png)
+
+- Missed changes are a bigger error than wrong classes in **11 of 12** runs.
+- Imbalance handling finds more changes but also raises false alarms. Going from plain CE to WCE + Dice on
+  Bi-SRNet-lite, change recall rises from 62.0% to
+  72.3%, but change precision falls from 73.4% to
+  65.9%, and false alarms go from 5.4% to
+  9.0% of unchanged pixels. The net effect on SeK is still positive
+  (14.24 → 15.38).
+- OHEM shows the extreme end of this trade: 60% false alarms.
+
+### Cross-validation (3-fold)
+
+The 2,373 train+validation pairs are split into 3
+folds (1,582 train / 791 validation per fold). The 595-pair test split is
+never used for training or model selection. Each fold's best-validation model is scored on it.
+Because each fold trains on fewer pairs than the main runs (2,077), CV scores are a little lower;
+they are used to measure **stability and ranking**, not to replace the main-table numbers.
+
+- **Best by cross-validation:** SSCD + CE (baseline), test SeK 12.97 ± 0.39 over 3 folds.
+- Fit diagnosis: 2× mild overfitting.
+
+| Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
+|---|---:|---:|---:|---:|---:|---:|---|---|
+| SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
+| Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
+
+![Cross-validation scores](docs/figures/cv_scores.png)
+
+### Overfitting and underfitting
+
+Each epoch, the model is also scored on a fixed 296-pair subset of its own training data (no
+augmentation), next to the validation fold. Rules used for the diagnosis (averaged over folds):
+
+| Diagnosis | Rule |
+|---|---|
+| Overfitting | validation loss ends >10% above its minimum **and** train SeK − val SeK > 3 at the last epoch |
+| Mild overfitting | only one of the two conditions above |
+| Underfitting (still improving) | val SeK still rising (> 0.15 per epoch over the last 5 epochs) and gap < 2 |
+| Failed to learn | best val SeK < 5 |
+| Good fit | none of the above |
+
+Losses of different techniques are defined differently, so compare train and validation loss
+**within** a panel, not across panels.
+
+![Train vs validation SeK](docs/figures/learning_curves_sek.png)
+
+![Train vs validation loss](docs/figures/learning_curves_loss.png)
+
+![Generalisation gap](docs/figures/generalization_gap.png)
+
 ## Reproduce
 
 ```bash
@@ -260,6 +333,7 @@ pip install torch torchvision numpy scipy pillow matplotlib gdown
 python prepare_data.py          # streams SECOND from Google Drive → data/SECOND_256 (needs bsdtar)
 python analyze_imbalance.py     # → results/imbalance_stats.json
 ./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
+./run_cv.sh                     # 3-fold cross-validation + train/val curves (~12 h on an M4)
 python make_docs.py             # → README.md, docs/*.md, docs/figures/*.png
 ```
 
@@ -277,6 +351,8 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 | [make_docs.py](make_docs.py) | Generates this README, `docs/` and all figures |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | Models, losses, metrics and training details |
 | [docs/RESULTS.md](docs/RESULTS.md) | Every table, per run |
+| [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |
+| [run_cv.sh](run_cv.sh) | 3-fold cross-validation of all 12 configurations |
 | [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md) | Problems hit while running on a laptop and their fixes |
 | `results/` | Per-run JSON (metrics, confusion matrix, training history), CSV summary |
 | `logs/` | Training logs |

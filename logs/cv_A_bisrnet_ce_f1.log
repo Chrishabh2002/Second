@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.201
+[A_bisrnet_ce_f1] ep 01 loss 2.1962 | val OA 76.50 mIoU 55.33 SeK 0.31 Fscd 37.06 | 1.0 min
+[A_bisrnet_ce_f1] ep 02 loss 1.5128 | val OA 82.92 mIoU 61.34 SeK 6.09 Fscd 43.29 | 2.1 min
+[A_bisrnet_ce_f1] ep 03 loss 1.3358 | val OA 84.31 mIoU 63.06 SeK 8.50 Fscd 46.78 | 3.1 min
+[A_bisrnet_ce_f1] ep 04 loss 1.2787 | val OA 84.34 mIoU 64.78 SeK 9.79 Fscd 48.95 | 4.2 min
+[A_bisrnet_ce_f1] ep 05 loss 1.2353 | val OA 83.57 mIoU 64.60 SeK 9.83 Fscd 49.58 | 5.2 min
+[A_bisrnet_ce_f1] ep 06 loss 1.2021 | val OA 84.92 mIoU 64.47 SeK 10.67 Fscd 49.33 | 6.2 min
+[A_bisrnet_ce_f1] ep 07 loss 1.1840 | val OA 84.64 mIoU 66.14 SeK 11.82 Fscd 51.36 | 7.3 min
+[A_bisrnet_ce_f1] ep 08 loss 1.1565 | val OA 84.79 mIoU 66.24 SeK 12.08 Fscd 51.79 | 8.3 min
+[A_bisrnet_ce_f1] ep 09 loss 1.1405 | val OA 85.09 mIoU 65.70 SeK 11.83 Fscd 51.15 | 9.3 min
+[A_bisrnet_ce_f1] ep 10 loss 1.1336 | val OA 85.21 mIoU 66.00 SeK 12.37 Fscd 51.84 | 10.4 min
+[A_bisrnet_ce_f1] ep 11 loss 1.0970 | val OA 85.51 mIoU 65.67 SeK 12.33 Fscd 51.61 | 11.4 min
+[A_bisrnet_ce_f1] ep 12 loss 1.0919 | val OA 85.25 mIoU 67.01 SeK 13.30 Fscd 52.98 | 12.4 min
+[A_bisrnet_ce_f1] ep 13 loss 1.0571 | val OA 85.31 mIoU 67.09 SeK 13.37 Fscd 53.08 | 13.5 min
+[A_bisrnet_ce_f1] ep 14 loss 1.0498 | val OA 85.33 mIoU 67.32 SeK 13.77 Fscd 53.55 | 14.6 min
+[A_bisrnet_ce_f1] ep 15 loss 1.0253 | val OA 85.12 mIoU 67.29 SeK 13.47 Fscd 53.40 | 15.6 min
+[A_bisrnet_ce_f1] ep 16 loss 1.0168 | val OA 85.41 mIoU 67.02 SeK 13.41 Fscd 53.10 | 16.7 min
+[A_bisrnet_ce_f1] ep 17 loss 1.0045 | val OA 85.61 mIoU 66.52 SeK 13.11 Fscd 52.45 | 17.7 min
+[A_bisrnet_ce_f1] ep 18 loss 0.9979 | val OA 85.30 mIoU 67.22 SeK 13.48 Fscd 53.33 | 18.7 min
+[A_bisrnet_ce_f1] ep 19 loss 0.9925 | val OA 85.41 mIoU 66.89 SeK 13.06 Fscd 52.55 | 19.7 min
+[A_bisrnet_ce_f1] ep 20 loss 0.9892 | val OA 85.42 mIoU 67.14 SeK 13.50 Fscd 53.07 | 20.8 min
+[A_bisrnet_ce_f1] TEST (best val epoch 14): OA 85.63 mIoU 67.90 SeK 13.49 Fscd 52.87
+per-class IoU: {'no-change': 86.38, 'non-veg ground': 34.23, 'tree': 31.07, 'low vegetation': 18.36, 'water': 14.73, 'building': 48.45, 'playground': 24.75}

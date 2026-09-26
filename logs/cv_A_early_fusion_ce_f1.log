@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.201
+[A_early_fusion_ce_f1] ep 01 loss 2.2439 | val OA 68.44 mIoU 46.72 SeK -8.77 Fscd 19.55 | 0.6 min
+[A_early_fusion_ce_f1] ep 02 loss 1.6390 | val OA 80.14 mIoU 47.98 SeK -2.14 Fscd 16.74 | 1.2 min
+[A_early_fusion_ce_f1] ep 03 loss 1.3877 | val OA 81.63 mIoU 51.74 SeK 0.68 Fscd 26.13 | 1.9 min
+[A_early_fusion_ce_f1] ep 04 loss 1.3095 | val OA 80.97 mIoU 54.25 SeK -0.05 Fscd 31.36 | 2.4 min
+[A_early_fusion_ce_f1] ep 05 loss 1.2466 | val OA 82.10 mIoU 58.28 SeK 3.04 Fscd 38.62 | 2.9 min
+[A_early_fusion_ce_f1] ep 06 loss 1.2074 | val OA 82.00 mIoU 55.43 SeK 1.93 Fscd 34.09 | 3.5 min
+[A_early_fusion_ce_f1] ep 07 loss 1.1856 | val OA 82.56 mIoU 57.26 SeK 3.19 Fscd 36.39 | 4.0 min
+[A_early_fusion_ce_f1] ep 08 loss 1.1616 | val OA 82.47 mIoU 59.93 SeK 4.51 Fscd 41.45 | 4.5 min
+[A_early_fusion_ce_f1] ep 09 loss 1.1471 | val OA 82.39 mIoU 59.39 SeK 4.14 Fscd 41.00 | 5.1 min
+[A_early_fusion_ce_f1] ep 10 loss 1.1257 | val OA 82.64 mIoU 58.04 SeK 3.78 Fscd 39.02 | 5.6 min
+[A_early_fusion_ce_f1] ep 11 loss 1.1000 | val OA 82.67 mIoU 58.89 SeK 4.18 Fscd 39.80 | 6.2 min
+[A_early_fusion_ce_f1] ep 12 loss 1.0890 | val OA 83.33 mIoU 60.62 SeK 5.97 Fscd 43.27 | 6.8 min
+[A_early_fusion_ce_f1] ep 13 loss 1.0623 | val OA 83.19 mIoU 59.96 SeK 5.43 Fscd 42.03 | 7.3 min
+[A_early_fusion_ce_f1] ep 14 loss 1.0496 | val OA 82.90 mIoU 61.01 SeK 6.03 Fscd 44.03 | 7.9 min
+[A_early_fusion_ce_f1] ep 15 loss 1.0348 | val OA 83.46 mIoU 61.31 SeK 6.57 Fscd 44.23 | 8.5 min
+[A_early_fusion_ce_f1] ep 16 loss 1.0237 | val OA 83.25 mIoU 61.16 SeK 6.30 Fscd 44.09 | 9.1 min
+[A_early_fusion_ce_f1] ep 17 loss 1.0153 | val OA 83.69 mIoU 60.49 SeK 6.38 Fscd 42.91 | 9.7 min
+[A_early_fusion_ce_f1] ep 18 loss 1.0050 | val OA 83.21 mIoU 62.23 SeK 7.07 Fscd 45.62 | 10.3 min
+[A_early_fusion_ce_f1] ep 19 loss 0.9941 | val OA 83.42 mIoU 61.65 SeK 6.74 Fscd 44.67 | 10.9 min
+[A_early_fusion_ce_f1] ep 20 loss 0.9934 | val OA 83.38 mIoU 61.60 SeK 6.71 Fscd 44.57 | 11.5 min
+[A_early_fusion_ce_f1] TEST (best val epoch 18): OA 83.41 mIoU 63.00 SeK 6.77 Fscd 44.98
+per-class IoU: {'no-change': 84.22, 'non-veg ground': 28.29, 'tree': 27.75, 'low vegetation': 8.95, 'water': 0.32, 'building': 37.38, 'playground': 0.1}
