@@ -153,6 +153,28 @@ clean(ax, "y")
 ax.spines["left"].set_visible(False)
 save(fig, "class_distribution.png")
 
+# 1b. the SeK "journey" for the summary: baseline -> architectures -> best technique
+_ef = next(x for x in A if x["model"] == "early_fusion")
+_ss = next(x for x in A if x["model"] == "sscd")
+steps = [("Early Fusion + CE\n(starting point)", _ef["SeK"], GRAY), ("SSCD + CE", _ss["SeK"], GRAY),
+         (f"{ARCH_SHORT[best_arch]} + CE", base["SeK"], GRAY),
+         (f"{ARCH_SHORT[best_arch]} +\n{best['label']} (best)", best["SeK"], BLUE)]
+fig, ax = plt.subplots(figsize=(8.5, 3.9))
+xs = np.arange(len(steps))
+ax.bar(xs, [v for _, v, _ in steps], 0.55, color=[c for _, _, c in steps], edgecolor=SURF, linewidth=1.5)
+for i, (_, v, _) in enumerate(steps):
+    ax.text(i, v + 0.35, f"{v:.2f}", ha="center", fontsize=11, fontweight="bold", color=INK)
+    if i:
+        ax.text(i, v / 2, f"{(v - steps[0][1]) / steps[0][1] * 100:+.0f}%\nvs start", ha="center",
+                va="center", fontsize=9, color="white" if steps[i][2] == BLUE else INK)
+ax.set_xticks(xs, [n for n, _, _ in steps])
+ax.set_ylim(0, max(v for _, v, _ in steps) * 1.18)
+ax.set_ylabel("Test SeK (%)")
+ax.set_title("How the score improved, step by step (test SeK, higher is better)")
+clean(ax, "y")
+ax.spines["left"].set_visible(False)
+save(fig, "sek_journey.png")
+
 # 2. from -> to transition matrix
 M = np.zeros((6, 6))
 for k, v in imb["transitions_pct"].items():
@@ -709,7 +731,7 @@ comes from the thing being tested:
 
 Everything runs end to end on a 16 GB Apple M4 laptop.
 
-**Documentation:** [Project summary](docs/PROJECT_SUMMARY.md) ·
+**Documentation:** [Excel results workbook](results/SECOND_SCD_Results.xlsx) · [Project summary](docs/PROJECT_SUMMARY.md) ·
 [Methodology](docs/METHODOLOGY.md) · [Full results](docs/RESULTS.md) ·
 [Diagnostics and cross-validation](docs/DIAGNOSTICS.md) · [References](docs/REFERENCES.md) ·
 [Roadmap](docs/ROADMAP.md) · [Engineering notes](docs/ENGINEERING_NOTES.md)
@@ -938,6 +960,7 @@ python analyze_imbalance.py     # → results/imbalance_stats.json
 ./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
 ./run_cv.sh                     # 3-fold cross-validation + train/val curves (~12 h on an M4)
 python make_docs.py             # → README.md, docs/*.md, docs/figures/*.png
+python make_excel.py            # → results/SECOND_SCD_Results.xlsx (Excel workbook with charts)
 ```
 
 One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 20 --tag my_run`.
@@ -952,6 +975,7 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 | [prepare_data.py](prepare_data.py) | Streaming download + 256 px conversion |
 | [analyze_imbalance.py](analyze_imbalance.py) | Class and transition statistics |
 | [make_docs.py](make_docs.py) | Generates this README, `docs/` and all figures |
+| [make_excel.py](make_excel.py) | Builds `results/SECOND_SCD_Results.xlsx`: all results, formulas and charts in one workbook |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | Models, losses, metrics and training details |
 | [docs/RESULTS.md](docs/RESULTS.md) | Every table, per run |
 | [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |

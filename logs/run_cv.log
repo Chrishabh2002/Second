@@ -11,3 +11,6 @@ skip A_bisrnet_ce_f1
 [B_bisrnet_combo_f1] TEST (best val epoch 20): OA 83.73 mIoU 68.13 SeK 14.10 Fscd 52.66
 [B_bisrnet_combo_f2] TEST (best val epoch 20): OA 83.68 mIoU 68.15 SeK 14.20 Fscd 52.60
 [B_bisrnet_dice_f0] TEST (best val epoch 20): OA 85.29 mIoU 68.85 SeK 14.73 Fscd 54.16
+[B_bisrnet_dice_f1] TEST (best val epoch 20): OA 85.15 mIoU 68.63 SeK 14.17 Fscd 53.40
+[B_bisrnet_dice_f2] TEST (best val epoch 20): OA 85.26 mIoU 68.60 SeK 14.23 Fscd 53.48
+[B_bisrnet_wce_f0] TEST (best val epoch 20): OA 83.94 mIoU 68.56 SeK 14.65 Fscd 53.21
