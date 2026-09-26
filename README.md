@@ -15,6 +15,11 @@ comes from the thing being tested:
 
 Everything runs end to end on a 16 GB Apple M4 laptop.
 
+**Documentation:** [Project summary](docs/PROJECT_SUMMARY.md) ·
+[Methodology](docs/METHODOLOGY.md) · [Full results](docs/RESULTS.md) ·
+[Diagnostics and cross-validation](docs/DIAGNOSTICS.md) · [References](docs/REFERENCES.md) ·
+[Roadmap](docs/ROADMAP.md) · [Engineering notes](docs/ENGINEERING_NOTES.md)
+
 All planned experiments are complete.
 
 ## Results at a glance
@@ -135,11 +140,13 @@ flowchart LR
     C --> OUT
 ```
 
-| Model | Idea | Parameters |
-|---|---|---:|
-| Early Fusion | Stack T1 and T2 as 6 channels, one network, three heads | 11.36M |
-| SSCD | Siamese encoder; semantic decoder per date (shared) + change decoder on concatenated features | 11.58M |
-| Bi-SRNet-lite | SSCD + cross-temporal attention on the deepest features + semantic-consistency loss | 11.91M |
+| Model | Idea | Based on | Parameters |
+|---|---|---|---:|
+| Early Fusion | Stack T1 and T2 as 6 channels, one network, three heads | HRSCD str.2 [[2]](https://arxiv.org/abs/1810.08452) | 11.36M |
+| SSCD | Siamese encoder; semantic decoder per date (shared) + change decoder on concatenated features | SSCD-l [[3]](https://arxiv.org/abs/2108.06103) | 11.58M |
+| Bi-SRNet-lite | SSCD + cross-temporal attention on the deepest features + semantic-consistency loss | Bi-SRNet [[3]](https://arxiv.org/abs/2108.06103) | 11.91M |
+
+Encoder: ResNet-18 [[7]](https://arxiv.org/abs/1512.03385), decoder: FPN-style [[8]](https://arxiv.org/abs/1612.03144).
 
 ### Loss
 
@@ -293,11 +300,14 @@ never used for training or model selection. Each fold's best-validation model is
 Because each fold trains on fewer pairs than the main runs (2,077), CV scores are a little lower;
 they are used to measure **stability and ranking**, not to replace the main-table numbers.
 
-- **Best by cross-validation:** SSCD + CE (baseline), test SeK 12.97 ± 0.39 over 3 folds.
-- Fit diagnosis: 2× mild overfitting.
+- **Best by cross-validation:** Bi-SRNet-lite + WCE + Dice, test SeK 14.26 ± 0.19 over 3 folds.
+- Against plain CE on the same model it wins in **3 of 3 folds** (mean +0.70 SeK, std 0.30). The gain is consistent across folds.
+- Fit diagnosis: 4× mild overfitting.
 
 | Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
 |---|---:|---:|---:|---:|---:|---:|---|---|
+| Bi-SRNet-lite + WCE + Dice | 14.96 ± 0.62 | **14.26 ± 0.19** | 52.77 ± 0.25 | 24.18 ± 0.91 | 9.22 ± 0.52 | 0.3% | Mild overfitting | 3/3 folds (+0.70) |
+| Bi-SRNet-lite + CE (baseline) | 14.39 ± 0.54 | **13.55 ± 0.42** | 52.79 ± 0.52 | 23.16 ± 1.03 | 8.77 ± 0.49 | 0.8% | Mild overfitting | 3/3 folds (+6.81) |
 | SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
 | Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
 
@@ -325,11 +335,27 @@ Losses of different techniques are defined differently, so compare train and val
 
 ![Generalisation gap](docs/figures/generalization_gap.png)
 
+*Cross-validation still running for: B_bisrnet_dice.*
+
+## Next steps
+
+The full plan with time estimates is in [docs/ROADMAP.md](docs/ROADMAP.md). In short:
+
+1. **Statistics:** finish the 3-fold cross-validation and add seeds, so every gap has a mean ± std.
+2. **Cheap fixes suggested by the error analysis:** tune the change threshold (missed changes are
+   the largest error), train the best configuration longer, and fix or drop OHEM.
+3. **New method, a transition-aware loss:** weight each pixel by how rare its *from → to* change
+   is, and compare it against CE, WCE + Dice and the SeK loss of Mamba-FCS
+   [[6]](https://arxiv.org/abs/2508.08232).
+4. **Published setting:** 512 px, a larger backbone and 50+ epochs on a GPU.
+5. **A second dataset:** Landsat-SCD.
+6. **Paper:** write it up and choose a venue.
+
 ## Reproduce
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
-pip install torch torchvision numpy scipy pillow matplotlib gdown
+pip install -r requirements.txt
 python prepare_data.py          # streams SECOND from Google Drive → data/SECOND_256 (needs bsdtar)
 python analyze_imbalance.py     # → results/imbalance_stats.json
 ./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
@@ -354,6 +380,10 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 | [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |
 | [run_cv.sh](run_cv.sh) | 3-fold cross-validation of all 12 configurations |
 | [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md) | Problems hit while running on a laptop and their fixes |
+| [docs/REFERENCES.md](docs/REFERENCES.md) | Paper, link and code location for every model, loss and metric |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Next steps towards a paper |
+| [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Short summary for supervisors and reviewers |
+| [requirements.txt](requirements.txt) | Exact package versions |
 | `results/` | Per-run JSON (metrics, confusion matrix, training history), CSV summary |
 | `logs/` | Training logs |
 
@@ -370,11 +400,21 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 
 ## References
 
-- Yang et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images*, IEEE TGRS 2021 (SECOND dataset and metrics).
-- Daudt et al., *Multitask learning for large-scale semantic change detection*, CVIU 2019 (HRSCD).
-- Ding et al., *Bi-Temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images*, IEEE TGRS 2022 (SSCD-l, Bi-SRNet).
-- Ding et al., *Joint Spatio-Temporal Modeling for Semantic Change Detection in Remote Sensing Images*, IEEE TGRS 2024 (SCanNet).
-- Chen et al., *ChangeMamba: Remote Sensing Change Detection with Spatio-Temporal State Space Model*, IEEE TGRS 2024.
-- Cui et al., *Class-Balanced Loss Based on Effective Number of Samples*, CVPR 2019.
-- Lin et al., *Focal Loss for Dense Object Detection*, ICCV 2017.
-- Published SECOND numbers as tabulated in [Mamba-FCS (arXiv 2508.08232)](https://arxiv.org/abs/2508.08232).
+Full table (each model, loss, optimiser and metric → paper, link, code location, our changes):
+**[docs/REFERENCES.md](docs/REFERENCES.md)**. Main sources:
+
+1. Yang et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images*, IEEE TGRS 2022 — SECOND dataset and metrics. [arXiv:2010.05687](https://arxiv.org/abs/2010.05687)
+2. Daudt et al., *Multitask Learning for Large-scale Semantic Change Detection*, CVIU 2019 — HRSCD strategies (Early Fusion). [arXiv:1810.08452](https://arxiv.org/abs/1810.08452)
+3. Ding et al., *Bi-Temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images*, IEEE TGRS 2022 — SSCD-l, Bi-SRNet, consistency loss. [arXiv:2108.06103](https://arxiv.org/abs/2108.06103)
+4. Ding et al., *Joint Spatio-Temporal Modeling for the Semantic Change Detection in Remote Sensing Images*, IEEE TGRS 2024 — SCanNet. [arXiv:2212.05245](https://arxiv.org/abs/2212.05245)
+5. Chen et al., *ChangeMamba*, IEEE TGRS 2024. [arXiv:2404.03425](https://arxiv.org/abs/2404.03425)
+6. *Mamba-FCS* (SeK loss; published SECOND table), 2025. [arXiv:2508.08232](https://arxiv.org/abs/2508.08232)
+7. He et al., *Deep Residual Learning* (ResNet), CVPR 2016. [arXiv:1512.03385](https://arxiv.org/abs/1512.03385)
+8. Lin et al., *Feature Pyramid Networks*, CVPR 2017. [arXiv:1612.03144](https://arxiv.org/abs/1612.03144)
+9. Eigen & Fergus, median-frequency balancing, ICCV 2015. [arXiv:1411.4734](https://arxiv.org/abs/1411.4734)
+10. Cui et al., *Class-Balanced Loss Based on Effective Number of Samples*, CVPR 2019. [arXiv:1901.05555](https://arxiv.org/abs/1901.05555)
+11. Lin et al., *Focal Loss for Dense Object Detection*, ICCV 2017. [arXiv:1708.02002](https://arxiv.org/abs/1708.02002)
+12. Milletari et al., *V-Net* (Dice loss), 3DV 2016. [arXiv:1606.04797](https://arxiv.org/abs/1606.04797)
+13. Shrivastava et al., *Online Hard Example Mining*, CVPR 2016. [arXiv:1604.03540](https://arxiv.org/abs/1604.03540)
+14. Gupta et al., *LVIS* (repeat-factor sampling), CVPR 2019. [arXiv:1908.03195](https://arxiv.org/abs/1908.03195)
+15. Loshchilov & Hutter, *AdamW*, ICLR 2019. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101) · Smith & Topin, *One-cycle / Super-Convergence*, 2017. [arXiv:1708.07120](https://arxiv.org/abs/1708.07120)

@@ -42,6 +42,17 @@ TECH = {  # (loss, sampler) -> (short label, description)
     ("combo", "uniform"): ("WCE + Dice", "Weighted CE + Dice (both branches)"),
     ("combo", "rare"): ("WCE + Dice + rare sampling", "Weighted CE + Dice with rare-class oversampling"),
 }
+TECH_REF = {
+    ("wce", "uniform"): "common practice; see [REFERENCES](REFERENCES.md)",
+    ("median", "uniform"): "[Eigen & Fergus](https://arxiv.org/abs/1411.4734)",
+    ("cb", "uniform"): "[Cui et al.](https://arxiv.org/abs/1901.05555)",
+    ("focal", "uniform"): "[Lin et al.](https://arxiv.org/abs/1708.02002)",
+    ("dice", "uniform"): "[Milletari et al.](https://arxiv.org/abs/1606.04797)",
+    ("ohem", "uniform"): "[Shrivastava et al.](https://arxiv.org/abs/1604.03540)",
+    ("ce", "rare"): "[Gupta et al. (LVIS)](https://arxiv.org/abs/1908.03195)",
+    ("combo", "uniform"): "[Milletari et al.](https://arxiv.org/abs/1606.04797) + weighted CE",
+    ("combo", "rare"): "as above + [LVIS](https://arxiv.org/abs/1908.03195)",
+}
 PLANNED_B = ["wce", "median", "cb", "focal", "dice", "ohem", "ce_rare", "combo", "combo_rare"]
 SEM = scd.CLASS_NAMES[1:]
 PARAMS = {"early_fusion": 11.36, "sscd": 11.58, "bisrnet": 11.91}  # millions, counted from the models
@@ -698,6 +709,11 @@ comes from the thing being tested:
 
 Everything runs end to end on a 16 GB Apple M4 laptop.
 
+**Documentation:** [Project summary](docs/PROJECT_SUMMARY.md) ·
+[Methodology](docs/METHODOLOGY.md) · [Full results](docs/RESULTS.md) ·
+[Diagnostics and cross-validation](docs/DIAGNOSTICS.md) · [References](docs/REFERENCES.md) ·
+[Roadmap](docs/ROADMAP.md) · [Engineering notes](docs/ENGINEERING_NOTES.md)
+
 {status}
 
 ## Results at a glance
@@ -818,11 +834,13 @@ flowchart LR
     C --> OUT
 ```
 
-| Model | Idea | Parameters |
-|---|---|---:|
-| Early Fusion | Stack T1 and T2 as 6 channels, one network, three heads | {PARAMS['early_fusion']}M |
-| SSCD | Siamese encoder; semantic decoder per date (shared) + change decoder on concatenated features | {PARAMS['sscd']}M |
-| Bi-SRNet-lite | SSCD + cross-temporal attention on the deepest features + semantic-consistency loss | {PARAMS['bisrnet']}M |
+| Model | Idea | Based on | Parameters |
+|---|---|---|---:|
+| Early Fusion | Stack T1 and T2 as 6 channels, one network, three heads | HRSCD str.2 [[2]](https://arxiv.org/abs/1810.08452) | {PARAMS['early_fusion']}M |
+| SSCD | Siamese encoder; semantic decoder per date (shared) + change decoder on concatenated features | SSCD-l [[3]](https://arxiv.org/abs/2108.06103) | {PARAMS['sscd']}M |
+| Bi-SRNet-lite | SSCD + cross-temporal attention on the deepest features + semantic-consistency loss | Bi-SRNet [[3]](https://arxiv.org/abs/2108.06103) | {PARAMS['bisrnet']}M |
+
+Encoder: ResNet-18 [[7]](https://arxiv.org/abs/1512.03385), decoder: FPN-style [[8]](https://arxiv.org/abs/1612.03144).
 
 ### Loss
 
@@ -896,11 +914,25 @@ SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
 > comparison inside this project.
 
 {diag_md}
+## Next steps
+
+The full plan with time estimates is in [docs/ROADMAP.md](docs/ROADMAP.md). In short:
+
+1. **Statistics:** finish the 3-fold cross-validation and add seeds, so every gap has a mean ± std.
+2. **Cheap fixes suggested by the error analysis:** tune the change threshold (missed changes are
+   the largest error), train the best configuration longer, and fix or drop OHEM.
+3. **New method, a transition-aware loss:** weight each pixel by how rare its *from → to* change
+   is, and compare it against CE, WCE + Dice and the SeK loss of Mamba-FCS
+   [[6]](https://arxiv.org/abs/2508.08232).
+4. **Published setting:** 512 px, a larger backbone and 50+ epochs on a GPU.
+5. **A second dataset:** Landsat-SCD.
+6. **Paper:** write it up and choose a venue.
+
 ## Reproduce
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
-pip install torch torchvision numpy scipy pillow matplotlib gdown
+pip install -r requirements.txt
 python prepare_data.py          # streams SECOND from Google Drive → data/SECOND_256 (needs bsdtar)
 python analyze_imbalance.py     # → results/imbalance_stats.json
 ./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
@@ -925,6 +957,10 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 | [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |
 | [run_cv.sh](run_cv.sh) | 3-fold cross-validation of all 12 configurations |
 | [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md) | Problems hit while running on a laptop and their fixes |
+| [docs/REFERENCES.md](docs/REFERENCES.md) | Paper, link and code location for every model, loss and metric |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Next steps towards a paper |
+| [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Short summary for supervisors and reviewers |
+| [requirements.txt](requirements.txt) | Exact package versions |
 | `results/` | Per-run JSON (metrics, confusion matrix, training history), CSV summary |
 | `logs/` | Training logs |
 
@@ -941,14 +977,24 @@ One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 2
 
 ## References
 
-- Yang et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images*, IEEE TGRS 2021 (SECOND dataset and metrics).
-- Daudt et al., *Multitask learning for large-scale semantic change detection*, CVIU 2019 (HRSCD).
-- Ding et al., *Bi-Temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images*, IEEE TGRS 2022 (SSCD-l, Bi-SRNet).
-- Ding et al., *Joint Spatio-Temporal Modeling for Semantic Change Detection in Remote Sensing Images*, IEEE TGRS 2024 (SCanNet).
-- Chen et al., *ChangeMamba: Remote Sensing Change Detection with Spatio-Temporal State Space Model*, IEEE TGRS 2024.
-- Cui et al., *Class-Balanced Loss Based on Effective Number of Samples*, CVPR 2019.
-- Lin et al., *Focal Loss for Dense Object Detection*, ICCV 2017.
-- Published SECOND numbers as tabulated in [Mamba-FCS (arXiv 2508.08232)](https://arxiv.org/abs/2508.08232).
+Full table (each model, loss, optimiser and metric → paper, link, code location, our changes):
+**[docs/REFERENCES.md](docs/REFERENCES.md)**. Main sources:
+
+1. Yang et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images*, IEEE TGRS 2022 — SECOND dataset and metrics. [arXiv:2010.05687](https://arxiv.org/abs/2010.05687)
+2. Daudt et al., *Multitask Learning for Large-scale Semantic Change Detection*, CVIU 2019 — HRSCD strategies (Early Fusion). [arXiv:1810.08452](https://arxiv.org/abs/1810.08452)
+3. Ding et al., *Bi-Temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images*, IEEE TGRS 2022 — SSCD-l, Bi-SRNet, consistency loss. [arXiv:2108.06103](https://arxiv.org/abs/2108.06103)
+4. Ding et al., *Joint Spatio-Temporal Modeling for the Semantic Change Detection in Remote Sensing Images*, IEEE TGRS 2024 — SCanNet. [arXiv:2212.05245](https://arxiv.org/abs/2212.05245)
+5. Chen et al., *ChangeMamba*, IEEE TGRS 2024. [arXiv:2404.03425](https://arxiv.org/abs/2404.03425)
+6. *Mamba-FCS* (SeK loss; published SECOND table), 2025. [arXiv:2508.08232](https://arxiv.org/abs/2508.08232)
+7. He et al., *Deep Residual Learning* (ResNet), CVPR 2016. [arXiv:1512.03385](https://arxiv.org/abs/1512.03385)
+8. Lin et al., *Feature Pyramid Networks*, CVPR 2017. [arXiv:1612.03144](https://arxiv.org/abs/1612.03144)
+9. Eigen & Fergus, median-frequency balancing, ICCV 2015. [arXiv:1411.4734](https://arxiv.org/abs/1411.4734)
+10. Cui et al., *Class-Balanced Loss Based on Effective Number of Samples*, CVPR 2019. [arXiv:1901.05555](https://arxiv.org/abs/1901.05555)
+11. Lin et al., *Focal Loss for Dense Object Detection*, ICCV 2017. [arXiv:1708.02002](https://arxiv.org/abs/1708.02002)
+12. Milletari et al., *V-Net* (Dice loss), 3DV 2016. [arXiv:1606.04797](https://arxiv.org/abs/1606.04797)
+13. Shrivastava et al., *Online Hard Example Mining*, CVPR 2016. [arXiv:1604.03540](https://arxiv.org/abs/1604.03540)
+14. Gupta et al., *LVIS* (repeat-factor sampling), CVPR 2019. [arXiv:1908.03195](https://arxiv.org/abs/1908.03195)
+15. Loshchilov & Hutter, *AdamW*, ICLR 2019. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101) · Smith & Topin, *One-cycle / Super-Convergence*, 2017. [arXiv:1708.07120](https://arxiv.org/abs/1708.07120)
 """
 open(os.path.join(scd.ROOT, "README.md"), "w").write(readme)
 
@@ -975,9 +1021,9 @@ Generated by `make_docs.py` from `results/*.json`. Test split = 595 pairs. {stat
 
 ## Technique definitions
 
-| Technique | Definition |
-|---|---|
-""" + "\n".join(f"| {v[0]} | {v[1]} |" for v in TECH.values()) + f"""
+| Technique | Definition | Reference |
+|---|---|---|
+""" + "\n".join(f"| {v[0]} | {v[1]} | {TECH_REF.get(k, '')} |" for k, v in TECH.items()) + f"""
 
 ## Published SECOND results (reference only)
 

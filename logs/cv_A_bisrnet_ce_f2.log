@@ -1,9 +1,23 @@
 train/val/test = 1582/791/595  change ratio = 0.200
 [A_bisrnet_ce_f2] ep 01 loss 2.1945 | val OA 74.95 mIoU 54.83 SeK 0.37 Fscd 36.68 | 1.1 min
-[A_bisrnet_ce_f2] ep 02 loss 1.5157 | val OA 84.16 mIoU 60.81 SeK 7.52 Fscd 43.30 | 2.1 min
-[A_bisrnet_ce_f2] ep 03 loss 1.3456 | val OA 84.65 mIoU 63.24 SeK 8.76 Fscd 45.81 | 3.2 min
-[A_bisrnet_ce_f2] ep 04 loss 1.2819 | val OA 84.34 mIoU 66.04 SeK 10.60 Fscd 49.76 | 4.3 min
+[A_bisrnet_ce_f2] ep 02 loss 1.5157 | val OA 84.16 mIoU 60.81 SeK 7.52 Fscd 43.30 | 2.2 min
+[A_bisrnet_ce_f2] ep 03 loss 1.3456 | val OA 84.65 mIoU 63.24 SeK 8.76 Fscd 45.81 | 3.3 min
+[A_bisrnet_ce_f2] ep 04 loss 1.2819 | val OA 84.34 mIoU 66.04 SeK 10.60 Fscd 49.76 | 4.2 min
 [A_bisrnet_ce_f2] ep 05 loss 1.2451 | val OA 84.56 mIoU 66.81 SeK 11.95 Fscd 51.78 | 5.3 min
-[A_bisrnet_ce_f2] ep 06 loss 1.2224 | val OA 84.96 mIoU 64.59 SeK 10.52 Fscd 48.63 | 6.5 min
-[A_bisrnet_ce_f2] ep 07 loss 1.1982 | val OA 85.22 mIoU 66.81 SeK 12.53 Fscd 51.98 | 7.9 min
-[A_bisrnet_ce_f2] ep 08 loss 1.1648 | val OA 85.30 mIoU 67.62 SeK 13.49 Fscd 52.81 | 9.1 min
+[A_bisrnet_ce_f2] ep 06 loss 1.2224 | val OA 84.96 mIoU 64.59 SeK 10.52 Fscd 48.63 | 6.3 min
+[A_bisrnet_ce_f2] ep 07 loss 1.1982 | val OA 85.22 mIoU 66.81 SeK 12.53 Fscd 51.98 | 7.4 min
+[A_bisrnet_ce_f2] ep 08 loss 1.1648 | val OA 85.30 mIoU 67.62 SeK 13.49 Fscd 52.81 | 8.5 min
+[A_bisrnet_ce_f2] ep 09 loss 1.1496 | val OA 85.62 mIoU 67.10 SeK 13.48 Fscd 52.86 | 9.5 min
+[A_bisrnet_ce_f2] ep 10 loss 1.1425 | val OA 85.75 mIoU 67.75 SeK 14.37 Fscd 53.93 | 10.6 min
+[A_bisrnet_ce_f2] ep 11 loss 1.1072 | val OA 85.21 mIoU 67.86 SeK 14.29 Fscd 54.13 | 11.6 min
+[A_bisrnet_ce_f2] ep 12 loss 1.0949 | val OA 85.54 mIoU 67.78 SeK 14.19 Fscd 53.65 | 12.6 min
+[A_bisrnet_ce_f2] ep 13 loss 1.0602 | val OA 85.91 mIoU 67.39 SeK 14.15 Fscd 53.51 | 13.7 min
+[A_bisrnet_ce_f2] ep 14 loss 1.0582 | val OA 85.50 mIoU 67.62 SeK 14.03 Fscd 53.72 | 14.7 min
+[A_bisrnet_ce_f2] ep 15 loss 1.0391 | val OA 85.75 mIoU 67.91 SeK 14.53 Fscd 54.07 | 15.7 min
+[A_bisrnet_ce_f2] ep 16 loss 1.0308 | val OA 85.97 mIoU 66.99 SeK 13.77 Fscd 52.96 | 16.8 min
+[A_bisrnet_ce_f2] ep 17 loss 1.0125 | val OA 85.88 mIoU 67.45 SeK 14.17 Fscd 53.23 | 17.8 min
+[A_bisrnet_ce_f2] ep 18 loss 1.0060 | val OA 85.81 mIoU 67.84 SeK 14.41 Fscd 53.86 | 18.9 min
+[A_bisrnet_ce_f2] ep 19 loss 0.9978 | val OA 85.81 mIoU 68.06 SeK 14.57 Fscd 53.98 | 20.0 min
+[A_bisrnet_ce_f2] ep 20 loss 0.9970 | val OA 85.86 mIoU 68.09 SeK 14.75 Fscd 54.13 | 21.0 min
+[A_bisrnet_ce_f2] TEST (best val epoch 20): OA 85.76 mIoU 67.57 SeK 13.16 Fscd 52.23
+per-class IoU: {'no-change': 86.51, 'non-veg ground': 32.98, 'tree': 31.02, 'low vegetation': 16.61, 'water': 13.83, 'building': 48.5, 'playground': 22.11}

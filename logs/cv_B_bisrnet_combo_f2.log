@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.200
+[B_bisrnet_combo_f2] ep 01 loss 3.9720 | val OA 63.28 mIoU 47.49 SeK 3.50 Fscd 33.97 | 1.2 min
+[B_bisrnet_combo_f2] ep 02 loss 3.0661 | val OA 82.13 mIoU 64.01 SeK 8.97 Fscd 47.35 | 2.3 min
+[B_bisrnet_combo_f2] ep 03 loss 2.7449 | val OA 82.28 mIoU 65.65 SeK 10.44 Fscd 49.18 | 3.5 min
+[B_bisrnet_combo_f2] ep 04 loss 2.6047 | val OA 81.38 mIoU 65.65 SeK 11.74 Fscd 50.01 | 4.6 min
+[B_bisrnet_combo_f2] ep 05 loss 2.5349 | val OA 80.50 mIoU 64.76 SeK 12.07 Fscd 50.52 | 5.8 min
+[B_bisrnet_combo_f2] ep 06 loss 2.4890 | val OA 82.73 mIoU 66.71 SeK 12.95 Fscd 51.86 | 6.9 min
+[B_bisrnet_combo_f2] ep 07 loss 2.4456 | val OA 83.30 mIoU 67.24 SeK 13.56 Fscd 52.81 | 8.1 min
+[B_bisrnet_combo_f2] ep 08 loss 2.3925 | val OA 82.98 mIoU 67.38 SeK 13.72 Fscd 52.22 | 9.3 min
+[B_bisrnet_combo_f2] ep 09 loss 2.3517 | val OA 83.20 mIoU 67.70 SeK 14.08 Fscd 52.57 | 10.4 min
+[B_bisrnet_combo_f2] ep 10 loss 2.3201 | val OA 82.77 mIoU 67.46 SeK 14.64 Fscd 53.24 | 11.6 min
+[B_bisrnet_combo_f2] ep 11 loss 2.2766 | val OA 82.19 mIoU 66.89 SeK 14.30 Fscd 52.71 | 12.7 min
+[B_bisrnet_combo_f2] ep 12 loss 2.2325 | val OA 82.33 mIoU 67.25 SeK 14.90 Fscd 53.25 | 13.8 min
+[B_bisrnet_combo_f2] ep 13 loss 2.1817 | val OA 84.62 mIoU 68.56 SeK 15.31 Fscd 54.72 | 15.0 min
+[B_bisrnet_combo_f2] ep 14 loss 2.1658 | val OA 82.19 mIoU 67.11 SeK 14.58 Fscd 52.89 | 16.1 min
+[B_bisrnet_combo_f2] ep 15 loss 2.1267 | val OA 83.12 mIoU 67.85 SeK 15.14 Fscd 53.90 | 17.2 min
+[B_bisrnet_combo_f2] ep 16 loss 2.1083 | val OA 84.73 mIoU 68.67 SeK 15.24 Fscd 54.69 | 18.4 min
+[B_bisrnet_combo_f2] ep 17 loss 2.0843 | val OA 84.36 mIoU 68.63 SeK 15.28 Fscd 54.30 | 19.5 min
+[B_bisrnet_combo_f2] ep 18 loss 2.0683 | val OA 83.99 mIoU 68.41 SeK 15.21 Fscd 54.35 | 20.6 min
+[B_bisrnet_combo_f2] ep 19 loss 2.0506 | val OA 83.87 mIoU 68.40 SeK 15.20 Fscd 54.20 | 21.8 min
+[B_bisrnet_combo_f2] ep 20 loss 2.0551 | val OA 83.81 mIoU 68.48 SeK 15.43 Fscd 54.33 | 22.9 min
+[B_bisrnet_combo_f2] TEST (best val epoch 20): OA 83.68 mIoU 68.15 SeK 14.20 Fscd 52.60
+per-class IoU: {'no-change': 84.72, 'non-veg ground': 34.39, 'tree': 31.32, 'low vegetation': 19.08, 'water': 21.15, 'building': 47.86, 'playground': 35.42}

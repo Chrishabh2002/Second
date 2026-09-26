@@ -1,0 +1,8 @@
+[A_early_fusion_ce_f0] TEST (best val epoch 17): OA 84.02 mIoU 62.42 SeK 6.65 Fscd 43.73
+[A_early_fusion_ce_f1] TEST (best val epoch 18): OA 83.41 mIoU 63.00 SeK 6.77 Fscd 44.98
+[A_early_fusion_ce_f2] TEST (best val epoch 15): OA 83.65 mIoU 62.93 SeK 6.82 Fscd 44.62
+[A_sscd_ce_f0] TEST (best val epoch 20): OA 85.90 mIoU 68.10 SeK 13.39 Fscd 52.15
+[A_sscd_ce_f1] TEST (best val epoch 20): OA 85.67 mIoU 67.67 SeK 12.92 Fscd 51.71
+[A_sscd_ce_f2] TEST (best val epoch 20): OA 85.64 mIoU 67.47 SeK 12.61 Fscd 51.15
+[A_bisrnet_ce_f0] TEST (best val epoch 20): OA 85.97 mIoU 68.30 SeK 14.00 Fscd 53.26
+[A_bisrnet_ce_f1] TEST (best val epoch 14): OA 85.63 mIoU 67.90 SeK 13.49 Fscd 52.87

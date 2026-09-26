@@ -42,11 +42,14 @@ never used for training or model selection. Each fold's best-validation model is
 Because each fold trains on fewer pairs than the main runs (2,077), CV scores are a little lower;
 they are used to measure **stability and ranking**, not to replace the main-table numbers.
 
-- **Best by cross-validation:** SSCD + CE (baseline), test SeK 12.97 ± 0.39 over 3 folds.
-- Fit diagnosis: 2× mild overfitting.
+- **Best by cross-validation:** Bi-SRNet-lite + WCE + Dice, test SeK 14.26 ± 0.19 over 3 folds.
+- Against plain CE on the same model it wins in **3 of 3 folds** (mean +0.70 SeK, std 0.30). The gain is consistent across folds.
+- Fit diagnosis: 4× mild overfitting.
 
 | Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
 |---|---:|---:|---:|---:|---:|---:|---|---|
+| Bi-SRNet-lite + WCE + Dice | 14.96 ± 0.62 | **14.26 ± 0.19** | 52.77 ± 0.25 | 24.18 ± 0.91 | 9.22 ± 0.52 | 0.3% | Mild overfitting | 3/3 folds (+0.70) |
+| Bi-SRNet-lite + CE (baseline) | 14.39 ± 0.54 | **13.55 ± 0.42** | 52.79 ± 0.52 | 23.16 ± 1.03 | 8.77 ± 0.49 | 0.8% | Mild overfitting | 3/3 folds (+6.81) |
 | SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
 | Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
 
@@ -74,6 +77,8 @@ Losses of different techniques are defined differently, so compare train and val
 
 ![Generalisation gap](figures/generalization_gap.png)
 
+*Cross-validation still running for: B_bisrnet_dice.*
+
 ## Per fold
 
 ### Early Fusion + CE (baseline)
@@ -91,3 +96,19 @@ Losses of different techniques are defined differently, so compare train and val
 | 0 | 20 | 25.21 | 13.55 | 13.39 | 11.66 | 2.6% | +0.08 |
 | 1 | 20 | 24.98 | 12.57 | 12.92 | 12.40 | 4.1% | +0.06 |
 | 2 | 20 | 25.34 | 14.00 | 12.61 | 11.33 | 1.5% | +0.17 |
+
+### Bi-SRNet-lite + CE (baseline)
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 23.79 | 14.66 | 14.00 | 9.13 | 0.5% | +0.10 |
+| 1 | 14 | 21.97 | 13.77 | 13.49 | 9.97 | 1.6% | +0.01 |
+| 2 | 20 | 23.72 | 14.75 | 13.16 | 8.98 | 0.4% | +0.23 |
+
+### Bi-SRNet-lite + WCE + Dice
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 23.93 | 15.20 | 14.47 | 8.73 | 0.1% | +0.12 |
+| 1 | 20 | 23.41 | 14.26 | 14.10 | 9.16 | 0.1% | +0.02 |
+| 2 | 20 | 25.19 | 15.43 | 14.20 | 9.77 | 0.7% | +0.03 |

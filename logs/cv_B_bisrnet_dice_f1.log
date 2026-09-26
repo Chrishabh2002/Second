@@ -1,0 +1,4 @@
+train/val/test = 1582/791/595  change ratio = 0.201
+[B_bisrnet_dice_f1] ep 01 loss 3.7086 | val OA 68.59 mIoU 50.78 SeK 2.50 Fscd 35.52 | 1.2 min
+[B_bisrnet_dice_f1] ep 02 loss 2.7694 | val OA 80.36 mIoU 62.57 SeK 7.69 Fscd 45.65 | 2.4 min
+[B_bisrnet_dice_f1] ep 03 loss 2.4814 | val OA 83.48 mIoU 64.94 SeK 9.94 Fscd 49.51 | 3.5 min

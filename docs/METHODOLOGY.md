@@ -1,7 +1,8 @@
 # Methodology
 
 This page describes how models are built, trained and scored. Every detail here matches the code in
-[scd.py](../scd.py) and [train.py](../train.py).
+[scd.py](../scd.py) and [train.py](../train.py). The paper behind each component, with links, is listed
+in [REFERENCES.md](REFERENCES.md).
 
 ## 1. Task
 
@@ -34,19 +35,19 @@ All models use the same **ImageNet-pretrained ResNet-18** encoder, which gives f
 lateral convs to 64 channels, top-down upsampling with addition, and a 3×3 conv-BN-ReLU after each
 merge. Heads are 1×1 convs, bilinearly upsampled to the input size.
 
-### Early Fusion (HRSCD strategy 2 style), 11.36M parameters
+### Early Fusion (HRSCD strategy 2 style, [Daudt et al.](https://arxiv.org/abs/1810.08452)), 11.36M parameters
 T1 and T2 are stacked as a 6-channel input. The first ResNet conv is widened by copying its
 pretrained RGB filters and halving them. One decoder feeds three heads: change (1 channel),
 semantic T1 (6), semantic T2 (6).
 
-### Siamese SSCD (SSCD-l style), 11.58M parameters
+### Siamese SSCD (SSCD-l style, [Ding et al.](https://arxiv.org/abs/2108.06103)), 11.58M parameters
 - A **shared** encoder processes T1 and T2 separately.
 - A shared **semantic decoder** is applied to each date's features, followed by a shared semantic
   head.
 - A separate **change decoder** takes the per-scale concatenation `[f1, f2]`
   (128/256/512/1024 channels) and feeds the change head.
 
-### Bi-SRNet-lite, 11.91M parameters
+### Bi-SRNet-lite ([Ding et al.](https://arxiv.org/abs/2108.06103)), 11.91M parameters
 SSCD plus two ideas from Bi-SRNet:
 
 1. **Cross-temporal attention** on the deepest features (stride 32). Each date's features attend to
@@ -74,13 +75,13 @@ dates, and the change ratio `p`.
 |---|---|---|
 | CE (baseline) | BCE | CE |
 | Weighted CE | BCE, `pos_weight = √((1−p)/p)` | CE, weights ∝ 1/√freq |
-| Median-freq | BCE + `pos_weight` | CE, weights = median(freq)/freq |
-| Class-balanced | BCE + `pos_weight` | CE, weights = (1−β)/(1−β^n), β = 1 − 1/mean(n) |
-| Focal | Focal BCE, γ = 2, α = 0.75 | Focal CE, γ = 2 |
-| CE + Dice | BCE + soft Dice | CE + multi-class soft Dice |
-| OHEM | Mean of the hardest 25% of pixel BCE values | Mean of the hardest 25% of pixel CE values |
+| Median-freq ([Eigen & Fergus](https://arxiv.org/abs/1411.4734)) | BCE + `pos_weight` | CE, weights = median(freq)/freq |
+| Class-balanced ([Cui et al.](https://arxiv.org/abs/1901.05555)) | BCE + `pos_weight` | CE, weights = (1−β)/(1−β^n), β = 1 − 1/mean(n) |
+| Focal ([Lin et al.](https://arxiv.org/abs/1708.02002)) | Focal BCE, γ = 2, α = 0.75 | Focal CE, γ = 2 |
+| CE + Dice ([V-Net](https://arxiv.org/abs/1606.04797)) | BCE + soft Dice | CE + multi-class soft Dice |
+| OHEM ([Shrivastava et al.](https://arxiv.org/abs/1604.03540)) | Mean of the hardest 25% of pixel BCE values | Mean of the hardest 25% of pixel CE values |
 | WCE + Dice | BCE + `pos_weight` + Dice | Weighted CE + Dice |
-| … + rare sampling | same as the loss | same as the loss; training images are drawn with probability ∝ max over classes present of 1/√freq |
+| … + rare sampling (after [LVIS](https://arxiv.org/abs/1908.03195) repeat-factor sampling) | same as the loss | same as the loss; training images are drawn with probability ∝ max over classes present of 1/√freq |
 
 All class-weight vectors are normalised to mean 1. With `p ≈ 0.20`, the change `pos_weight` is ≈ 2.0.
 
@@ -99,7 +100,7 @@ All class-weight vectors are normalised to mean 1. With `p ≈ 0.20`, the change
 
 ## 6. Metrics
 
-This project uses the **official SECOND metrics**, the same definitions as the evaluation code of
+This project uses the **official SECOND metrics** ([Yang et al.](https://arxiv.org/abs/2010.05687)), the same definitions as the evaluation code of
 SECOND, Bi-SRNet and SCanNet. Predicted and true SCD maps of both dates are accumulated into one
 7×7 confusion matrix (rows = prediction, columns = truth, class 0 = no-change).
 
