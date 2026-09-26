@@ -5,3 +5,10 @@ best architecture by val SeK: bisrnet
 skip B_bisrnet_wce
 skip B_bisrnet_median
 skip B_bisrnet_cb
+[B_bisrnet_focal] TEST (best val epoch 19): OA 81.58 mIoU 66.31 SeK 13.89 Fscd 52.09
+[B_bisrnet_dice] TEST (best val epoch 18): OA 85.03 mIoU 68.98 SeK 14.67 Fscd 53.76
+[B_bisrnet_ohem] TEST (best val epoch 10): OA 43.31 mIoU 32.20 SeK 3.60 Fscd 26.77
+[B_bisrnet_ce_rare] TEST (best val epoch 14): OA 85.13 mIoU 67.93 SeK 13.67 Fscd 53.14
+[B_bisrnet_combo] TEST (best val epoch 19): OA 84.27 mIoU 68.97 SeK 15.38 Fscd 53.88
+[B_bisrnet_combo_rare] TEST (best val epoch 19): OA 84.22 mIoU 68.50 SeK 14.38 Fscd 53.04
+ALL_DONE

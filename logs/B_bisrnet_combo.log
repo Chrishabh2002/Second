@@ -1,0 +1,23 @@
+train/val/test = 2077/296/595  change ratio = 0.201
+[B_bisrnet_combo] ep 01 loss 3.8716 | val OA 71.79 mIoU 53.24 SeK 2.70 Fscd 37.67 | 1.2 min
+[B_bisrnet_combo] ep 02 loss 2.9401 | val OA 74.82 mIoU 58.39 SeK 7.71 Fscd 43.11 | 2.4 min
+[B_bisrnet_combo] ep 03 loss 2.6739 | val OA 80.10 mIoU 63.02 SeK 9.68 Fscd 47.82 | 3.6 min
+[B_bisrnet_combo] ep 04 loss 2.5680 | val OA 83.36 mIoU 65.98 SeK 12.30 Fscd 51.73 | 4.8 min
+[B_bisrnet_combo] ep 05 loss 2.5073 | val OA 82.93 mIoU 66.43 SeK 12.68 Fscd 51.77 | 6.0 min
+[B_bisrnet_combo] ep 06 loss 2.4605 | val OA 82.61 mIoU 66.31 SeK 13.03 Fscd 52.19 | 7.3 min
+[B_bisrnet_combo] ep 07 loss 2.4121 | val OA 83.98 mIoU 66.91 SeK 13.26 Fscd 52.97 | 8.5 min
+[B_bisrnet_combo] ep 08 loss 2.3912 | val OA 80.65 mIoU 65.16 SeK 12.36 Fscd 49.94 | 9.7 min
+[B_bisrnet_combo] ep 09 loss 2.3569 | val OA 82.95 mIoU 67.18 SeK 14.39 Fscd 53.50 | 10.9 min
+[B_bisrnet_combo] ep 10 loss 2.3072 | val OA 82.67 mIoU 66.99 SeK 14.33 Fscd 53.37 | 12.1 min
+[B_bisrnet_combo] ep 11 loss 2.2699 | val OA 84.08 mIoU 68.05 SeK 15.11 Fscd 54.70 | 13.3 min
+[B_bisrnet_combo] ep 12 loss 2.2522 | val OA 84.34 mIoU 67.78 SeK 14.48 Fscd 53.96 | 14.5 min
+[B_bisrnet_combo] ep 13 loss 2.2183 | val OA 84.80 mIoU 68.24 SeK 15.00 Fscd 54.66 | 15.7 min
+[B_bisrnet_combo] ep 14 loss 2.1801 | val OA 83.89 mIoU 68.04 SeK 15.24 Fscd 54.73 | 16.9 min
+[B_bisrnet_combo] ep 15 loss 2.1584 | val OA 83.92 mIoU 68.13 SeK 15.48 Fscd 54.87 | 18.1 min
+[B_bisrnet_combo] ep 16 loss 2.1405 | val OA 83.39 mIoU 67.75 SeK 15.13 Fscd 54.08 | 19.3 min
+[B_bisrnet_combo] ep 17 loss 2.1297 | val OA 83.62 mIoU 67.89 SeK 15.08 Fscd 54.44 | 20.5 min
+[B_bisrnet_combo] ep 18 loss 2.1067 | val OA 83.33 mIoU 67.86 SeK 15.24 Fscd 54.30 | 21.7 min
+[B_bisrnet_combo] ep 19 loss 2.1054 | val OA 84.04 mIoU 68.29 SeK 15.54 Fscd 54.84 | 22.9 min
+[B_bisrnet_combo] ep 20 loss 2.0911 | val OA 83.69 mIoU 68.09 SeK 15.49 Fscd 54.68 | 24.1 min
+[B_bisrnet_combo] TEST (best val epoch 19): OA 84.27 mIoU 68.97 SeK 15.38 Fscd 53.88
+per-class IoU: {'no-change': 85.28, 'non-veg ground': 35.16, 'tree': 33.05, 'low vegetation': 20.66, 'water': 22.99, 'building': 48.93, 'playground': 32.86}

@@ -1,0 +1,23 @@
+train/val/test = 2077/296/595  change ratio = 0.201
+[B_bisrnet_ohem] ep 01 loss 2.8887 | val OA 74.38 mIoU 49.73 SeK -6.63 Fscd 23.49 | 1.1 min
+[B_bisrnet_ohem] ep 02 loss 2.4084 | val OA 69.95 mIoU 50.08 SeK -1.86 Fscd 29.79 | 2.2 min
+[B_bisrnet_ohem] ep 03 loss 2.2954 | val OA 62.40 mIoU 40.50 SeK -6.57 Fscd 23.11 | 3.3 min
+[B_bisrnet_ohem] ep 04 loss 2.2590 | val OA 79.43 mIoU 51.83 SeK -2.43 Fscd 27.66 | 4.4 min
+[B_bisrnet_ohem] ep 05 loss 2.2411 | val OA 61.70 mIoU 41.29 SeK -5.03 Fscd 24.09 | 5.5 min
+[B_bisrnet_ohem] ep 06 loss 2.2102 | val OA 80.75 mIoU 59.05 SeK 1.58 Fscd 35.44 | 6.7 min
+[B_bisrnet_ohem] ep 07 loss 2.2039 | val OA 82.44 mIoU 51.35 SeK 2.85 Fscd 26.37 | 7.8 min
+[B_bisrnet_ohem] ep 08 loss 2.1959 | val OA 71.18 mIoU 52.88 SeK -1.25 Fscd 31.06 | 8.9 min
+[B_bisrnet_ohem] ep 09 loss 2.1885 | val OA 82.46 mIoU 54.88 SeK 2.74 Fscd 32.78 | 10.0 min
+[B_bisrnet_ohem] ep 10 loss 2.1645 | val OA 43.65 mIoU 32.25 SeK 3.85 Fscd 28.06 | 11.1 min
+[B_bisrnet_ohem] ep 11 loss 2.1538 | val OA 59.77 mIoU 44.61 SeK 3.22 Fscd 32.07 | 12.3 min
+[B_bisrnet_ohem] ep 12 loss 2.1440 | val OA 62.96 mIoU 46.72 SeK 1.25 Fscd 30.25 | 13.4 min
+[B_bisrnet_ohem] ep 13 loss 2.1298 | val OA 66.96 mIoU 49.49 SeK 0.98 Fscd 32.89 | 14.5 min
+[B_bisrnet_ohem] ep 14 loss 2.1214 | val OA 81.83 mIoU 51.80 SeK 1.50 Fscd 26.82 | 15.7 min
+[B_bisrnet_ohem] ep 15 loss 2.1064 | val OA 80.86 mIoU 53.77 SeK 0.05 Fscd 31.18 | 16.8 min
+[B_bisrnet_ohem] ep 16 loss 2.1023 | val OA 81.84 mIoU 52.49 SeK 1.58 Fscd 27.50 | 17.9 min
+[B_bisrnet_ohem] ep 17 loss 2.0920 | val OA 80.61 mIoU 45.04 SeK -0.08 Fscd 12.57 | 19.1 min
+[B_bisrnet_ohem] ep 18 loss 2.0897 | val OA 79.46 mIoU 55.12 SeK -0.66 Fscd 33.33 | 20.2 min
+[B_bisrnet_ohem] ep 19 loss 2.0855 | val OA 80.50 mIoU 56.35 SeK 0.60 Fscd 34.70 | 21.4 min
+[B_bisrnet_ohem] ep 20 loss 2.0766 | val OA 81.16 mIoU 58.83 SeK 2.39 Fscd 37.35 | 22.5 min
+[B_bisrnet_ohem] TEST (best val epoch 10): OA 43.31 mIoU 32.20 SeK 3.60 Fscd 26.77
+per-class IoU: {'no-change': 38.62, 'non-veg ground': 13.67, 'tree': 16.12, 'low vegetation': 12.36, 'water': 14.56, 'building': 17.93, 'playground': 19.03}

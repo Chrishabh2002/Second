@@ -15,7 +15,7 @@ comes from the thing being tested:
 
 Everything runs end to end on a 16 GB Apple M4 laptop.
 
-**Status:** 3/9 phase-B runs complete; still running: `focal`, `dice`, `ohem`, `ce_rare`, `combo`, `combo_rare`. Re-run `make_docs.py` when they finish.
+All planned experiments are complete.
 
 ## Results at a glance
 
@@ -24,20 +24,20 @@ Everything runs end to end on a 16 GB Apple M4 laptop.
 | Early Fusion + CE (starting point) | 7.97 | — |
 | SSCD + CE | 13.59 | **+70.4%** |
 | Bi-SRNet-lite + CE (selected architecture) | 14.24 | **+78.6%** |
-| **Best overall: Bi-SRNet-lite + Weighted CE** | **14.52** | **+82.1%** |
+| **Best overall: Bi-SRNet-lite + WCE + Dice** | **15.38** | **+92.9%** |
 
 - **Architecture matters most.** Replacing early fusion with a Siamese design raised SeK by
   70%. Adding cross-temporal attention and a semantic-consistency
   loss (Bi-SRNet-lite) raised it by another 4.8%, with only
   0.33M extra parameters.
-- **Imbalance handling gives a smaller gain.** The best technique, *Weighted CE*, improves SeK by
-  +2.0% over plain CE on the same architecture.
-  3 of 3 techniques beat the CE baseline on SeK. 3 of 3 lower
+- **Imbalance handling gives a smaller gain.** The best technique, *WCE + Dice*, improves SeK by
+  +8.0% over plain CE on the same architecture.
+  6 of 9 techniques beat the CE baseline on SeK. 9 of 9 lower
   overall accuracy (OA): they trade some no-change pixels for more detected change.
 - **Rare classes gain the most.** From the Early Fusion baseline to the best run, *water* IoU goes
-  from 0.0 to 20.9 and *playground* IoU from 9.7 to
-  29.8.
-- **Most errors are missed changes, not wrong classes.** In the best run, 32% of changed
+  from 0.0 to 23.0 and *playground* IoU from 9.7 to
+  32.9.
+- **Most errors are missed changes, not wrong classes.** In the best run, 31% of changed
   pixels (averaged over the 6 classes) are predicted as *no-change*. Mixing up two land-cover
   classes is much rarer ([confusion matrix](#training-curves-and-error-analysis)). The change branch
   has more room to improve than the semantic branch.
@@ -185,17 +185,31 @@ SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
 | Technique | OA | mIoU | **SeK** | Fscd | Change IoU | val SeK | best ep | train min |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | CE (baseline) | 85.75 | 68.65 | 14.24 | 53.36 | 50.67 | 14.48 | 16 | 22.5 |
-| **Weighted CE** | 84.04 | 68.42 | **14.52** | 53.01 | 51.77 | 15.62 | 19 | 22.2 |
+| **WCE + Dice** | 84.27 | 68.97 | **15.38** | 53.88 | 52.66 | 15.54 | 19 | 24.3 |
+| CE + Dice | 85.03 | 68.98 | 14.67 | 53.76 | 51.96 | 15.03 | 18 | 24.1 |
+| Weighted CE | 84.04 | 68.42 | 14.52 | 53.01 | 51.77 | 15.62 | 19 | 22.2 |
+| WCE + Dice + rare sampling | 84.22 | 68.50 | 14.38 | 53.04 | 51.75 | 14.99 | 19 | 23.9 |
 | Median-freq | 83.13 | 68.11 | 14.36 | 51.82 | 51.86 | 14.76 | 18 | 22.6 |
 | Class-balanced | 83.39 | 68.08 | 14.29 | 52.40 | 51.69 | 15.29 | 18 | 34.7 |
+| Focal | 81.58 | 66.31 | 13.89 | 52.09 | 50.34 | 14.69 | 19 | 22.9 |
+| CE + rare sampling | 85.13 | 67.93 | 13.67 | 53.14 | 49.96 | 14.31 | 14 | 22.6 |
+| OHEM | 43.31 | 32.20 | 3.60 | 26.77 | 25.79 | 3.85 | 10 | 22.6 |
+
+> **OHEM did not train properly** (best validation SeK 3.85, test OA 43.3%). Its default setting was not tuned for this task, so this run shows that setting failing here, not that the technique cannot work.
 
 Relative change against the CE baseline (Δ% for metrics, percentage points for class IoU):
 
 | Technique | ΔSeK | ΔFscd | ΔmIoU | ΔOA | ΔChange IoU | Δwater IoU | Δplayground IoU |
 |---|---:|---:|---:|---:|---:|---:|---:|
+| WCE + Dice | +8.0% | +1.0% | +0.5% | -1.7% | +3.9% | +3.4 pt | +3.1 pt |
+| CE + Dice | +2.9% | +0.7% | +0.5% | -0.8% | +2.5% | +2.5 pt | +4.0 pt |
 | Weighted CE | +2.0% | -0.7% | -0.3% | -2.0% | +2.2% | +1.3 pt | +0.0 pt |
+| WCE + Dice + rare sampling | +0.9% | -0.6% | -0.2% | -1.8% | +2.1% | +3.3 pt | +9.4 pt |
 | Median-freq | +0.8% | -2.9% | -0.8% | -3.1% | +2.4% | -3.3 pt | -0.6 pt |
 | Class-balanced | +0.3% | -1.8% | -0.8% | -2.8% | +2.0% | -0.9 pt | +1.8 pt |
+| Focal | -2.5% | -2.4% | -3.4% | -4.9% | -0.6% | +2.7 pt | +3.8 pt |
+| CE + rare sampling | -4.0% | -0.4% | -1.1% | -0.7% | -1.4% | +2.4 pt | +2.9 pt |
+| OHEM | -74.8% | -49.8% | -53.1% | -49.5% | -49.1% | -5.1 pt | -10.8 pt |
 
 ![Relative gain vs CE](docs/figures/relative_gain_vs_ce.png)
 
@@ -213,7 +227,7 @@ Relative change against the CE baseline (Δ% for metrics, percentage points for 
 
 ![Qualitative predictions](docs/figures/qualitative.png)
 
-*Predictions from `A_early_fusion_ce` on test pairs. Colours follow the official SECOND legend.*
+*Predictions from `B_bisrnet_combo` on test pairs. Colours follow the official SECOND legend.*
 
 ### Comparison with published results
 
@@ -228,7 +242,7 @@ Relative change against the CE baseline (Δ% for metrics, percentage points for 
 | **Ours: Early Fusion** | 256 px, R-18, 20 ep | 84.15 | 63.71 | **7.97** | 46.12 |
 | **Ours: SSCD** | 256 px, R-18, 20 ep | 85.92 | 68.02 | **13.59** | 52.48 |
 | **Ours: Bi-SRNet-lite** | 256 px, R-18, 20 ep | 85.75 | 68.65 | **14.24** | 53.36 |
-| **Ours: Bi-SRNet-lite + Weighted CE** | 256 px, R-18, 20 ep | 84.04 | 68.42 | **14.52** | 53.01 |
+| **Ours: Bi-SRNet-lite + WCE + Dice** | 256 px, R-18, 20 ep | 84.27 | 68.97 | **15.38** | 53.88 |
 
 ![Comparison with published results](docs/figures/literature_comparison.png)
 

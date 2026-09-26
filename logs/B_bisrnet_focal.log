@@ -3,3 +3,21 @@ train/val/test = 2077/296/595  change ratio = 0.201
 [B_bisrnet_focal] ep 02 loss 0.6950 | val OA 73.39 mIoU 57.03 SeK 7.38 Fscd 42.84 | 2.4 min
 [B_bisrnet_focal] ep 03 loss 0.6093 | val OA 77.82 mIoU 60.52 SeK 8.30 Fscd 46.38 | 3.5 min
 [B_bisrnet_focal] ep 04 loss 0.5735 | val OA 79.46 mIoU 62.87 SeK 10.59 Fscd 49.06 | 4.7 min
+[B_bisrnet_focal] ep 05 loss 0.5609 | val OA 80.12 mIoU 64.10 SeK 12.18 Fscd 50.85 | 5.8 min
+[B_bisrnet_focal] ep 06 loss 0.5428 | val OA 81.30 mIoU 65.43 SeK 12.20 Fscd 50.82 | 6.9 min
+[B_bisrnet_focal] ep 07 loss 0.5353 | val OA 81.74 mIoU 65.48 SeK 12.51 Fscd 51.90 | 8.1 min
+[B_bisrnet_focal] ep 08 loss 0.5256 | val OA 73.86 mIoU 58.46 SeK 9.71 Fscd 44.72 | 9.2 min
+[B_bisrnet_focal] ep 09 loss 0.5158 | val OA 80.48 mIoU 64.84 SeK 13.27 Fscd 51.95 | 10.3 min
+[B_bisrnet_focal] ep 10 loss 0.5095 | val OA 79.91 mIoU 64.26 SeK 12.63 Fscd 50.99 | 11.4 min
+[B_bisrnet_focal] ep 11 loss 0.4957 | val OA 81.88 mIoU 66.23 SeK 14.03 Fscd 53.28 | 12.6 min
+[B_bisrnet_focal] ep 12 loss 0.4926 | val OA 81.78 mIoU 65.85 SeK 13.35 Fscd 52.38 | 13.7 min
+[B_bisrnet_focal] ep 13 loss 0.4836 | val OA 82.42 mIoU 66.57 SeK 14.13 Fscd 53.63 | 14.8 min
+[B_bisrnet_focal] ep 14 loss 0.4753 | val OA 81.07 mIoU 65.50 SeK 13.98 Fscd 52.86 | 15.9 min
+[B_bisrnet_focal] ep 15 loss 0.4689 | val OA 81.06 mIoU 65.64 SeK 14.31 Fscd 53.04 | 17.0 min
+[B_bisrnet_focal] ep 16 loss 0.4638 | val OA 80.77 mIoU 65.38 SeK 14.26 Fscd 52.73 | 18.2 min
+[B_bisrnet_focal] ep 17 loss 0.4608 | val OA 80.83 mIoU 65.45 SeK 14.16 Fscd 52.85 | 19.3 min
+[B_bisrnet_focal] ep 18 loss 0.4568 | val OA 80.88 mIoU 65.56 SeK 14.42 Fscd 53.00 | 20.5 min
+[B_bisrnet_focal] ep 19 loss 0.4554 | val OA 81.65 mIoU 66.29 SeK 14.69 Fscd 53.55 | 21.6 min
+[B_bisrnet_focal] ep 20 loss 0.4500 | val OA 81.08 mIoU 65.74 SeK 14.51 Fscd 53.17 | 22.8 min
+[B_bisrnet_focal] TEST (best val epoch 19): OA 81.58 mIoU 66.31 SeK 13.89 Fscd 52.09
+per-class IoU: {'no-change': 82.27, 'non-veg ground': 33.22, 'tree': 31.35, 'low vegetation': 20.29, 'water': 22.28, 'building': 46.82, 'playground': 33.59}

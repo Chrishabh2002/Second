@@ -189,10 +189,11 @@ ax.set_title(f"Phase B: class-imbalance techniques on {ARCH_SHORT[best_arch]}")
 save(fig, "imbalance_techniques.png")
 
 # 5. relative change vs CE baseline (diverging bars) for SeK / Fscd / change IoU
-fig, axes = plt.subplots(1, 3, figsize=(12, 0.42 * len(B) + 1.4), sharey=True)
+BOK = [x for x in B if x["val"] >= 0.5 * base["val"]]  # runs that trained; failures in the tables
+fig, axes = plt.subplots(1, 3, figsize=(12, 0.42 * len(BOK) + 1.4), sharey=True)
 for ax, k in zip(axes, ["SeK", "Fscd", "IoU_c"]):
-    d = [rel(x[k], base[k]) for x in B]
-    y = np.arange(len(B))
+    d = [rel(x[k], base[k]) for x in BOK]
+    y = np.arange(len(BOK))
     ax.barh(y, d, 0.62, color=[BLUE if v >= 0 else RED for v in d], edgecolor=SURF, linewidth=1.5)
     ax.axvline(0, color=INK2, lw=1)
     lim = max(abs(v) for v in d) * 1.45 + 0.5
@@ -200,11 +201,13 @@ for ax, k in zip(axes, ["SeK", "Fscd", "IoU_c"]):
     for i, v in enumerate(d):
         ax.text(v + (lim * 0.03 if v >= 0 else -lim * 0.03), i, f"{v:+.1f}%", va="center",
                 ha="left" if v >= 0 else "right", fontsize=8.5, color=INK2)
-    ax.set_yticks(y, [x["label"] for x in B])
+    ax.set_yticks(y, [x["label"] for x in BOK])
     ax.invert_yaxis()
     ax.set_title({"SeK": "SeK", "Fscd": "Fscd", "IoU_c": "Change IoU"}[k], fontsize=11)
     clean(ax)
-fig.suptitle("Relative change vs. the CE baseline (blue = better, red = worse)", x=0.01,
+fig.suptitle("Relative change vs. the CE baseline (blue = better, red = worse)"
+             + ("" if len(BOK) == len(B) else "; runs that failed to train are in the tables only"),
+             x=0.01, fontsize=11,
              ha="left", fontweight="bold", y=1.03)
 save(fig, "relative_gain_vs_ce.png")
 
@@ -383,6 +386,11 @@ litd = {m[0]: m for m in LIT}
 reach = {x["model"]: x["SeK"] / litd[LIT_OF[x["model"]]][3] * 100 for x in A}
 sscd = next(x for x in A if x["model"] == "sscd")
 oa_drop = sum(x["OA"] < base["OA"] for x in B)
+failed = [x for x in B if x["val"] < 0.5 * base["val"]]
+failed_md = "".join(
+    f"> **{x['label']} did not train properly** (best validation SeK {x['val']:.2f}, test OA "
+    f"{x['OA']:.1f}%). Its default setting was not tuned for this task, so this run shows that "
+    f"setting failing here, not that the technique cannot work.\n\n" for x in failed)
 better_b = [x for x in B if x["SeK"] > base["SeK"]]
 worse_b = [x for x in B if x["SeK"] <= base["SeK"]]
 _Cb = best["conf"].T.astype(float)
@@ -579,7 +587,7 @@ SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
 
 {tbl(BB, "Technique")}
 
-Relative change against the CE baseline (Δ% for metrics, percentage points for class IoU):
+{failed_md}Relative change against the CE baseline (Δ% for metrics, percentage points for class IoU):
 
 {delta_tbl()}
 
