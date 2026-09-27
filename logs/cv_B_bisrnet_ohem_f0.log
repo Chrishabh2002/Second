@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.200
+[B_bisrnet_ohem_f0] ep 01 loss 2.9327 | val OA 61.62 mIoU 42.85 SeK -5.81 Fscd 20.22 | 1.0 min
+[B_bisrnet_ohem_f0] ep 02 loss 2.4513 | val OA 77.47 mIoU 52.71 SeK -4.46 Fscd 25.42 | 2.1 min
+[B_bisrnet_ohem_f0] ep 03 loss 2.3206 | val OA 79.48 mIoU 53.44 SeK -2.10 Fscd 29.10 | 3.1 min
+[B_bisrnet_ohem_f0] ep 04 loss 2.2869 | val OA 62.65 mIoU 46.67 SeK 2.24 Fscd 32.05 | 4.2 min
+[B_bisrnet_ohem_f0] ep 05 loss 2.2464 | val OA 57.78 mIoU 39.48 SeK -1.99 Fscd 26.88 | 5.2 min
+[B_bisrnet_ohem_f0] ep 06 loss 2.2296 | val OA 66.56 mIoU 48.78 SeK 1.99 Fscd 34.57 | 6.2 min
+[B_bisrnet_ohem_f0] ep 07 loss 2.2189 | val OA 81.92 mIoU 52.52 SeK 2.01 Fscd 27.14 | 7.3 min
+[B_bisrnet_ohem_f0] ep 08 loss 2.2042 | val OA 70.25 mIoU 51.77 SeK 0.87 Fscd 34.06 | 8.3 min
+[B_bisrnet_ohem_f0] ep 09 loss 2.1828 | val OA 65.02 mIoU 48.41 SeK 2.01 Fscd 32.64 | 9.3 min
+[B_bisrnet_ohem_f0] ep 10 loss 2.1717 | val OA 81.62 mIoU 54.16 SeK 1.25 Fscd 29.69 | 10.4 min
+[B_bisrnet_ohem_f0] ep 11 loss 2.1540 | val OA 69.12 mIoU 52.02 SeK 2.02 Fscd 34.52 | 11.4 min
+[B_bisrnet_ohem_f0] ep 12 loss 2.1449 | val OA 73.94 mIoU 44.43 SeK -8.77 Fscd 19.12 | 12.4 min
+[B_bisrnet_ohem_f0] ep 13 loss 2.1213 | val OA 62.54 mIoU 45.87 SeK 2.72 Fscd 33.67 | 13.5 min
+[B_bisrnet_ohem_f0] ep 14 loss 2.1147 | val OA 79.95 mIoU 51.18 SeK -1.58 Fscd 27.06 | 14.5 min
+[B_bisrnet_ohem_f0] ep 15 loss 2.1030 | val OA 79.45 mIoU 58.05 SeK 1.51 Fscd 37.25 | 15.6 min
+[B_bisrnet_ohem_f0] ep 16 loss 2.0956 | val OA 78.66 mIoU 58.39 SeK 1.60 Fscd 37.32 | 16.6 min
+[B_bisrnet_ohem_f0] ep 17 loss 2.0877 | val OA 74.43 mIoU 49.45 SeK -4.60 Fscd 29.55 | 17.7 min
+[B_bisrnet_ohem_f0] ep 18 loss 2.0796 | val OA 80.12 mIoU 50.18 SeK -1.38 Fscd 25.44 | 18.7 min
+[B_bisrnet_ohem_f0] ep 19 loss 2.0805 | val OA 81.47 mIoU 57.34 SeK 2.16 Fscd 36.27 | 19.7 min
+[B_bisrnet_ohem_f0] ep 20 loss 2.0735 | val OA 80.24 mIoU 58.92 SeK 2.74 Fscd 39.47 | 20.8 min
+[B_bisrnet_ohem_f0] TEST (best val epoch 20): OA 80.91 mIoU 59.89 SeK 3.02 Fscd 39.77
+per-class IoU: {'no-change': 81.86, 'non-veg ground': 21.31, 'tree': 22.13, 'low vegetation': 13.86, 'water': 15.08, 'building': 34.34, 'playground': 26.88}

@@ -503,7 +503,7 @@ if cvs:
         n = len(cvs)
         cols = 4
         rows_n = int(np.ceil(n / cols))
-        fig, axes = plt.subplots(rows_n, cols, figsize=(13, 2.6 * rows_n + 0.6), squeeze=False)
+        fig, axes = plt.subplots(rows_n, cols, figsize=(13, 3.0 * rows_n + 0.6), squeeze=False)
         for ax, c in zip(axes.ravel(), cvs):
             tr_v, va_v = (c["tr_s"], c["va_s"]) if key == "SeK" else (c["tr_l"], c["va_l"])
             e = np.arange(1, tr_v.shape[1] + 1)
@@ -511,7 +511,7 @@ if cvs:
                 mu, sd = v.mean(0), v.std(0)
                 ax.fill_between(e, mu - sd, mu + sd, color=col, alpha=0.15, lw=0)
                 ax.plot(e, mu, color=col, lw=2, label=lab)
-            ax.set_title(f"{cname(c)}\n{c['diag']}", fontsize=9, loc="left")
+            ax.set_title(cname(c).replace(" + ", " +\n", 1) + f"\n{c['diag']}", fontsize=9, loc="left")
             ax.tick_params(labelsize=8)
             ax.spines[["top", "right"]].set_visible(False)
             ax.grid(axis="x", visible=False)
@@ -568,6 +568,12 @@ def err_table():
     return "\n".join(out)
 
 
+_cvref = cvd.get("A_bisrnet_ce")
+_cvB = [c for c in cvs if c["tag"].startswith("B_")]
+cv_win_n = sum(1 for c in _cvB if _cvref is not None and paired(c, _cvref)[1] == len(c["test"]))
+_top = sorted(_cvB, key=lambda c: -c["test"].mean())[:3]
+cv_top3 = ", ".join(c["label"] for c in _top) if _top else "n/a"
+cv_spread = (_top[0]["test"].mean() - _top[-1]["test"].mean()) if _top else 0.0
 n_miss_big = sum(x["err"]["missed"] > x["err"]["wrong_class"] for x in ER)
 if cvs:
     cv_best = max(cvs, key=lambda c: c["test"].mean())
@@ -762,6 +768,9 @@ Everything runs end to end on a 16 GB Apple M4 laptop.
   pixels (averaged over the 6 classes) are predicted as *no-change*. Mixing up two land-cover
   classes is much rarer ([confusion matrix](#training-curves-and-error-analysis)). The change branch
   has more room to improve than the semantic branch.
+- **Cross-validation confirms it.** Over 3 folds, {cv_win_n} imbalance techniques beat plain CE in
+  every fold. The top three ({cv_top3}) are within {cv_spread:.2f} SeK of each other, so they are
+  effectively tied. Focal loss, rare sampling alone and OHEM did not beat CE.
 - **The published ranking holds at lower cost.** Our runs keep the published order
   (HRSCD-str.2 < SSCD-l < Bi-SRNet) and reach {reach['early_fusion']:.0f}% / {reach['sscd']:.0f}% /
   {reach['bisrnet']:.0f}% of the published SeK. They use ¼ of the pixels (256 px instead of 512 px),
@@ -940,7 +949,8 @@ SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
 
 The full plan with time estimates is in [docs/ROADMAP.md](docs/ROADMAP.md). In short:
 
-1. **Statistics:** finish the 3-fold cross-validation and add seeds, so every gap has a mean ± std.
+1. **Statistics:** add 2 more seeds for the top configurations and a paired significance test, on
+   top of the finished 3-fold cross-validation.
 2. **Cheap fixes suggested by the error analysis:** tune the change threshold (missed changes are
    the largest error), train the best configuration longer, and fix or drop OHEM.
 3. **New method, a transition-aware loss:** weight each pixel by how rare its *from → to* change

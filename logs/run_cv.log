@@ -6,11 +6,32 @@ skip A_sscd_ce_f1
 skip A_sscd_ce_f2
 skip A_bisrnet_ce_f0
 skip A_bisrnet_ce_f1
-[A_bisrnet_ce_f2] TEST (best val epoch 20): OA 85.76 mIoU 67.57 SeK 13.16 Fscd 52.23
-[B_bisrnet_combo_f0] TEST (best val epoch 20): OA 83.87 mIoU 68.45 SeK 14.47 Fscd 53.05
-[B_bisrnet_combo_f1] TEST (best val epoch 20): OA 83.73 mIoU 68.13 SeK 14.10 Fscd 52.66
-[B_bisrnet_combo_f2] TEST (best val epoch 20): OA 83.68 mIoU 68.15 SeK 14.20 Fscd 52.60
-[B_bisrnet_dice_f0] TEST (best val epoch 20): OA 85.29 mIoU 68.85 SeK 14.73 Fscd 54.16
-[B_bisrnet_dice_f1] TEST (best val epoch 20): OA 85.15 mIoU 68.63 SeK 14.17 Fscd 53.40
-[B_bisrnet_dice_f2] TEST (best val epoch 20): OA 85.26 mIoU 68.60 SeK 14.23 Fscd 53.48
-[B_bisrnet_wce_f0] TEST (best val epoch 20): OA 83.94 mIoU 68.56 SeK 14.65 Fscd 53.21
+skip A_bisrnet_ce_f2
+skip B_bisrnet_combo_f0
+skip B_bisrnet_combo_f1
+skip B_bisrnet_combo_f2
+skip B_bisrnet_dice_f0
+skip B_bisrnet_dice_f1
+skip B_bisrnet_dice_f2
+skip B_bisrnet_wce_f0
+skip B_bisrnet_wce_f1
+skip B_bisrnet_wce_f2
+skip B_bisrnet_median_f0
+skip B_bisrnet_median_f1
+skip B_bisrnet_median_f2
+skip B_bisrnet_cb_f0
+skip B_bisrnet_cb_f1
+skip B_bisrnet_cb_f2
+skip B_bisrnet_focal_f0
+[B_bisrnet_focal_f1] TEST (best val epoch 17): OA 82.43 mIoU 66.92 SeK 13.44 Fscd 52.00
+[B_bisrnet_focal_f2] TEST (best val epoch 17): OA 81.93 mIoU 66.34 SeK 13.27 Fscd 51.62
+[B_bisrnet_ce_rare_f0] TEST (best val epoch 19): OA 85.82 mIoU 67.78 SeK 13.34 Fscd 52.34
+[B_bisrnet_ce_rare_f1] TEST (best val epoch 19): OA 85.70 mIoU 67.74 SeK 13.20 Fscd 52.29
+[B_bisrnet_ce_rare_f2] TEST (best val epoch 16): OA 85.16 mIoU 67.89 SeK 13.37 Fscd 52.75
+[B_bisrnet_combo_rare_f0] TEST (best val epoch 17): OA 84.17 mIoU 68.26 SeK 14.12 Fscd 52.99
+[B_bisrnet_combo_rare_f1] TEST (best val epoch 19): OA 83.68 mIoU 67.98 SeK 13.72 Fscd 52.20
+[B_bisrnet_combo_rare_f2] TEST (best val epoch 19): OA 83.18 mIoU 67.48 SeK 13.44 Fscd 51.69
+[B_bisrnet_ohem_f0] TEST (best val epoch 20): OA 80.91 mIoU 59.89 SeK 3.02 Fscd 39.77
+[B_bisrnet_ohem_f1] TEST (best val epoch 14): OA 59.38 mIoU 44.40 SeK 3.48 Fscd 31.56
+[B_bisrnet_ohem_f2] TEST (best val epoch 17): OA 53.79 mIoU 39.87 SeK 3.52 Fscd 29.83
+CV_DONE

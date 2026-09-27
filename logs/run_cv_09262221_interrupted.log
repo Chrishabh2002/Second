@@ -1,0 +1,25 @@
+skip A_early_fusion_ce_f0
+skip A_early_fusion_ce_f1
+skip A_early_fusion_ce_f2
+skip A_sscd_ce_f0
+skip A_sscd_ce_f1
+skip A_sscd_ce_f2
+skip A_bisrnet_ce_f0
+skip A_bisrnet_ce_f1
+skip A_bisrnet_ce_f2
+skip B_bisrnet_combo_f0
+skip B_bisrnet_combo_f1
+skip B_bisrnet_combo_f2
+skip B_bisrnet_dice_f0
+skip B_bisrnet_dice_f1
+skip B_bisrnet_dice_f2
+skip B_bisrnet_wce_f0
+skip B_bisrnet_wce_f1
+skip B_bisrnet_wce_f2
+skip B_bisrnet_median_f0
+skip B_bisrnet_median_f1
+[B_bisrnet_median_f2] TEST (best val epoch 20): OA 83.30 mIoU 67.83 SeK 13.42 Fscd 50.92
+[B_bisrnet_cb_f0] TEST (best val epoch 20): OA 83.69 mIoU 68.44 SeK 14.37 Fscd 52.60
+[B_bisrnet_cb_f1] TEST (best val epoch 17): OA 84.54 mIoU 68.64 SeK 14.38 Fscd 52.95
+[B_bisrnet_cb_f2] TEST (best val epoch 20): OA 83.47 mIoU 67.86 SeK 13.69 Fscd 51.84
+[B_bisrnet_focal_f0] TEST (best val epoch 17): OA 82.33 mIoU 66.79 SeK 13.34 Fscd 52.01

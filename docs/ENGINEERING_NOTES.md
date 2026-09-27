@@ -45,10 +45,11 @@ Fusion run finished.
 
 ## 4. The pipeline stopped when the machine restarted
 
-**Problem.** The machine restarted twice while the pipeline was running. The first restart
-stopped the *median-frequency* run and the second stopped the *focal* run.
+**Problem.** The machine restarted at least five times while experiments were running (twice
+during the main runs, the rest during cross-validation), once staying off for about 1.5 hours.
+Each restart stopped the run in progress.
 
-**Fix.** `run_all.sh` skips any run whose `results/<tag>.json` already exists. Re-running the same
+**Fix.** `run_all.sh` and `run_cv.sh` skip any run whose result JSON already exists. Re-running the same
 command resumes from the first unfinished run. Only the interrupted run is repeated. Partial logs
 are kept as `logs/*_interrupted.log`. The pipeline now runs under `caffeinate -i` so the Mac does
 not go to idle sleep during training.
@@ -71,4 +72,6 @@ that history has to be rewritten once (for example with `git filter-branch --ind
 | SSCD / Bi-SRNet-lite | ~21–23 |
 
 Some runs took longer (the class-balanced run took ~35 minutes). The cause was not investigated;
-the most likely reason is other work on the machine at the same time. The full study (3 + 9 runs) takes about 5 hours of machine time.
+the most likely reason is other work on the machine at the same time. The main study (3 + 9 runs) takes about 5 hours of machine time; the 3-fold cross-validation
+(36 runs, with train-subset scoring every epoch) takes about 12.5 hours. Restarts added roughly
+3–4 hours in total.

@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.200
+[B_bisrnet_focal_f0] ep 01 loss 1.1918 | val OA 71.27 mIoU 52.68 SeK 1.38 Fscd 35.78 | 1.1 min
+[B_bisrnet_focal_f0] ep 02 loss 0.7310 | val OA 75.75 mIoU 59.14 SeK 7.36 Fscd 43.87 | 2.1 min
+[B_bisrnet_focal_f0] ep 03 loss 0.6238 | val OA 75.56 mIoU 59.79 SeK 9.15 Fscd 45.48 | 3.2 min
+[B_bisrnet_focal_f0] ep 04 loss 0.5935 | val OA 77.66 mIoU 61.91 SeK 10.27 Fscd 47.73 | 4.2 min
+[B_bisrnet_focal_f0] ep 05 loss 0.5711 | val OA 76.55 mIoU 60.81 SeK 10.67 Fscd 47.46 | 5.2 min
+[B_bisrnet_focal_f0] ep 06 loss 0.5526 | val OA 79.39 mIoU 63.63 SeK 11.86 Fscd 49.79 | 6.3 min
+[B_bisrnet_focal_f0] ep 07 loss 0.5405 | val OA 75.73 mIoU 60.37 SeK 11.50 Fscd 47.89 | 7.4 min
+[B_bisrnet_focal_f0] ep 08 loss 0.5338 | val OA 81.05 mIoU 65.47 SeK 12.52 Fscd 51.08 | 8.4 min
+[B_bisrnet_focal_f0] ep 09 loss 0.5174 | val OA 80.20 mIoU 64.70 SeK 13.01 Fscd 51.17 | 9.5 min
+[B_bisrnet_focal_f0] ep 10 loss 0.5052 | val OA 79.96 mIoU 64.45 SeK 12.32 Fscd 50.62 | 10.5 min
+[B_bisrnet_focal_f0] ep 11 loss 0.4971 | val OA 84.32 mIoU 67.34 SeK 13.35 Fscd 53.21 | 11.6 min
+[B_bisrnet_focal_f0] ep 12 loss 0.4892 | val OA 81.46 mIoU 66.06 SeK 13.50 Fscd 52.42 | 12.6 min
+[B_bisrnet_focal_f0] ep 13 loss 0.4761 | val OA 80.75 mIoU 65.57 SeK 13.92 Fscd 52.11 | 13.7 min
+[B_bisrnet_focal_f0] ep 14 loss 0.4673 | val OA 81.24 mIoU 66.00 SeK 14.17 Fscd 52.70 | 14.8 min
+[B_bisrnet_focal_f0] ep 15 loss 0.4616 | val OA 80.56 mIoU 65.41 SeK 13.95 Fscd 52.08 | 15.8 min
+[B_bisrnet_focal_f0] ep 16 loss 0.4581 | val OA 80.41 mIoU 65.13 SeK 13.78 Fscd 52.06 | 16.9 min
+[B_bisrnet_focal_f0] ep 17 loss 0.4511 | val OA 82.34 mIoU 66.91 SeK 14.36 Fscd 53.52 | 17.9 min
+[B_bisrnet_focal_f0] ep 18 loss 0.4472 | val OA 81.85 mIoU 66.49 SeK 14.22 Fscd 53.17 | 19.0 min
+[B_bisrnet_focal_f0] ep 19 loss 0.4470 | val OA 81.15 mIoU 65.95 SeK 13.99 Fscd 52.56 | 20.0 min
+[B_bisrnet_focal_f0] ep 20 loss 0.4447 | val OA 81.34 mIoU 66.13 SeK 14.26 Fscd 52.91 | 21.2 min
+[B_bisrnet_focal_f0] TEST (best val epoch 17): OA 82.33 mIoU 66.79 SeK 13.34 Fscd 52.01
+per-class IoU: {'no-change': 83.14, 'non-veg ground': 33.17, 'tree': 31.06, 'low vegetation': 19.36, 'water': 20.75, 'building': 46.48, 'playground': 31.78}

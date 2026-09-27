@@ -537,9 +537,10 @@ ws, r, n = new_sheet("Learning Curves", "Overfitting or underfitting? (train vs 
                      "the score on training data (orange) and on unseen validation data (blue) after every epoch, "
                      "averaged over the 3 folds. A growing gap between the two lines means overfitting; both lines "
                      "low or still climbing means underfitting.",
-                     ("So far: " + ", ".join(f"{v} × {k.lower()}" for k, v in diag_counts.items()) + ". The "
-                      "validation score flattens after about 12–15 epochs while the training score keeps rising, "
-                      "so longer training alone is unlikely to help much.")
+                     (", ".join(f"{v} × {k.lower()}" for k, v in diag_counts.items()) + ". In every "
+                      "configuration the training score keeps rising while the validation score grows only "
+                      "slowly after about 12–15 epochs. More data or regularisation should help more than "
+                      "simply training longer.")
                      if cv_complete else "Cross-validation still running.",
                      [8] + [12] * 11)
 r = picture(ws, r, "learning_curves_sek.png", n, 1000)
@@ -677,7 +678,7 @@ ws, r, n = new_sheet("Next Steps", "Next steps towards a publication",
                      "targets the biggest error found here: missed changes on rare types of change.",
                      [6, 62, 54, 22])
 steps = [
-    (1, "Finish cross-validation; add 2 more seeds for the best configurations", "Every claim gets a mean ± std", "About 1 day"),
+    (1, "Add 2 more seeds for the best configurations (cross-validation is done)", "Makes the small gaps between the top techniques testable", "About 1 day"),
     (2, "Tune the change threshold on the validation split", "Missed changes are the largest error", "Hours, no retraining"),
     (3, "Train the best configuration for 40 epochs", "In CV its best epoch was often the last one", "About 45 min"),
     (4, "Fix or drop OHEM (keep 50–70% of pixels)", "The default setting failed", "2–3 runs"),

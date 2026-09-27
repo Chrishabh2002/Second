@@ -44,15 +44,22 @@ they are used to measure **stability and ranking**, not to replace the main-tabl
 
 - **Best by cross-validation:** Bi-SRNet-lite + CE + Dice, test SeK 14.38 ± 0.31 over 3 folds.
 - Against plain CE on the same model it wins in **3 of 3 folds** (mean +0.83 SeK, std 0.22). The gain is consistent across folds.
-- Fit diagnosis: 5× mild overfitting.
+- Fit diagnosis: 11× mild overfitting, 1× failed to learn.
 
 | Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
 |---|---:|---:|---:|---:|---:|---:|---|---|
 | Bi-SRNet-lite + CE + Dice | 14.97 ± 0.88 | **14.38 ± 0.31** | 53.68 ± 0.41 | 24.51 ± 0.78 | 9.54 ± 0.93 | 0.4% | Mild overfitting | 3/3 folds (+0.83) |
+| Bi-SRNet-lite + Weighted CE | 14.89 ± 0.55 | **14.35 ± 0.26** | 52.90 ± 0.31 | 22.95 ± 0.65 | 8.06 ± 0.29 | 0.9% | Mild overfitting | 3/3 folds (+0.80) |
 | Bi-SRNet-lite + WCE + Dice | 14.96 ± 0.62 | **14.26 ± 0.19** | 52.77 ± 0.25 | 24.18 ± 0.91 | 9.22 ± 0.52 | 0.3% | Mild overfitting | 3/3 folds (+0.70) |
+| Bi-SRNet-lite + Class-balanced | 14.75 ± 0.67 | **14.15 ± 0.40** | 52.46 ± 0.57 | 22.09 ± 0.58 | 7.35 ± 0.12 | 0.9% | Mild overfitting | 3/3 folds (+0.60) |
+| Bi-SRNet-lite + WCE + Dice + rare sampling | 14.53 ± 0.49 | **13.76 ± 0.34** | 52.29 ± 0.66 | 23.02 ± 0.59 | 8.49 ± 0.13 | 1.3% | Mild overfitting | 3/3 folds (+0.20) |
+| Bi-SRNet-lite + Median-freq | 14.40 ± 0.60 | **13.73 ± 0.42** | 51.46 ± 0.60 | 21.00 ± 0.54 | 6.60 ± 0.32 | 1.3% | Mild overfitting | 3/3 folds (+0.18) |
 | Bi-SRNet-lite + CE (baseline) | 14.39 ± 0.54 | **13.55 ± 0.42** | 52.79 ± 0.52 | 23.16 ± 1.03 | 8.77 ± 0.49 | 0.8% | Mild overfitting | 3/3 folds (+6.81) |
+| Bi-SRNet-lite + Focal | 13.99 ± 0.52 | **13.35 ± 0.08** | 51.88 ± 0.22 | 20.73 ± 0.32 | 6.75 ± 0.82 | 1.0% | Mild overfitting | 1/3 folds (-0.20) |
+| Bi-SRNet-lite + CE + rare sampling | 13.88 ± 0.74 | **13.30 ± 0.09** | 52.46 ± 0.25 | 22.38 ± 0.73 | 8.50 ± 0.87 | 1.3% | Mild overfitting | 1/3 folds (-0.25) |
 | SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
 | Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
+| Bi-SRNet-lite + OHEM | 3.33 ± 0.56 | **3.34 ± 0.28** | 33.72 ± 5.31 | 4.53 ± 0.15 | 1.20 ± 0.42 | 0.2% | Failed to learn | 0/3 folds (-10.21) |
 
 ![Cross-validation scores](figures/cv_scores.png)
 
@@ -119,3 +126,59 @@ Losses of different techniques are defined differently, so compare train and val
 | 0 | 20 | 23.93 | 15.44 | 14.73 | 8.49 | 0.3% | +0.09 |
 | 1 | 20 | 24.21 | 13.96 | 14.17 | 10.25 | 0.9% | +0.03 |
 | 2 | 20 | 25.39 | 15.52 | 14.23 | 9.87 | 0.1% | +0.15 |
+
+### Bi-SRNet-lite + Weighted CE
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 23.47 | 15.08 | 14.65 | 8.39 | 1.2% | +0.09 |
+| 1 | 16 | 22.22 | 14.26 | 14.26 | 8.45 | 0.6% | -0.04 |
+| 2 | 20 | 23.14 | 15.32 | 14.14 | 7.83 | 1.0% | -0.00 |
+
+### Bi-SRNet-lite + Median-freq
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 20.91 | 14.68 | 14.21 | 6.24 | 0.3% | +0.19 |
+| 1 | 19 | 20.51 | 13.71 | 13.57 | 6.81 | 1.3% | +0.03 |
+| 2 | 20 | 21.58 | 14.80 | 13.42 | 6.78 | 2.4% | +0.01 |
+
+### Bi-SRNet-lite + Class-balanced
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 22.36 | 14.97 | 14.37 | 7.39 | 0.3% | +0.12 |
+| 1 | 17 | 21.43 | 13.99 | 14.38 | 7.67 | 1.3% | +0.00 |
+| 2 | 20 | 22.49 | 15.28 | 13.69 | 7.21 | 1.2% | +0.02 |
+
+### Bi-SRNet-lite + Focal
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 17 | 20.43 | 14.36 | 13.34 | 5.93 | 0.8% | +0.06 |
+| 1 | 17 | 21.06 | 13.40 | 13.44 | 7.55 | 1.6% | -0.02 |
+| 2 | 17 | 20.71 | 14.20 | 13.27 | 6.28 | 0.7% | -0.02 |
+
+### Bi-SRNet-lite + CE + rare sampling
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 19 | 23.16 | 13.82 | 13.34 | 9.33 | 0.7% | +0.11 |
+| 1 | 19 | 21.72 | 13.18 | 13.20 | 8.16 | 2.3% | -0.04 |
+| 2 | 16 | 22.25 | 14.65 | 13.37 | 7.87 | 0.9% | -0.06 |
+
+### Bi-SRNet-lite + WCE + Dice + rare sampling
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 17 | 23.42 | 14.93 | 14.12 | 8.58 | 0.3% | +0.04 |
+| 1 | 19 | 22.34 | 13.98 | 13.72 | 8.27 | 2.0% | +0.04 |
+| 2 | 19 | 23.29 | 14.67 | 13.44 | 8.54 | 1.7% | +0.06 |
+
+### Bi-SRNet-lite + OHEM
+
+| fold | best epoch | train SeK | val SeK | test SeK | gap at end | val-loss rise | val-SeK slope (last 5 ep) |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 20 | 4.39 | 2.74 | 3.02 | 1.66 | 0.1% | +0.90 |
+| 1 | 14 | 4.50 | 3.39 | 3.48 | 1.65 | 0.4% | +0.07 |
+| 2 | 17 | 4.68 | 3.85 | 3.52 | 0.40 | 0.2% | -0.43 |

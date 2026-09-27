@@ -46,9 +46,11 @@ Every component is referenced in [REFERENCES.md](REFERENCES.md).
 4. **Missed changes are the largest error** (38% of changed pixels with CE, 28% with the best
    technique). Imbalance techniques raise change recall (62% → 72%) but also false alarms
    (5.4% → 9.0%).
-5. **Cross-validation** confirms the architecture ranking and, so far, that WCE + Dice beats CE in
-   all 3 folds. The runs are still in progress; see [DIAGNOSTICS.md](DIAGNOSTICS.md) for the
-   current state.
+5. **Cross-validation (3 folds, 36 runs)** confirms the architecture ranking in every fold. Six
+   techniques beat plain CE in all 3 folds. The top three — CE + Dice (14.38 ± 0.31), Weighted CE
+   (14.35 ± 0.26) and WCE + Dice (14.26 ± 0.19) — are within 0.12 SeK, so they are effectively
+   tied. Focal loss and rare sampling alone did not beat CE; OHEM failed. Details:
+   [DIAGNOSTICS.md](DIAGNOSTICS.md).
 
 ## Honest limitations
 
@@ -62,7 +64,7 @@ Every component is referenced in [REFERENCES.md](REFERENCES.md).
 
 Short version of the [roadmap](ROADMAP.md):
 
-1. Finish cross-validation and add seeds.
+1. Add seeds and a significance test for the top techniques.
 2. Tune the change threshold and train longer.
 3. **Transition-aware loss:** weight pixels by the rarity of their from → to change, and test it
    against CE, WCE + Dice and the SeK loss of Mamba-FCS.
@@ -80,8 +82,10 @@ class.
 Bi-SRNet but not its Siamese reasoning blocks, so all three models share the same ResNet-18 and
 the comparison stays fair.
 
-**Is the gain from WCE + Dice real?** On the main split it is +1.14 SeK. In cross-validation it has
-won every fold so far. More seeds will make this firmer.
+**Is the gain from WCE + Dice real?** On the main split it is +1.14 SeK, and in cross-validation it
+beat plain CE in all 3 folds (+0.70 SeK on average). CE + Dice and Weighted CE did the same, and the gaps
+between the three are smaller than their fold-to-fold spread, so the safe claim is "weighting and/or Dice help", not
+"WCE + Dice is the single best".
 
 **What would make it publishable?** A method that fixes the main error (missed changes on rare
 transitions), shown to work at the published setting and on a second dataset.

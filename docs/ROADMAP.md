@@ -7,18 +7,18 @@
 | Controlled comparison of 3 architectures (Early Fusion → SSCD → Bi-SRNet-lite) | [README](../README.md#phase-a-architecture-plain-ce), SeK 7.97 → 13.59 → 14.24 |
 | 9 class-imbalance techniques on the best architecture | [README](../README.md#phase-b-class-imbalance-techniques-on-bi-srnet-lite), best WCE + Dice, SeK 15.38 |
 | Error breakdown of every run | [README](../README.md#model-diagnostics-errors-cross-validation-and-fit): missed changes are the largest error in 11 of 12 runs |
-| 3-fold cross-validation + train/val curves | [DIAGNOSTICS](DIAGNOSTICS.md), in progress (`run_cv.sh`) |
+| 3-fold cross-validation + train/val curves (36 runs) | [DIAGNOSTICS](DIAGNOSTICS.md): architecture order holds in every fold; 6 techniques beat CE in all 3 folds |
 | Documentation, figures, references | README, [METHODOLOGY](METHODOLOGY.md), [RESULTS](RESULTS.md), [REFERENCES](REFERENCES.md) |
 
 **What is missing for a paper.** None of the models or losses is new. The absolute scores are
 below published ones because of the smaller setup (256 px, ResNet-18, 20 epochs). Most results rest
 on one seed. The steps below fix these gaps, most important first.
 
-## Step 1: finish and strengthen the statistics (running now, then ~1 day)
+## Step 1: strengthen the statistics (~1 day)
 
 - **Why.** Several techniques differ by less than 0.5 SeK. Without repeated runs, a reviewer can
   say those gaps are noise.
-- **How.** Let `run_cv.sh` finish all 36 folds. For the top 3 configurations and the CE baseline,
+- **How.** Cross-validation is finished (36 runs). For the top 3 configurations and the CE baseline,
   add 2 more seeds of the main split (`--seed 1`, `--seed 2`). Report mean ± std, and a paired test
   (paired t-test across folds × seeds) for "technique vs CE".
 - **Done when.** Every claim in the README carries a mean ± std and a fold/seed win count.
@@ -45,7 +45,7 @@ should weight each pixel by the rarity of its **transition**, not of its class.
    the change loss, which directly attacks the missed-change error.
 3. Optional: a small 30-way "transition head" trained with the same weights.
 
-**Must beat.** Plain CE, WCE + Dice (our best so far), and the SeK-inspired loss of Mamba-FCS
+**Must beat.** Plain CE, the tied top techniques (CE + Dice, Weighted CE, WCE + Dice), and the SeK-inspired loss of Mamba-FCS
 ([arXiv:2508.08232](https://arxiv.org/abs/2508.08232)), which we re-implement. Compare with
 FD-ProtoSCD ([Remote Sensing 2026](https://www.mdpi.com/2072-4292/18/17/2957)), which also
 targets imbalanced transitions, but with prototype learning instead of loss weighting.

@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.200
+[B_bisrnet_combo_rare_f2] ep 01 loss 3.9806 | val OA 68.38 mIoU 51.61 SeK 2.89 Fscd 34.27 | 1.1 min
+[B_bisrnet_combo_rare_f2] ep 02 loss 3.0514 | val OA 80.86 mIoU 62.63 SeK 7.69 Fscd 46.08 | 2.2 min
+[B_bisrnet_combo_rare_f2] ep 03 loss 2.7217 | val OA 79.73 mIoU 63.31 SeK 9.09 Fscd 47.00 | 3.4 min
+[B_bisrnet_combo_rare_f2] ep 04 loss 2.5718 | val OA 81.15 mIoU 64.81 SeK 11.59 Fscd 50.30 | 4.5 min
+[B_bisrnet_combo_rare_f2] ep 05 loss 2.4425 | val OA 81.75 mIoU 64.79 SeK 10.11 Fscd 48.41 | 5.6 min
+[B_bisrnet_combo_rare_f2] ep 06 loss 2.4133 | val OA 82.06 mIoU 66.36 SeK 12.41 Fscd 50.50 | 6.7 min
+[B_bisrnet_combo_rare_f2] ep 07 loss 2.3469 | val OA 82.52 mIoU 66.24 SeK 11.88 Fscd 50.13 | 7.8 min
+[B_bisrnet_combo_rare_f2] ep 08 loss 2.3001 | val OA 80.82 mIoU 65.31 SeK 12.49 Fscd 50.38 | 8.9 min
+[B_bisrnet_combo_rare_f2] ep 09 loss 2.2673 | val OA 83.95 mIoU 67.72 SeK 14.02 Fscd 53.00 | 10.0 min
+[B_bisrnet_combo_rare_f2] ep 10 loss 2.1896 | val OA 82.64 mIoU 66.78 SeK 13.09 Fscd 51.98 | 11.1 min
+[B_bisrnet_combo_rare_f2] ep 11 loss 2.1688 | val OA 80.44 mIoU 65.03 SeK 13.10 Fscd 50.92 | 12.2 min
+[B_bisrnet_combo_rare_f2] ep 12 loss 2.1285 | val OA 83.63 mIoU 67.84 SeK 14.48 Fscd 53.61 | 13.3 min
+[B_bisrnet_combo_rare_f2] ep 13 loss 2.1001 | val OA 82.64 mIoU 67.24 SeK 14.33 Fscd 52.99 | 14.4 min
+[B_bisrnet_combo_rare_f2] ep 14 loss 2.0503 | val OA 81.49 mIoU 66.09 SeK 13.54 Fscd 51.67 | 15.5 min
+[B_bisrnet_combo_rare_f2] ep 15 loss 2.0190 | val OA 83.21 mIoU 67.51 SeK 14.44 Fscd 53.27 | 16.5 min
+[B_bisrnet_combo_rare_f2] ep 16 loss 1.9829 | val OA 81.78 mIoU 66.57 SeK 14.10 Fscd 52.33 | 17.6 min
+[B_bisrnet_combo_rare_f2] ep 17 loss 1.9822 | val OA 83.25 mIoU 67.66 SeK 14.52 Fscd 53.48 | 18.7 min
+[B_bisrnet_combo_rare_f2] ep 18 loss 1.9684 | val OA 83.06 mIoU 67.58 SeK 14.47 Fscd 53.34 | 19.7 min
+[B_bisrnet_combo_rare_f2] ep 19 loss 1.9661 | val OA 83.35 mIoU 67.86 SeK 14.67 Fscd 53.45 | 20.8 min
+[B_bisrnet_combo_rare_f2] ep 20 loss 1.9601 | val OA 82.84 mIoU 67.37 SeK 14.32 Fscd 53.11 | 21.8 min
+[B_bisrnet_combo_rare_f2] TEST (best val epoch 19): OA 83.18 mIoU 67.48 SeK 13.44 Fscd 51.69
+per-class IoU: {'no-change': 84.22, 'non-veg ground': 33.69, 'tree': 30.55, 'low vegetation': 18.53, 'water': 20.81, 'building': 46.94, 'playground': 32.92}

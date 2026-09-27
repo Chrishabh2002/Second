@@ -1,0 +1,23 @@
+train/val/test = 1582/791/595  change ratio = 0.201
+[B_bisrnet_median_f1] ep 01 loss 2.5506 | val OA 68.87 mIoU 51.27 SeK 0.99 Fscd 30.77 | 1.1 min
+[B_bisrnet_median_f1] ep 02 loss 1.9197 | val OA 80.52 mIoU 62.23 SeK 5.97 Fscd 41.14 | 2.1 min
+[B_bisrnet_median_f1] ep 03 loss 1.6941 | val OA 81.54 mIoU 64.25 SeK 8.99 Fscd 46.77 | 3.2 min
+[B_bisrnet_median_f1] ep 04 loss 1.5875 | val OA 83.09 mIoU 65.17 SeK 10.06 Fscd 47.81 | 4.2 min
+[B_bisrnet_median_f1] ep 05 loss 1.5370 | val OA 79.60 mIoU 63.45 SeK 10.00 Fscd 46.66 | 5.3 min
+[B_bisrnet_median_f1] ep 06 loss 1.4758 | val OA 82.59 mIoU 65.54 SeK 10.77 Fscd 48.17 | 6.3 min
+[B_bisrnet_median_f1] ep 07 loss 1.4493 | val OA 81.76 mIoU 65.56 SeK 11.43 Fscd 48.86 | 7.3 min
+[B_bisrnet_median_f1] ep 08 loss 1.4104 | val OA 82.29 mIoU 66.04 SeK 11.71 Fscd 49.38 | 8.4 min
+[B_bisrnet_median_f1] ep 09 loss 1.3807 | val OA 82.27 mIoU 66.04 SeK 11.79 Fscd 49.27 | 9.4 min
+[B_bisrnet_median_f1] ep 10 loss 1.3633 | val OA 82.07 mIoU 66.02 SeK 12.07 Fscd 49.36 | 10.5 min
+[B_bisrnet_median_f1] ep 11 loss 1.3224 | val OA 83.14 mIoU 66.60 SeK 12.42 Fscd 50.37 | 11.5 min
+[B_bisrnet_median_f1] ep 12 loss 1.3138 | val OA 82.45 mIoU 66.73 SeK 12.79 Fscd 50.26 | 12.6 min
+[B_bisrnet_median_f1] ep 13 loss 1.2702 | val OA 82.73 mIoU 66.79 SeK 13.09 Fscd 51.02 | 13.6 min
+[B_bisrnet_median_f1] ep 14 loss 1.2646 | val OA 81.92 mIoU 66.32 SeK 12.94 Fscd 50.35 | 14.6 min
+[B_bisrnet_median_f1] ep 15 loss 1.2373 | val OA 82.95 mIoU 67.00 SeK 13.53 Fscd 51.86 | 15.7 min
+[B_bisrnet_median_f1] ep 16 loss 1.2220 | val OA 83.18 mIoU 67.19 SeK 13.59 Fscd 51.78 | 16.7 min
+[B_bisrnet_median_f1] ep 17 loss 1.2048 | val OA 83.85 mIoU 67.58 SeK 13.66 Fscd 51.92 | 17.7 min
+[B_bisrnet_median_f1] ep 18 loss 1.2034 | val OA 82.63 mIoU 66.88 SeK 13.63 Fscd 51.73 | 18.8 min
+[B_bisrnet_median_f1] ep 19 loss 1.1871 | val OA 83.40 mIoU 67.43 SeK 13.71 Fscd 52.03 | 20.0 min
+[B_bisrnet_median_f1] ep 20 loss 1.1847 | val OA 83.18 mIoU 67.36 SeK 13.71 Fscd 51.78 | 21.0 min
+[B_bisrnet_median_f1] TEST (best val epoch 19): OA 83.72 mIoU 68.24 SeK 13.57 Fscd 51.35
+per-class IoU: {'no-change': 85.01, 'non-veg ground': 33.75, 'tree': 30.49, 'low vegetation': 18.51, 'water': 15.67, 'building': 45.92, 'playground': 27.42}

@@ -46,6 +46,9 @@ All planned experiments are complete.
   pixels (averaged over the 6 classes) are predicted as *no-change*. Mixing up two land-cover
   classes is much rarer ([confusion matrix](#training-curves-and-error-analysis)). The change branch
   has more room to improve than the semantic branch.
+- **Cross-validation confirms it.** Over 3 folds, 6 imbalance techniques beat plain CE in
+  every fold. The top three (CE + Dice, Weighted CE, WCE + Dice) are within 0.12 SeK of each other, so they are
+  effectively tied. Focal loss, rare sampling alone and OHEM did not beat CE.
 - **The published ranking holds at lower cost.** Our runs keep the published order
   (HRSCD-str.2 < SSCD-l < Bi-SRNet) and reach 75% / 62% /
   61% of the published SeK. They use ¼ of the pixels (256 px instead of 512 px),
@@ -302,15 +305,22 @@ they are used to measure **stability and ranking**, not to replace the main-tabl
 
 - **Best by cross-validation:** Bi-SRNet-lite + CE + Dice, test SeK 14.38 ± 0.31 over 3 folds.
 - Against plain CE on the same model it wins in **3 of 3 folds** (mean +0.83 SeK, std 0.22). The gain is consistent across folds.
-- Fit diagnosis: 5× mild overfitting.
+- Fit diagnosis: 11× mild overfitting, 1× failed to learn.
 
 | Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
 |---|---:|---:|---:|---:|---:|---:|---|---|
 | Bi-SRNet-lite + CE + Dice | 14.97 ± 0.88 | **14.38 ± 0.31** | 53.68 ± 0.41 | 24.51 ± 0.78 | 9.54 ± 0.93 | 0.4% | Mild overfitting | 3/3 folds (+0.83) |
+| Bi-SRNet-lite + Weighted CE | 14.89 ± 0.55 | **14.35 ± 0.26** | 52.90 ± 0.31 | 22.95 ± 0.65 | 8.06 ± 0.29 | 0.9% | Mild overfitting | 3/3 folds (+0.80) |
 | Bi-SRNet-lite + WCE + Dice | 14.96 ± 0.62 | **14.26 ± 0.19** | 52.77 ± 0.25 | 24.18 ± 0.91 | 9.22 ± 0.52 | 0.3% | Mild overfitting | 3/3 folds (+0.70) |
+| Bi-SRNet-lite + Class-balanced | 14.75 ± 0.67 | **14.15 ± 0.40** | 52.46 ± 0.57 | 22.09 ± 0.58 | 7.35 ± 0.12 | 0.9% | Mild overfitting | 3/3 folds (+0.60) |
+| Bi-SRNet-lite + WCE + Dice + rare sampling | 14.53 ± 0.49 | **13.76 ± 0.34** | 52.29 ± 0.66 | 23.02 ± 0.59 | 8.49 ± 0.13 | 1.3% | Mild overfitting | 3/3 folds (+0.20) |
+| Bi-SRNet-lite + Median-freq | 14.40 ± 0.60 | **13.73 ± 0.42** | 51.46 ± 0.60 | 21.00 ± 0.54 | 6.60 ± 0.32 | 1.3% | Mild overfitting | 3/3 folds (+0.18) |
 | Bi-SRNet-lite + CE (baseline) | 14.39 ± 0.54 | **13.55 ± 0.42** | 52.79 ± 0.52 | 23.16 ± 1.03 | 8.77 ± 0.49 | 0.8% | Mild overfitting | 3/3 folds (+6.81) |
+| Bi-SRNet-lite + Focal | 13.99 ± 0.52 | **13.35 ± 0.08** | 51.88 ± 0.22 | 20.73 ± 0.32 | 6.75 ± 0.82 | 1.0% | Mild overfitting | 1/3 folds (-0.20) |
+| Bi-SRNet-lite + CE + rare sampling | 13.88 ± 0.74 | **13.30 ± 0.09** | 52.46 ± 0.25 | 22.38 ± 0.73 | 8.50 ± 0.87 | 1.3% | Mild overfitting | 1/3 folds (-0.25) |
 | SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
 | Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
+| Bi-SRNet-lite + OHEM | 3.33 ± 0.56 | **3.34 ± 0.28** | 33.72 ± 5.31 | 4.53 ± 0.15 | 1.20 ± 0.42 | 0.2% | Failed to learn | 0/3 folds (-10.21) |
 
 ![Cross-validation scores](docs/figures/cv_scores.png)
 
@@ -340,7 +350,8 @@ Losses of different techniques are defined differently, so compare train and val
 
 The full plan with time estimates is in [docs/ROADMAP.md](docs/ROADMAP.md). In short:
 
-1. **Statistics:** finish the 3-fold cross-validation and add seeds, so every gap has a mean ± std.
+1. **Statistics:** add 2 more seeds for the top configurations and a paired significance test, on
+   top of the finished 3-fold cross-validation.
 2. **Cheap fixes suggested by the error analysis:** tune the change threshold (missed changes are
    the largest error), train the best configuration longer, and fix or drop OHEM.
 3. **New method, a transition-aware loss:** weight each pixel by how rare its *from → to* change
