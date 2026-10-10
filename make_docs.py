@@ -320,7 +320,7 @@ ax.set_xticks(range(7), scd.CLASS_NAMES, rotation=30, ha="right")
 ax.set_yticks(range(7), scd.CLASS_NAMES)
 ax.set_xlabel("Predicted")
 ax.set_ylabel("Ground truth")
-ax.set_title(f"Confusion matrix, best run ({best['label']}), % of each true class")
+ax.set_title("Confusion matrix of the best model (% of each true class)")
 ax.grid(False)
 ax.tick_params(length=0)
 for s in ax.spines.values():
@@ -368,8 +368,8 @@ if qual:
     handles = [plt.Rectangle((0, 0), 1, 1, fc=PALETTE[k] / 255, ec=MUTED, lw=0.5) for k in range(7)]
     fig.legend(handles, scd.CLASS_NAMES, loc="lower center", ncol=7, fontsize=9,
                bbox_to_anchor=(0.5, -0.02))
-    fig.suptitle(f"Test-set predictions: {ARCH_SHORT[qual['model']]} + {qual['label']} "
-                 f"(test SeK {qual['SeK']:.2f})", x=0.01, ha="left", fontweight="bold")
+    fig.suptitle("Test-set predictions of the best model (white = no change)", x=0.01, ha="left",
+                 fontweight="bold")
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     save(fig, "qualitative.png")
 
