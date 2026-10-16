@@ -3,14 +3,20 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+.ipynb_checkpoints/
 
-# Dataset (re-create with prepare_data.py)
+# Datasets (re-created by the scripts / notebooks)
 data/
+second_data/
+SECOND_SCD_512/
+*.npy
+*.rar
 
-# Model weights
+# Model weights and checkpoints
 checkpoints/
 *.pt
 *.pth
+*.zip
 
 # OS / editor
 .DS_Store

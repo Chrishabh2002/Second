@@ -1,432 +1,319 @@
-# Semantic Change Detection on SECOND: a controlled study of architectures and class imbalance
-
-This project trains and evaluates **semantic change detection (SCD)** models on the
-[SECOND](https://captain-whu.github.io/SCD/) aerial dataset. Each model answers two questions for
-every pixel of a before/after image pair: *did this pixel change?* and *if so, what was it before
-and what is it now?*
-
-The project has two phases, both run under one fixed protocol so every difference in the results
-comes from the thing being tested:
-
-1. **Phase A: architecture.** Three SCD designs share the same backbone, decoder, data split,
-   schedule and seed.
-2. **Phase B: class imbalance.** Nine imbalance techniques are tested on the winning
-   architecture.
-
-Everything runs end to end on a 16 GB Apple M4 laptop.
-
-**Documentation:** [Excel results workbook](results/SECOND_SCD_Results.xlsx) · [Project summary](docs/PROJECT_SUMMARY.md) ·
-[Methodology](docs/METHODOLOGY.md) · [Full results](docs/RESULTS.md) ·
-[Diagnostics and cross-validation](docs/DIAGNOSTICS.md) · [References](docs/REFERENCES.md) ·
-[Roadmap](docs/ROADMAP.md) · [Engineering notes](docs/ENGINEERING_NOTES.md)
-
-All planned experiments are complete.
-
-## Results at a glance
-
-| | Test SeK | vs. Early Fusion baseline |
-|---|---:|---:|
-| Early Fusion + CE (starting point) | 7.97 | — |
-| SSCD + CE | 13.59 | **+70.4%** |
-| Bi-SRNet-lite + CE (selected architecture) | 14.24 | **+78.6%** |
-| **Best overall: Bi-SRNet-lite + WCE + Dice** | **15.38** | **+92.9%** |
-
-- **Architecture matters most.** Replacing early fusion with a Siamese design raised SeK by
-  70%. Adding cross-temporal attention and a semantic-consistency
-  loss (Bi-SRNet-lite) raised it by another 4.8%, with only
-  0.33M extra parameters.
-- **Imbalance handling gives a smaller gain.** The best technique, *WCE + Dice*, improves SeK by
-  +8.0% over plain CE on the same architecture.
-  6 of 9 techniques beat the CE baseline on SeK. 9 of 9 lower
-  overall accuracy (OA): they trade some no-change pixels for more detected change.
-- **Rare classes gain the most.** From the Early Fusion baseline to the best run, *water* IoU goes
-  from 0.0 to 23.0 and *playground* IoU from 9.7 to
-  32.9.
-- **Most errors are missed changes, not wrong classes.** In the best run, 31% of changed
-  pixels (averaged over the 6 classes) are predicted as *no-change*. Mixing up two land-cover
-  classes is much rarer ([confusion matrix](#training-curves-and-error-analysis)). The change branch
-  has more room to improve than the semantic branch.
-- **Cross-validation confirms it.** Over 3 folds, 6 imbalance techniques beat plain CE in
-  every fold. The top three (CE + Dice, Weighted CE, WCE + Dice) are within 0.12 SeK of each other, so they are
-  effectively tied. Focal loss, rare sampling alone and OHEM did not beat CE.
-- **The published ranking holds at lower cost.** Our runs keep the published order
-  (HRSCD-str.2 < SSCD-l < Bi-SRNet) and reach 75% / 62% /
-  61% of the published SeK. They use ¼ of the pixels (256 px instead of 512 px),
-  a ResNet-18 backbone, 20 epochs and about 22 minutes of training per model on a laptop.
-
-![SeK by imbalance technique](docs/figures/imbalance_techniques.png)
-
-## What is different about this project
-
-Most SCD papers propose a new network and report one number against earlier networks. This project
-is a **controlled comparison** instead:
-
-| | Typical SCD paper | This project |
-|---|---|---|
-| Comparison | Often against numbers reported in other papers (different code, schedules and sometimes splits) | 3 architectures, one fixed protocol: same backbone, decoder, split, seed, schedule and metric code |
-| Class imbalance | Usually one loss choice, rarely compared with alternatives | Imbalance measured first (4:1 change ratio, 59× between classes, 31 transition types), then 9 techniques benchmarked |
-| Balancing scope | Varies | Both branches: BCE `pos_weight`/focal/Dice/OHEM on change, class weights/Dice/focal/OHEM on semantics, plus image-level rare-class oversampling |
-| Hardware | GPU training at 512 px, usually for many more epochs | One 16 GB Apple M4 laptop (MPS), 256 px, 20 epochs, ~22 min/run |
-| Data handling | Download, unpack, train | 2.2 GB RAR streamed from Google Drive into a 256 px copy without writing the archive to disk; lazy PNG loading keeps RAM low |
-| Reproducibility | Varies | Fixed split (seed 0), one command runs everything; docs are generated from the result files |
-
-Design choices used in every run (standard ideas, applied consistently rather than claimed as new):
-
-- **Temporal-swap augmentation:** T1 and T2 (and their labels) are swapped at random, so the model
-  sees every change in both directions (e.g. tree → building and building → tree).
-- **Cross-temporal attention with a zero-initialised gate:** training starts exactly from the SSCD
-  model and learns how much attention to add.
-- **Change-aware semantic loss:** semantic loss is computed only on changed pixels, as in
-  Bi-SRNet, because SECOND defines semantic labels only there.
-- **Model selection on a separate validation split:** checkpoints are chosen by validation SeK and
-  reported once on a separate test split, so no test-set tuning.
-
-## Pipeline
-
-```mermaid
-flowchart TD
-    A[(SECOND_train_set.rar<br/>2.2 GB, Google Drive)] -->|gdown stream| B[bsdtar<br/>RAR → tar stream]
-    B -->|prepare_data.py| C[Resize 512→256<br/>RGB labels → class index]
-    C --> D[(data/SECOND_256<br/>2,968 pairs)]
-    D --> E[analyze_imbalance.py<br/>class and transition statistics]
-    D --> F[Split 70/10/20<br/>2,077 / 296 / 595, seed 0]
-    F --> G[Phase A<br/>3 architectures × plain CE]
-    G --> H{Best validation SeK}
-    H --> I[Phase B<br/>9 imbalance techniques]
-    I --> J[Test-split evaluation<br/>OA · mIoU · SeK · Fscd]
-    E --> K[make_docs.py<br/>figures + README]
-    J --> K
-```
-
-### Experiment protocol
-
-```mermaid
-flowchart TD
-    S[Start run: model, loss, sampler] --> T[Train one epoch<br/>AdamW + OneCycle, bs 8<br/>flip / rot90 / temporal swap]
-    T --> V[Evaluate on validation split]
-    V --> Q{Val SeK > best?}
-    Q -- yes --> K[Save checkpoint]
-    Q -- no --> N
-    K --> N{Epoch < 20?}
-    N -- yes --> T
-    N -- no --> L[Load best checkpoint]
-    L --> X[Evaluate once on test split]
-    X --> R[(results/tag.json<br/>metrics, confusion, history)]
-```
-
-## Models
-
-All three share an ImageNet-pretrained **ResNet-18** encoder and an FPN-style decoder (64 channels,
-stride 4).
-
-```mermaid
-flowchart LR
-    subgraph EF[Early Fusion ~ HRSCD-str.2 · 11.36M]
-      direction LR
-      e1[T1 ⊕ T2<br/>6-channel input] --> e2[ResNet-18] --> e3[FPN decoder] --> e4[change head<br/>semantic head T1<br/>semantic head T2]
-    end
-```
-
-```mermaid
-flowchart LR
-    X1[Image T1] --> ENC1[ResNet-18<br/>shared weights]
-    X2[Image T2] --> ENC2[ResNet-18<br/>shared weights]
-    ENC1 -- layer4 --> COT[Cross-temporal attention<br/>T1 ↔ T2, gated<br/>Bi-SRNet-lite only]
-    ENC2 -- layer4 --> COT
-    COT --> SD1[Semantic decoder<br/>shared] --> S1[Semantic map T1<br/>6 classes]
-    COT --> SD2[Semantic decoder<br/>shared] --> S2[Semantic map T2<br/>6 classes]
-    ENC1 -- 4 scales --> CAT[concat T1,T2 features]
-    ENC2 -- 4 scales --> CAT
-    CAT --> CD[Change decoder] --> C[Change map<br/>binary]
-    S1 --> OUT[SCD output<br/>class × change mask]
-    S2 --> OUT
-    C --> OUT
-```
-
-| Model | Idea | Based on | Parameters |
-|---|---|---|---:|
-| Early Fusion | Stack T1 and T2 as 6 channels, one network, three heads | HRSCD str.2 [[2]](https://arxiv.org/abs/1810.08452) | 11.36M |
-| SSCD | Siamese encoder; semantic decoder per date (shared) + change decoder on concatenated features | SSCD-l [[3]](https://arxiv.org/abs/2108.06103) | 11.58M |
-| Bi-SRNet-lite | SSCD + cross-temporal attention on the deepest features + semantic-consistency loss | Bi-SRNet [[3]](https://arxiv.org/abs/2108.06103) | 11.91M |
-
-Encoder: ResNet-18 [[7]](https://arxiv.org/abs/1512.03385), decoder: FPN-style [[8]](https://arxiv.org/abs/1612.03144).
-
-### Loss
-
-```mermaid
-flowchart LR
-    C[change logits] --> LC[change loss<br/>BCE / focal / Dice / OHEM]
-    S[semantic logits T1, T2<br/>changed pixels only] --> LS[semantic loss<br/>CE / weighted / focal / Dice / OHEM]
-    P[softmax T1 · T2] --> LK[consistency loss<br/>agree if unchanged,<br/>differ if changed]
-    LC --> T((total = L_change + 0.5·L_sem + L_cons))
-    LS --> T
-    LK --> T
-```
-
-## Dataset and class imbalance
-
-SECOND has 2,968 public 512×512 image pairs with 6 land-cover classes. Labels exist only where
-change happened. Only **19.9%** of pixels change (no-change : change =
-4.01 : 1). Among changed pixels, the largest class is
-**59×** bigger than the smallest. *Playground* appears in only
-111 of 2,968 before-images.
-
-![Class distribution](docs/figures/class_distribution.png)
-
-![Transition matrix](docs/figures/transition_matrix.png)
-
-## Results
-
-All numbers are on the held-out **test split (595 pairs)**. Checkpoints are selected by validation
-SeK. SeK is the primary metric. Full tables: [docs/RESULTS.md](docs/RESULTS.md).
-
-### Phase A: architecture (plain CE)
-
-| Architecture | OA | mIoU | **SeK** | Fscd | Change IoU | val SeK | best ep | train min |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| Early Fusion (HRSCD-str.2-style) | 84.15 | 63.71 | 7.97 | 46.12 | 42.51 | 8.29 | 20 | 9.5 |
-| Siamese SSCD (SSCD-l-style) | 85.92 | 68.02 | 13.59 | 52.48 | 49.28 | 13.67 | 15 | 21.1 |
-| **Bi-SRNet-lite (SSCD + cross-temporal attention + consistency loss)** | 85.75 | 68.65 | **14.24** | 53.36 | 50.67 | 14.48 | 16 | 22.5 |
-
-![Architecture comparison](docs/figures/architecture_comparison.png)
-
-### Phase B: class-imbalance techniques on Bi-SRNet-lite
-
-| Technique | OA | mIoU | **SeK** | Fscd | Change IoU | val SeK | best ep | train min |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| CE (baseline) | 85.75 | 68.65 | 14.24 | 53.36 | 50.67 | 14.48 | 16 | 22.5 |
-| **WCE + Dice** | 84.27 | 68.97 | **15.38** | 53.88 | 52.66 | 15.54 | 19 | 24.3 |
-| CE + Dice | 85.03 | 68.98 | 14.67 | 53.76 | 51.96 | 15.03 | 18 | 24.1 |
-| Weighted CE | 84.04 | 68.42 | 14.52 | 53.01 | 51.77 | 15.62 | 19 | 22.2 |
-| WCE + Dice + rare sampling | 84.22 | 68.50 | 14.38 | 53.04 | 51.75 | 14.99 | 19 | 23.9 |
-| Median-freq | 83.13 | 68.11 | 14.36 | 51.82 | 51.86 | 14.76 | 18 | 22.6 |
-| Class-balanced | 83.39 | 68.08 | 14.29 | 52.40 | 51.69 | 15.29 | 18 | 34.7 |
-| Focal | 81.58 | 66.31 | 13.89 | 52.09 | 50.34 | 14.69 | 19 | 22.9 |
-| CE + rare sampling | 85.13 | 67.93 | 13.67 | 53.14 | 49.96 | 14.31 | 14 | 22.6 |
-| OHEM | 43.31 | 32.20 | 3.60 | 26.77 | 25.79 | 3.85 | 10 | 22.6 |
-
-> **OHEM did not train properly** (best validation SeK 3.85, test OA 43.3%). Its default setting was not tuned for this task, so this run shows that setting failing here, not that the technique cannot work.
-
-Relative change against the CE baseline (Δ% for metrics, percentage points for class IoU):
-
-| Technique | ΔSeK | ΔFscd | ΔmIoU | ΔOA | ΔChange IoU | Δwater IoU | Δplayground IoU |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| WCE + Dice | +8.0% | +1.0% | +0.5% | -1.7% | +3.9% | +3.4 pt | +3.1 pt |
-| CE + Dice | +2.9% | +0.7% | +0.5% | -0.8% | +2.5% | +2.5 pt | +4.0 pt |
-| Weighted CE | +2.0% | -0.7% | -0.3% | -2.0% | +2.2% | +1.3 pt | +0.0 pt |
-| WCE + Dice + rare sampling | +0.9% | -0.6% | -0.2% | -1.8% | +2.1% | +3.3 pt | +9.4 pt |
-| Median-freq | +0.8% | -2.9% | -0.8% | -3.1% | +2.4% | -3.3 pt | -0.6 pt |
-| Class-balanced | +0.3% | -1.8% | -0.8% | -2.8% | +2.0% | -0.9 pt | +1.8 pt |
-| Focal | -2.5% | -2.4% | -3.4% | -4.9% | -0.6% | +2.7 pt | +3.8 pt |
-| CE + rare sampling | -4.0% | -0.4% | -1.1% | -0.7% | -1.4% | +2.4 pt | +2.9 pt |
-| OHEM | -74.8% | -49.8% | -53.1% | -49.5% | -49.1% | -5.1 pt | -10.8 pt |
-
-![Relative gain vs CE](docs/figures/relative_gain_vs_ce.png)
-
-### Per-class IoU
-
-![Per-class IoU](docs/figures/per_class_iou.png)
-
-### Training curves and error analysis
-
-![Validation SeK curves](docs/figures/training_curves.png)
-
-![Confusion matrix of best run](docs/figures/confusion_best.png)
-
-### Qualitative results
-
-![Qualitative predictions](docs/figures/qualitative.png)
-
-*Predictions from `B_bisrnet_combo` on test pairs. Colours follow the official SECOND legend.*
-
-### Comparison with published results
-
-| Method | Setting | OA | mIoU | SeK | Fscd |
-|---|---|---:|---:|---:|---:|
-| HRSCD-str.2 | published, 512 px | 85.49 | 64.43 | 10.69 | 49.22 |
-| HRSCD-str.4 | published, 512 px | 86.62 | 71.15 | 18.80 | 58.21 |
-| SSCD-l | published, 512 px | 87.19 | 72.60 | 21.86 | 61.22 |
-| Bi-SRNet | published, 512 px | 87.84 | 73.41 | 23.22 | 62.61 |
-| SCanNet | published, 512 px | 87.86 | 73.42 | 23.94 | 63.66 |
-| ChangeMamba | published, 512 px | 88.12 | 73.68 | 24.11 | 64.03 |
-| **Ours: Early Fusion** | 256 px, R-18, 20 ep | 84.15 | 63.71 | **7.97** | 46.12 |
-| **Ours: SSCD** | 256 px, R-18, 20 ep | 85.92 | 68.02 | **13.59** | 52.48 |
-| **Ours: Bi-SRNet-lite** | 256 px, R-18, 20 ep | 85.75 | 68.65 | **14.24** | 53.36 |
-| **Ours: Bi-SRNet-lite + WCE + Dice** | 256 px, R-18, 20 ep | 84.27 | 68.97 | **15.38** | 53.88 |
-
-![Comparison with published results](docs/figures/literature_comparison.png)
-
-> **This comparison is not like-for-like.** Published numbers use 512×512 images, usually larger
-> backbones, longer training and their own splits. Ours use 256×256 (¼ of the pixels),
-> ResNet-18, 20 epochs and a 70/10/20 split of the 2,968 public pairs. The table shows where the
-> results sit, not a claim to beat those methods. The main result here is the controlled
-> comparison inside this project.
-
-## Model diagnostics: errors, cross-validation and fit
-
-### Error breakdown (main runs, test split)
-
-Every changed pixel ends up in one of three buckets: correct class, wrong class, or missed (the
-model says *no-change*). Unchanged pixels that the model marks as changed are false alarms.
-
-| Model / technique | Correct | Wrong class | Missed change | False alarm | Change precision | Change recall |
-|---|---:|---:|---:|---:|---:|---:|
-| Early Fusion + CE (baseline) | 39.9% | 11.7% | 48.4% | 5.2% | 70.7% | 51.6% |
-| SSCD + CE (baseline) | 46.6% | 12.0% | 41.4% | 4.6% | 75.6% | 58.6% |
-| Bi-SRNet-lite + CE (baseline) | 49.2% | 12.8% | 38.0% | 5.4% | 73.4% | 62.0% |
-| Bi-SRNet-lite + WCE + Dice | 56.5% | 15.8% | 27.7% | 9.0% | 65.9% | 72.3% |
-| Bi-SRNet-lite + CE + Dice | 53.1% | 14.5% | 32.4% | 7.3% | 69.2% | 67.6% |
-| Bi-SRNet-lite + Weighted CE | 55.2% | 15.8% | 29.0% | 9.0% | 65.6% | 71.0% |
-| Bi-SRNet-lite + WCE + Dice + rare sampling | 54.6% | 15.6% | 29.8% | 8.6% | 66.3% | 70.2% |
-| Bi-SRNet-lite + Median-freq | 56.3% | 17.9% | 25.8% | 10.4% | 63.3% | 74.2% |
-| Bi-SRNet-lite + Class-balanced | 56.3% | 16.9% | 26.7% | 10.1% | 63.7% | 73.3% |
-| Bi-SRNet-lite + Focal | 60.9% | 17.4% | 21.7% | 13.4% | 58.5% | 78.3% |
-| Bi-SRNet-lite + CE + rare sampling | 50.6% | 12.8% | 36.5% | 6.5% | 70.1% | 63.5% |
-| Bi-SRNet-lite + OHEM | 59.0% | 31.4% | 9.6% | 60.5% | 26.5% | 90.4% |
-
-![Error breakdown](docs/figures/error_breakdown.png)
-
-- Missed changes are a bigger error than wrong classes in **11 of 12** runs.
-- Imbalance handling finds more changes but also raises false alarms. Going from plain CE to WCE + Dice on
-  Bi-SRNet-lite, change recall rises from 62.0% to
-  72.3%, but change precision falls from 73.4% to
-  65.9%, and false alarms go from 5.4% to
-  9.0% of unchanged pixels. The net effect on SeK is still positive
-  (14.24 → 15.38).
-- OHEM shows the extreme end of this trade: 60% false alarms.
-
-### Cross-validation (3-fold)
-
-The 2,373 train+validation pairs are split into 3
-folds (1,582 train / 791 validation per fold). The 595-pair test split is
-never used for training or model selection. Each fold's best-validation model is scored on it.
-Because each fold trains on fewer pairs than the main runs (2,077), CV scores are a little lower;
-they are used to measure **stability and ranking**, not to replace the main-table numbers.
-
-- **Best by cross-validation:** Bi-SRNet-lite + CE + Dice, test SeK 14.38 ± 0.31 over 3 folds.
-- Against plain CE on the same model it wins in **3 of 3 folds** (mean +0.83 SeK, std 0.22). The gain is consistent across folds.
-- Fit diagnosis: 11× mild overfitting, 1× failed to learn.
-
-| Model / technique | Val SeK | **Test SeK** | Test Fscd | Train SeK | Gap (train−val) | Val-loss rise | Diagnosis | Beats reference in |
-|---|---:|---:|---:|---:|---:|---:|---|---|
-| Bi-SRNet-lite + CE + Dice | 14.97 ± 0.88 | **14.38 ± 0.31** | 53.68 ± 0.41 | 24.51 ± 0.78 | 9.54 ± 0.93 | 0.4% | Mild overfitting | 3/3 folds (+0.83) |
-| Bi-SRNet-lite + Weighted CE | 14.89 ± 0.55 | **14.35 ± 0.26** | 52.90 ± 0.31 | 22.95 ± 0.65 | 8.06 ± 0.29 | 0.9% | Mild overfitting | 3/3 folds (+0.80) |
-| Bi-SRNet-lite + WCE + Dice | 14.96 ± 0.62 | **14.26 ± 0.19** | 52.77 ± 0.25 | 24.18 ± 0.91 | 9.22 ± 0.52 | 0.3% | Mild overfitting | 3/3 folds (+0.70) |
-| Bi-SRNet-lite + Class-balanced | 14.75 ± 0.67 | **14.15 ± 0.40** | 52.46 ± 0.57 | 22.09 ± 0.58 | 7.35 ± 0.12 | 0.9% | Mild overfitting | 3/3 folds (+0.60) |
-| Bi-SRNet-lite + WCE + Dice + rare sampling | 14.53 ± 0.49 | **13.76 ± 0.34** | 52.29 ± 0.66 | 23.02 ± 0.59 | 8.49 ± 0.13 | 1.3% | Mild overfitting | 3/3 folds (+0.20) |
-| Bi-SRNet-lite + Median-freq | 14.40 ± 0.60 | **13.73 ± 0.42** | 51.46 ± 0.60 | 21.00 ± 0.54 | 6.60 ± 0.32 | 1.3% | Mild overfitting | 3/3 folds (+0.18) |
-| Bi-SRNet-lite + CE (baseline) | 14.39 ± 0.54 | **13.55 ± 0.42** | 52.79 ± 0.52 | 23.16 ± 1.03 | 8.77 ± 0.49 | 0.8% | Mild overfitting | 3/3 folds (+6.81) |
-| Bi-SRNet-lite + Focal | 13.99 ± 0.52 | **13.35 ± 0.08** | 51.88 ± 0.22 | 20.73 ± 0.32 | 6.75 ± 0.82 | 1.0% | Mild overfitting | 1/3 folds (-0.20) |
-| Bi-SRNet-lite + CE + rare sampling | 13.88 ± 0.74 | **13.30 ± 0.09** | 52.46 ± 0.25 | 22.38 ± 0.73 | 8.50 ± 0.87 | 1.3% | Mild overfitting | 1/3 folds (-0.25) |
-| SSCD + CE (baseline) | 13.38 ± 0.73 | **12.97 ± 0.39** | 51.67 ± 0.50 | 25.17 ± 0.18 | 11.80 ± 0.55 | 2.8% | Mild overfitting | 3/3 folds (+6.23) |
-| Early Fusion + CE (baseline) | 7.03 ± 0.28 | **6.74 ± 0.09** | 44.44 ± 0.64 | 11.78 ± 0.37 | 4.75 ± 0.49 | 0.4% | Mild overfitting | — (reference) |
-| Bi-SRNet-lite + OHEM | 3.33 ± 0.56 | **3.34 ± 0.28** | 33.72 ± 5.31 | 4.53 ± 0.15 | 1.20 ± 0.42 | 0.2% | Failed to learn | 0/3 folds (-10.21) |
-
-![Cross-validation scores](docs/figures/cv_scores.png)
-
-### Overfitting and underfitting
-
-Each epoch, the model is also scored on a fixed 296-pair subset of its own training data (no
-augmentation), next to the validation fold. Rules used for the diagnosis (averaged over folds):
-
-| Diagnosis | Rule |
-|---|---|
-| Overfitting | validation loss ends >10% above its minimum **and** train SeK − val SeK > 3 at the last epoch |
-| Mild overfitting | only one of the two conditions above |
-| Underfitting (still improving) | val SeK still rising (> 0.15 per epoch over the last 5 epochs) and gap < 2 |
-| Failed to learn | best val SeK < 5 |
-| Good fit | none of the above |
-
-Losses of different techniques are defined differently, so compare train and validation loss
-**within** a panel, not across panels.
-
-![Train vs validation SeK](docs/figures/learning_curves_sek.png)
-
-![Train vs validation loss](docs/figures/learning_curves_loss.png)
-
-![Generalisation gap](docs/figures/generalization_gap.png)
-
-## Next steps
-
-The full plan with time estimates is in [docs/ROADMAP.md](docs/ROADMAP.md). In short:
-
-1. **Statistics:** add 2 more seeds for the top configurations and a paired significance test, on
-   top of the finished 3-fold cross-validation.
-2. **Cheap fixes suggested by the error analysis:** tune the change threshold (missed changes are
-   the largest error), train the best configuration longer, and fix or drop OHEM.
-3. **New method, a transition-aware loss:** weight each pixel by how rare its *from → to* change
-   is, and compare it against CE, WCE + Dice and the SeK loss of Mamba-FCS
-   [[6]](https://arxiv.org/abs/2508.08232).
-4. **Published setting:** 512 px, a larger backbone and 50+ epochs on a GPU.
-5. **A second dataset:** Landsat-SCD.
-6. **Paper:** write it up and choose a venue.
-
-## Reproduce
-
-```bash
-python3.11 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python prepare_data.py          # streams SECOND from Google Drive → data/SECOND_256 (needs bsdtar)
-python analyze_imbalance.py     # → results/imbalance_stats.json
-./run_all.sh                    # phase A + phase B (EPOCHS=20 by default); finished runs are skipped
-./run_cv.sh                     # 3-fold cross-validation + train/val curves (~12 h on an M4)
-python make_docs.py             # → README.md, docs/*.md, docs/figures/*.png
-python make_excel.py            # → results/SECOND_SCD_Results.xlsx (Excel workbook with charts)
-```
-
-One run: `python train.py --model bisrnet --loss combo --sampler rare --epochs 20 --tag my_run`.
+# Semantic Change Detection on SECOND: from 256×256 to 512×512
+
+Semantic change detection (SCD) on the **SECOND** aerial dataset. Given two images of the same place taken at different times, the model predicts **where** the land changed and **what it changed from and to**, across 6 land-cover classes.
+
+The work was done in **three phases**:
+
+| Phase | Where | Setup | Best test SeK |
+|---|---|---|---|
+| [**1. Laptop, 256×256**](phase1_laptop_256/) | Apple M4 laptop (MPS) | ResNet-18, 3 architectures + 9 class-imbalance techniques + 3-fold cross-validation | 15.38 (Bi-SRNet-lite + WCE+Dice) |
+| [**2. Colab, 256×256**](phase2_colab_256/) | Google Colab GPU | ResNet-18, 3 architectures + 5 losses | 13.92 (Bi-SRNet + WCE+Dice) |
+| [**3. Kaggle, 512×512**](phase3_kaggle_512/) | Kaggle T4 GPU | **ResNet-34 at native resolution, faithful Bi-SRNet, new proposed Bi-SRNet-DF, TTA** | **21.00** (Bi-SRNet-DF + TTA) |
+
+![Project journey](figures/00_journey_all_phases.png)
+
+Phases 1 and 2 are independent code bases with slightly different random splits, so compare them only loosely. **Phases 2 and 3 use the identical split**, so the 256→512 comparison below is exact. Phase 3 against Phase 2:
+
+| | Before (256×256) | After (512×512) | Change |
+|---|---|---|---|
+| Best model | Bi-SRNet + WCE+Dice | **Bi-SRNet-DF (proposed) + TTA** | |
+| **SeK** (main metric) | 13.92 | **21.00** | **+7.08 (+51%)** |
+| Fscd | 53.38 | 60.22 | +6.84 |
+| mIoU | 67.60 | 72.62 | +5.02 |
+| OA | 84.68 | 87.08 | +2.40 |
+
+All numbers are on the held-out **test set**, with the **same split** in both studies.
+
+![Best result before vs after](figures/02_best_before_vs_after.png)
+
+---
+
+## Contents
+
+- [Dataset](#dataset)
+- [Repository layout](#repository-layout)
+- [What was done: version history](#what-was-done-version-history)
+- [Models](#models)
+- [Loss functions](#loss-functions)
+- [Evaluation metrics](#evaluation-metrics)
+- [Results](#results)
+- [Overfitting / underfitting check](#overfitting--underfitting-check)
+- [Comparison with published papers](#comparison-with-published-papers)
+- [How to run](#how-to-run)
+- [Limitations and next steps](#limitations-and-next-steps)
+- [References](#references)
+
+---
+
+## Dataset
+
+**SECOND** (SEmantic Change detectiON Dataset), Yang et al., IEEE TGRS 2021.
+
+- 2,968 publicly labelled bi-temporal image pairs, 512×512 pixels, aerial RGB, 0.5–3 m resolution.
+- Each pair has two label maps (T1 and T2). Pixels are either **no change** or one of 6 land-cover classes: non-vegetated ground, tree, low vegetation, water, building, playground.
+- Only about 20% of pixels are changed, and water, low vegetation and playground are rare. This class imbalance is the main difficulty.
+
+**Split used in both studies:** a random 70 / 10 / 20 split with seed 0, giving **2,077 train / 297 validation / 594 test** pairs. Model and loss selection used the validation set only. The test set was used once, for final reporting.
+
+The notebook downloads the dataset automatically from Google Drive. On Kaggle, you can instead add any SECOND dataset that has `im1/ im2/ label1/ label2/` folders as an Input.
+
+---
 
 ## Repository layout
 
-| Path | Contents |
+```
+Second/
+├── README.md                     # this file: the whole story
+├── requirements.txt
+├── figures/                      # all comparison graphs (tools/make_figures.py)
+├── tools/make_figures.py
+├── docs/
+│   ├── SECOND_SCD_Summary_256_vs_512.xlsx   # 12-sheet explained summary (meeting version)
+│   └── literature/                          # research papers reviewed
+├── phase1_laptop_256/            # Phase 1: laptop study (own README, scripts, results, logs, docs)
+│   ├── README.md · scd.py · train.py · prepare_data.py · run_all.sh · run_cv.sh
+│   ├── make_docs.py · make_excel.py · make_report.py · analyze_imbalance.py
+│   ├── results/  (per-run JSON, summary.csv, cross-validation, Excel)
+│   ├── logs/     (final training logs)
+│   └── docs/     (methodology, results, diagnostics, references, roadmap, figures)
+├── phase2_colab_256/             # Phase 2: Colab 256x256 study
+│   ├── notebook/SECOND_SCD_256.ipynb · src/second_scd_256.py
+│   └── results/  (Excel + CSV)
+└── phase3_kaggle_512/            # Phase 3: Kaggle 512x512 study
+    ├── notebooks/SECOND_SCD_512.ipynb        # final version (v4)
+    ├── notebooks/drafts/                     # v2, v3 kept for history
+    ├── src/second_scd_512.py · tools/build_512_notebook.py
+    ├── results/  (Excel + CSV, incl. 256-vs-512 and vs-papers tables)
+    └── logs/     (raw Kaggle logs used to diagnose crashes)
+```
+
+Model weights, datasets and virtual environments are not stored in git (see `.gitignore`). The scripts and notebooks recreate them.
+
+---
+
+## What was done: version history
+
+### Phase 1: laptop study, 256×256 (`phase1_laptop_256/`)
+
+- Platform: Apple M4 laptop, 16 GB, PyTorch MPS. SECOND was streamed from Google Drive into a 256 px copy.
+- Controlled protocol: the same ResNet-18 backbone, decoder, split, seed and 20-epoch schedule for every run.
+- Phase A compared Early Fusion, SSCD and Bi-SRNet-lite (SeK 7.97 → 13.59 → 14.24). Phase B tested 9 class-imbalance techniques on Bi-SRNet-lite. The best, **WCE + Dice, reached 15.38**. A 3-fold cross-validation confirmed the ranking.
+- Full write-up: [`phase1_laptop_256/README.md`](phase1_laptop_256/README.md) and its `docs/` folder.
+
+### Phase 2: Colab study, 256×256 (`phase2_colab_256/`)
+
+- Platform: Google Colab. All images were down-sampled from 512 to **256×256** because of GPU memory, and the whole dataset was kept on the GPU.
+- Backbone: **ResNet-18** (ImageNet). Decoder: small FPN with 64 channels. 20 epochs.
+- Three models were compared with CE loss (Early Fusion, SSCD, a simplified Bi-SRNet). Then five losses were compared on the best model.
+- Best result: **Bi-SRNet + WCE + Dice → SeK 13.92**.
+
+### Phase 3: Kaggle study, 512×512 (`phase3_kaggle_512/`)
+
+| Version | What changed | Outcome on Kaggle |
+|---|---|---|
+| v1 | First 512 notebook. It built a 6 GB memory-mapped cache of the whole dataset. | Kernel died. Not kept, because v2 replaced it. |
+| v2 (`drafts/`) | Images read lazily from disk, so no big cache is needed. RAM and disk use are printed. | Download and data loading worked. The kernel crashed at the first training step. See `phase3_kaggle_512/logs/kaggle_v2_kernel_crash_log.txt`. |
+| v3 (`drafts/`) | Single GPU instead of 2-GPU `DataParallel`, no `channels_last`, `faulthandler` turned on, class-weight divide-by-zero fixed. | Trained for 1.9 h (Early Fusion and SSCD finished), then was killed by a slow RAM leak. See `phase3_kaggle_512/logs/kaggle_v3_training_session_log.txt`. |
+| **v4 (final)** | Fixed the RAM leak: references to finished batches are dropped, glibc malloc arenas are limited with `malloc_trim` each epoch, and RAM is logged every epoch. Training resumes automatically from the last epoch. | **All 8 runs completed.** |
+
+### What changed from Phase 2 (256) to Phase 3 (512), and why it helps
+
+| Aspect | Phase 2 (256×256) | Phase 3 (512×512) | Why it is better |
+|---|---|---|---|
+| Input | 256×256, down-sampled | **512×512 native** | Small objects and edges are not blurred away |
+| Backbone | ResNet-18 | **ResNet-34** | Richer features. Same backbone as Bi-SRNet, SCanNet and LSAFNet |
+| Bi-SRNet | One cross-attention at the deepest layer | **Self-attention + cross-attention Semantic Reasoning blocks at 1/16 and 1/32 scale**, plus consistency loss | Follows the original paper |
+| Decoder | FPN, 64 channels | Panoptic-style FPN, 128 channels, all levels fused | Combines fine detail with global context |
+| New model | none | **Bi-SRNet-DF** (see below) | Explicit "what changed" signal |
+| Augmentation | flip, rot90 | + **T1↔T2 swap, random scale crop 1–1.5×, brightness/contrast jitter** | Regularisation, so less overfitting |
+| Schedule | cosine, 20 epochs | warm-up + per-iteration cosine, gradient clipping, 30 epochs (50 for the proposed model) | More stable training |
+| Inference | single pass, threshold 0.5 | **4-flip TTA** + change threshold tuned on validation | Removes random errors (+0.62 SeK) |
+| Data | whole dataset on GPU | disk + background prefetch | 512 data does not fit on the GPU |
+
+---
+
+## Models
+
+Every model outputs one binary change map and one 6-class semantic map for each date. All use ResNet-34 (ImageNet), AdamW (lr 3e-4, weight decay 1e-4), batch 8 and mixed precision.
+
+| Model | Idea | Params |
+|---|---|---|
+| **Early Fusion** | T1 and T2 are stacked into a 6-channel input and passed through one encoder and one decoder | 23.0 M |
+| **SSCD** | Siamese encoder with shared weights. A semantic decoder runs per date, and a change decoder uses the concatenated T1+T2 features | 24.3 M |
+| **Bi-SRNet** | SSCD + Semantic Reasoning blocks: self-attention within each date and cross-attention between dates, plus a semantic consistency loss | 25.9 M |
+| **Bi-SRNet-DF (proposed)** | Bi-SRNet + **(a)** differential features `[T1, T2, \|T1−T2\|]` at every scale, **(b)** Squeeze-and-Excitation channel attention, and **(c)** the change head also receives the semantic-difference prior `\|sem(T1) − sem(T2)\|` | 27.0 M |
+
+---
+
+## Loss functions
+
+Every loss adds binary cross-entropy for the change map. Bi-SRNet and Bi-SRNet-DF also add a semantic consistency term: T1 and T2 class probabilities should be similar where nothing changed and different where something changed.
+
+| Loss | What it does | SeK @256 | SeK @512 |
+|---|---|---|---|
+| CE | Standard per-pixel cross-entropy | 12.87 | 18.46 |
+| WCE | Class weights = 1/√frequency, so rare classes count more | 13.25 | 18.79 |
+| Focal | Down-weights easy pixels: (1−p)² · CE | 12.78 | 18.45 |
+| CE + Dice | Adds Dice loss, which directly optimises region overlap | 13.43 | **19.15** |
+| WCE + Dice | Combines both | **13.92** | 18.71 |
+
+At 512, rare classes are already visible in the image, so class weighting helps less. **Dice** is the consistent winner at both resolutions.
+
+---
+
+## Evaluation metrics
+
+| Metric | Meaning |
 |---|---|
-| [scd.py](scd.py) | Data loading, the 3 models, all losses, official SECOND metrics |
-| [train.py](train.py) | Training and evaluation of a single run → `results/<tag>.json` |
-| [run_all.sh](run_all.sh) | Phase A → pick best architecture → phase B |
-| [prepare_data.py](prepare_data.py) | Streaming download + 256 px conversion |
-| [analyze_imbalance.py](analyze_imbalance.py) | Class and transition statistics |
-| [make_docs.py](make_docs.py) | Generates this README, `docs/` and all figures |
-| [make_excel.py](make_excel.py) | Builds `results/SECOND_SCD_Results.xlsx`: all results, formulas and charts in one workbook |
-| [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | Models, losses, metrics and training details |
-| [docs/RESULTS.md](docs/RESULTS.md) | Every table, per run |
-| [docs/DIAGNOSTICS.md](docs/DIAGNOSTICS.md) | Error breakdown, cross-validation, fold-by-fold fit diagnosis |
-| [run_cv.sh](run_cv.sh) | 3-fold cross-validation of all 12 configurations |
-| [docs/ENGINEERING_NOTES.md](docs/ENGINEERING_NOTES.md) | Problems hit while running on a laptop and their fixes |
-| [docs/REFERENCES.md](docs/REFERENCES.md) | Paper, link and code location for every model, loss and metric |
-| [docs/ROADMAP.md](docs/ROADMAP.md) | Next steps towards a paper |
-| [docs/PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) | Short summary for supervisors and reviewers |
-| [requirements.txt](requirements.txt) | Exact package versions |
-| `results/` | Per-run JSON (metrics, confusion matrix, training history), CSV summary |
-| `logs/` | Training logs |
+| **SeK (Separated Kappa)**, the main metric | Kappa over changed pixels only (true no-change removed) × e^(IoU_change − 1). It rewards correct from–to classes and is the official SECOND ranking metric |
+| **Fscd** | F1 of changed pixels whose semantic class is also correct |
+| **mIoU** | Mean of IoU(change) and IoU(no-change) |
+| **OA** | Overall pixel accuracy. It is dominated by no-change pixels, so it is less informative |
+| Precision / Recall / F1 | Binary change vs no-change |
+| Per-class IoU | Overlap for no change + each of the 6 classes |
+| Confusion matrix | TP / FP / FN / TN of changed pixels, plus TPR, FPR, FNR, TNR |
 
-## Limitations
+---
 
-- **One seed per configuration.** Several phase-B techniques differ by only a few tenths of SeK.
-  Those gaps may change with another seed, so treat close results as ties.
-- **Lower resolution and a short schedule** (256 px, 20 epochs). Absolute scores are lower than
-  published ones, as the comparison above explains.
-- **Simplified versions of the published models.** They follow the core ideas of HRSCD-str.2,
-  SSCD-l and Bi-SRNet, but are not exact copies of those papers' code.
-- **Test split taken from the public training release,** because SECOND's official test labels
-  are not part of the download used here.
+## Results
+
+### 256 vs 512: same model and same loss
+
+Every one of the 7 configurations improved, with an **average gain of +5.33 SeK**.
+
+![SeK 256 vs 512](figures/01_sek_256_vs_512.png)
+
+### Experiments at 512×512 (test set)
+
+| Model | Loss | SeK | Fscd | mIoU | OA |
+|---|---|---|---|---|---|
+| Early Fusion | CE | 13.61 | 53.15 | 67.95 | 85.72 |
+| SSCD | CE | 18.19 | 58.05 | 70.28 | 87.24 |
+| Bi-SRNet | CE | 18.46 | 58.28 | 70.74 | 87.13 |
+| Bi-SRNet | WCE | 18.79 | 57.89 | 71.33 | 87.17 |
+| Bi-SRNet | Focal | 18.45 | 58.19 | 70.73 | 87.26 |
+| Bi-SRNet | CE + Dice | 19.15 | 58.76 | 71.37 | 86.79 |
+| Bi-SRNet | WCE + Dice | 18.71 | 58.16 | 71.05 | 86.79 |
+| **Bi-SRNet-DF (proposed)** | CE + Dice | 20.38 | 59.62 | 72.25 | 86.81 |
+| **Bi-SRNet-DF (proposed) + TTA** | CE + Dice | **21.00** | **60.22** | **72.62** | 87.08 |
+
+![Experiments 512](figures/04_experiments_512.png)
+![Experiments 256](figures/03_experiments_256.png)
+
+**Where the gain comes from (SeK):**
+
+| Step | Gain |
+|---|---|
+| 512 resolution + ResNet-34 + better training | about +5.5 |
+| Best loss (CE + Dice) vs CE | +0.69 |
+| Proposed Bi-SRNet-DF vs Bi-SRNet (same loss) | **+1.23** |
+| Flip TTA | +0.62 |
+
+### Confusion matrix and per-class results
+
+| Best model | Recall (TPR) | Precision | Specificity (TNR) | FPR |
+|---|---|---|---|---|
+| Before (256) | 65.4% | 67.8% | 92.5% | 7.5% |
+| After (512) | **72.4%** | **73.5%** | **93.7%** | **6.3%** |
+
+The final model misses fewer real changes and raises fewer false alarms. Building (56.7 IoU) and playground (55.6) are detected best. **Low vegetation (21.8) and water (26.8)** remain hardest because they have very few training pixels.
+
+![Per-class IoU](figures/05_per_class_iou.png)
+
+Full tables (TP/FP/FN/TN per run, per-class precision and recall) are in `phase2_colab_256/results/`, `phase3_kaggle_512/results/` and in `docs/SECOND_SCD_Summary_256_vs_512.xlsx`.
+
+---
+
+## Overfitting / underfitting check
+
+| | Train − validation SeK gap | Verdict |
+|---|---|---|
+| 256×256 | 3.2 – 9.9 points | Mild overfitting |
+| 512×512 | −1.6 – 2.0 points | **Balanced (good fit)** |
+
+The larger input and stronger augmentation act as regularisation. Validation SeK falls by less than 1 point after the best epoch, so training is stable, and the best checkpoint is kept automatically. Early Fusion has train SeK *below* validation SeK. That means it is capacity-limited (slight underfitting), which is consistent with it being the weakest model.
+
+![Fit check](figures/06_fit_check.png)
+![Training curves](figures/08_training_curves_512.png)
+
+---
+
+## Comparison with published papers
+
+![vs papers](figures/07_vs_papers.png)
+
+| Method | Year | SeK | mIoU | Fscd | OA |
+|---|---|---|---|---|---|
+| ASN-ATL (SECOND paper) | 2021 | 16.80 | 70.00 | – | – |
+| HRSCD.str4 | 2019 | 18.80 | 71.15 | 58.21 | 86.62 |
+| SRDFNet | 2026 | 20.36 | 70.31 | 60.25 | 87.64 |
+| **This work: Bi-SRNet-DF + TTA** | 2026 | **21.00** | **72.62** | 60.22 | 87.08 |
+| SSCD-l | 2022 | 21.86 | 72.60 | 61.22 | 87.19 |
+| Bi-SRNet | 2022 | 22.43 | 73.38 | 61.62 | 87.48 |
+| SCanNet | 2024 | 23.34 | 73.20 | 62.59 | 87.46 |
+| BT-SCD | 2025 | 23.61 | 73.45 | 63.80 | 88.10 |
+| ChangeMamba | 2024 | 24.11 | 73.68 | 64.03 | 88.12 |
+| DBTANet | 2026 | 24.12 | 73.74 | 64.08 | 88.23 |
+| LSAFNet | 2024 | 24.32 | 74.01 | 63.20 | 87.66 |
+| Mamba-FCS | 2025 | 25.50 | 74.07 | 65.78 | 88.62 |
+
+**What this shows:**
+- This work beats ASN-ATL, HRSCD.str4 and the 2026 **SRDFNet** on SeK and mIoU, and matches SSCD-l on mIoU.
+- It is 4.5 SeK below the best method found, Mamba-FCS. That gap comes mostly from the encoder. Mamba-FCS's own ablation shows its VMamba-Base backbone alone (ChangeMamba) reaches 24.11, and its extra modules add about 1.4.
+
+**This comparison is indicative, not apples-to-apples.** Published methods train on all 2,968 public pairs, and several test on the official 1,694-pair test set. This work trains on 70% of the public pairs (2,077) and tests on its own 20%. The protocol matters: the same Bi-SRNet is reported as 22.43, 23.22 and 23.59 in different papers.
+
+---
+
+## How to run
+
+**Kaggle (recommended, free T4 GPU)**
+
+1. Create a notebook, then use **File → Import Notebook** to load `phase3_kaggle_512/notebooks/SECOND_SCD_512.ipynb`.
+2. In Settings, choose **Accelerator: GPU T4** and set **Internet: On**.
+3. Optionally, add a SECOND dataset through **Add Input**. Without one, the notebook downloads SECOND itself.
+4. Set `QUICK_TEST = True` and use **Run All** for a 15-minute pipeline check.
+5. Set `QUICK_TEST = False`, then **Save Version → Save & Run All**.
+6. If the 12-hour session ends before training finishes: add this notebook's output as an Input and run again. Finished runs are loaded, and an interrupted run resumes from its last epoch.
+
+Full training takes about 10 hours on one T4, split over two sessions.
+
+**Colab:** the same notebook works. Results are saved to `MyDrive/SECOND_SCD_512`.
+
+**Phase 1 (laptop):** see [`phase1_laptop_256/README.md`](phase1_laptop_256/README.md). Run `prepare_data.py`, then `run_all.sh` and `run_cv.sh`, from inside that folder.
+
+**Phase 2 (Colab):** open `phase2_colab_256/notebook/SECOND_SCD_256.ipynb` in Colab with a GPU runtime and run all cells.
+
+**Regenerate the figures and the notebook** (from the repository root)
+
+```bash
+pip install -r requirements.txt
+python tools/make_figures.py        # rebuilds figures/ from the phase results
+python phase3_kaggle_512/tools/build_512_notebook.py  # rebuilds the phase-3 notebook
+```
+
+---
+
+## Limitations and next steps
+
+- **Protocol:** retrain on all public pairs and evaluate on the standard test set, so the comparison with papers is exact.
+- **Encoder:** ResNet-34 is the main gap to the top methods. Next is a stronger encoder such as VMamba-Base (as in Mamba-FCS), ConvNeXt or PVT-v2.
+- **Losses and guidance:** add SeK and mIoU losses and change-guided attention (as in Mamba-FCS). Keep this work's semantic-difference prior, Dice loss and consistency loss, which together give *bidirectional* change↔semantic guidance.
+- **Inference:** EMA or checkpoint averaging, and multi-scale TTA.
+- **Rare classes:** class-aware sampling for water and low vegetation.
+
+---
 
 ## References
 
-Full table (each model, loss, optimiser and metric → paper, link, code location, our changes):
-**[docs/REFERENCES.md](docs/REFERENCES.md)**. Main sources:
+- Yang K. et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images* (SECOND dataset), IEEE TGRS, 2021. Dataset page: https://captain-whu.github.io/SCD/
+- Ding L. et al., *Bi-temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images* (Bi-SRNet, SSCD-l), IEEE TGRS, 2022.
+- Daudt R. C. et al., *Multitask learning for large-scale semantic change detection* (HRSCD), CVIU, 2019.
+- Ding L. et al., *Joint Spatio-Temporal Modeling for Semantic Change Detection* (SCanNet), IEEE TGRS, 2024. arXiv:2212.05245
+- *A Late-Stage Bitemporal Feature Fusion Network for Semantic Change Detection* (LSAFNet), arXiv:2406.10678
+- Chen H. et al., *ChangeMamba*, IEEE TGRS, 2024. https://github.com/ChenHongruixuan/ChangeMamba
+- *Mamba-FCS: Joint Spatio-Frequency Feature Fusion, Change-Guided Attention, and SeK Loss*, arXiv:2508.08232. https://github.com/Buddhi19/Mamba-FCS
+- *A Dual-Branch Framework for Semantic Change Detection with Boundary and Temporal Awareness* (DBTANet), arXiv:2602.11466
+- *SRDFNet: Semantic Refinement and Differential Features for High-Resolution Change Detection*, Sensors 26(11):3427, 2026.
 
-1. Yang et al., *Asymmetric Siamese Networks for Semantic Change Detection in Aerial Images*, IEEE TGRS 2022 — SECOND dataset and metrics. [arXiv:2010.05687](https://arxiv.org/abs/2010.05687)
-2. Daudt et al., *Multitask Learning for Large-scale Semantic Change Detection*, CVIU 2019 — HRSCD strategies (Early Fusion). [arXiv:1810.08452](https://arxiv.org/abs/1810.08452)
-3. Ding et al., *Bi-Temporal Semantic Reasoning for the Semantic Change Detection in HR Remote Sensing Images*, IEEE TGRS 2022 — SSCD-l, Bi-SRNet, consistency loss. [arXiv:2108.06103](https://arxiv.org/abs/2108.06103)
-4. Ding et al., *Joint Spatio-Temporal Modeling for the Semantic Change Detection in Remote Sensing Images*, IEEE TGRS 2024 — SCanNet. [arXiv:2212.05245](https://arxiv.org/abs/2212.05245)
-5. Chen et al., *ChangeMamba*, IEEE TGRS 2024. [arXiv:2404.03425](https://arxiv.org/abs/2404.03425)
-6. *Mamba-FCS* (SeK loss; published SECOND table), 2025. [arXiv:2508.08232](https://arxiv.org/abs/2508.08232)
-7. He et al., *Deep Residual Learning* (ResNet), CVPR 2016. [arXiv:1512.03385](https://arxiv.org/abs/1512.03385)
-8. Lin et al., *Feature Pyramid Networks*, CVPR 2017. [arXiv:1612.03144](https://arxiv.org/abs/1612.03144)
-9. Eigen & Fergus, median-frequency balancing, ICCV 2015. [arXiv:1411.4734](https://arxiv.org/abs/1411.4734)
-10. Cui et al., *Class-Balanced Loss Based on Effective Number of Samples*, CVPR 2019. [arXiv:1901.05555](https://arxiv.org/abs/1901.05555)
-11. Lin et al., *Focal Loss for Dense Object Detection*, ICCV 2017. [arXiv:1708.02002](https://arxiv.org/abs/1708.02002)
-12. Milletari et al., *V-Net* (Dice loss), 3DV 2016. [arXiv:1606.04797](https://arxiv.org/abs/1606.04797)
-13. Shrivastava et al., *Online Hard Example Mining*, CVPR 2016. [arXiv:1604.03540](https://arxiv.org/abs/1604.03540)
-14. Gupta et al., *LVIS* (repeat-factor sampling), CVPR 2019. [arXiv:1908.03195](https://arxiv.org/abs/1908.03195)
-15. Loshchilov & Hutter, *AdamW*, ICLR 2019. [arXiv:1711.05101](https://arxiv.org/abs/1711.05101) · Smith & Topin, *One-cycle / Super-Convergence*, 2017. [arXiv:1708.07120](https://arxiv.org/abs/1708.07120)
+The SECOND dataset belongs to its authors. Follow its terms of use; this repository does not redistribute the images.

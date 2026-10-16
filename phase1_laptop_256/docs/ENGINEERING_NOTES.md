@@ -51,7 +51,7 @@ Each restart stopped the run in progress.
 
 **Fix.** `run_all.sh` and `run_cv.sh` skip any run whose result JSON already exists. Re-running the same
 command resumes from the first unfinished run. Only the interrupted run is repeated. Partial logs
-are kept as `logs/*_interrupted.log`. The pipeline now runs under `caffeinate -i` so the Mac does
+of interrupted runs were removed from the repository to keep it clean. The pipeline now runs under `caffeinate -i` so the Mac does
 not go to idle sleep during training.
 
 ## 5. A 368 MB file blocked `git push`

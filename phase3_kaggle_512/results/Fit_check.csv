@@ -1,0 +1,9 @@
+,Model,Loss,Best epoch,Epochs,Train SeK,Validation SeK,Gap = Train SeK - Validation SeK,Validation drop after best epoch,Fit
+1,Early Fusion,CE (Cross-Entropy),29,30,13.14,14.77,-1.63,0.58,Good fit
+2,SSCD,CE (Cross-Entropy),21,30,19.45,19.14,0.3,0.64,Good fit
+3,Bi-SRNet,CE (Cross-Entropy),27,30,22.26,20.6,1.66,0.25,Good fit
+4,Bi-SRNet,WCE (Weighted Cross-Entropy),28,30,21.43,19.95,1.47,0.16,Good fit
+5,Bi-SRNet,Focal loss,24,30,21.72,20.21,1.51,0.25,Good fit
+6,Bi-SRNet,CE (Cross-Entropy) + Dice,28,30,23.39,21.38,2.01,0.25,Good fit
+7,Bi-SRNet,WCE (Weighted Cross-Entropy) + Dice,24,30,22.53,21.01,1.52,0.43,Good fit
+8,Bi-SRNet-DF (proposed),CE (Cross-Entropy) + Dice,24,50,24.55,22.55,2.01,0.83,Good fit

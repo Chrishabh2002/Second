@@ -1,0 +1,221 @@
+Time
+#
+Log Message
+11.5s	1	0.00s - Debugger warning: It seems that frozen modules are being used, which may
+11.5s	2	0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+11.5s	3	0.00s - to python to disable frozen modules.
+11.5s	4	0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+12.3s	5	0.00s - Debugger warning: It seems that frozen modules are being used, which may
+12.3s	6	0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+12.3s	7	0.00s - to python to disable frozen modules.
+12.3s	8	0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+38.1s	9	PyTorch 2.11.0+cu128 | GPU: Tesla T4, Tesla T4 | results -> /kaggle/working/SECOND_SCD_512/results_quicktest
+38.1s	10	Looking for SECOND ... 1148.8 GB disk free, 31.9 GB RAM free
+38.1s	11	SECOND not found locally - downloading from Google Drive ...
+47.4s	12	Downloading...
+47.4s	13	From (original): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc
+47.4s	14	From (redirected): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc&confirm=t&uuid=1c124364-30ed-4150-adaa-9a2e844704ce
+47.4s	15	To: /tmp/second_data/second.rar
+47.4s	16	
+47.4s	17	Downloading...
+47.4s	18	From (original): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc
+47.4s	19	From (redirected): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc&confirm=t&uuid=1c124364-30ed-4150-adaa-9a2e844704ce
+47.4s	20	To: /tmp/second_data/second.rar
+47.4s	21	  0%|          | 0.00/2.41G [00:00<?, ?B/s]
+47.5s	22	  0%|          | 0.00/2.41G [00:00<?, ?B/s]  0%|          | 8.91M/2.41G [00:00<00:40, 59.8MB/s]
+47.6s	23	  0%|          | 8.91M/2.41G [00:00<00:40, 59.8MB/s]  2%|▏         | 36.7M/2.41G [00:00<00:14, 166MB/s] 
+47.7s	24	  2%|▏         | 36.7M/2.41G [00:00<00:14, 166MB/s]   3%|▎         | 61.3M/2.41G [00:00<00:11, 198MB/s]
+47.8s	25	  3%|▎         | 61.3M/2.41G [00:00<00:11, 198MB/s]  3%|▎         | 83.9M/2.41G [00:00<00:11, 208MB/s]
+47.9s	26	  3%|▎         | 83.9M/2.41G [00:00<00:11, 208MB/s]  5%|▍         | 112M/2.41G [00:00<00:09, 231MB/s] 
+48.0s	27	  5%|▍         | 112M/2.41G [00:00<00:09, 231MB/s]   6%|▌         | 136M/2.41G [00:00<00:09, 236MB/s]
+48.1s	28	  6%|▌         | 136M/2.41G [00:00<00:09, 236MB/s]  7%|▋         | 160M/2.41G [00:00<00:09, 237MB/s]
+48.3s	29	  7%|▋         | 160M/2.41G [00:00<00:09, 237MB/s]  8%|▊         | 185M/2.41G [00:00<00:11, 198MB/s]
+48.4s	30	  8%|▊         | 185M/2.41G [00:00<00:11, 198MB/s]  9%|▉         | 211M/2.41G [00:01<00:10, 216MB/s]
+48.5s	31	  9%|▉         | 211M/2.41G [00:01<00:10, 216MB/s] 10%|▉         | 239M/2.41G [00:01<00:09, 225MB/s]
+48.6s	32	 10%|▉         | 239M/2.41G [00:01<00:09, 225MB/s] 11%|█▏        | 271M/2.41G [00:01<00:08, 251MB/s]
+48.7s	33	 11%|█▏        | 271M/2.41G [00:01<00:08, 251MB/s] 12%|█▏        | 300M/2.41G [00:01<00:08, 261MB/s]
+48.8s	34	 12%|█▏        | 300M/2.41G [00:01<00:08, 261MB/s] 14%|█▎        | 327M/2.41G [00:01<00:08, 258MB/s]
+48.9s	35	 14%|█▎        | 327M/2.41G [00:01<00:08, 258MB/s] 15%|█▍        | 354M/2.41G [00:01<00:07, 261MB/s]
+49.0s	36	 15%|█▍        | 354M/2.41G [00:01<00:07, 261MB/s] 16%|█▌        | 381M/2.41G [00:01<00:08, 250MB/s]
+49.1s	37	 16%|█▌        | 381M/2.41G [00:01<00:08, 250MB/s] 17%|█▋        | 407M/2.41G [00:01<00:08, 246MB/s]
+49.3s	38	 17%|█▋        | 407M/2.41G [00:01<00:08, 246MB/s] 18%|█▊        | 432M/2.41G [00:01<00:08, 235MB/s]
+49.4s	39	 18%|█▊        | 432M/2.41G [00:01<00:08, 235MB/s] 19%|█▉        | 456M/2.41G [00:02<00:08, 229MB/s]
+49.5s	40	 19%|█▉        | 456M/2.41G [00:02<00:08, 229MB/s] 20%|██        | 483M/2.41G [00:02<00:07, 241MB/s]
+49.6s	41	 20%|██        | 483M/2.41G [00:02<00:07, 241MB/s] 21%|██        | 510M/2.41G [00:02<00:07, 248MB/s]
+49.7s	42	 21%|██        | 510M/2.41G [00:02<00:07, 248MB/s] 22%|██▏       | 535M/2.41G [00:02<00:07, 245MB/s]
+49.8s	43	 22%|██▏       | 535M/2.41G [00:02<00:07, 245MB/s] 23%|██▎       | 564M/2.41G [00:02<00:07, 255MB/s]
+49.9s	44	 23%|██▎       | 564M/2.41G [00:02<00:07, 255MB/s] 24%|██▍       | 589M/2.41G [00:02<00:07, 254MB/s]
+50.1s	45	 24%|██▍       | 589M/2.41G [00:02<00:07, 254MB/s] 26%|██▌       | 615M/2.41G [00:02<00:08, 214MB/s]
+50.2s	46	 26%|██▌       | 615M/2.41G [00:02<00:08, 214MB/s] 27%|██▋       | 640M/2.41G [00:02<00:07, 223MB/s]
+50.3s	47	 27%|██▋       | 640M/2.41G [00:02<00:07, 223MB/s] 28%|██▊       | 664M/2.41G [00:02<00:07, 223MB/s]
+50.4s	48	 28%|██▊       | 664M/2.41G [00:02<00:07, 223MB/s] 29%|██▊       | 688M/2.41G [00:02<00:07, 227MB/s]
+50.5s	49	 29%|██▊       | 688M/2.41G [00:02<00:07, 227MB/s] 30%|██▉       | 711M/2.41G [00:03<00:07, 228MB/s]
+50.6s	50	 30%|██▉       | 711M/2.41G [00:03<00:07, 228MB/s] 31%|███       | 738M/2.41G [00:03<00:07, 237MB/s]
+50.7s	51	 31%|███       | 738M/2.41G [00:03<00:07, 237MB/s] 32%|███▏      | 764M/2.41G [00:03<00:06, 245MB/s]
+50.8s	52	 32%|███▏      | 764M/2.41G [00:03<00:06, 245MB/s] 33%|███▎      | 791M/2.41G [00:03<00:06, 251MB/s]
+51.0s	53	 33%|███▎      | 791M/2.41G [00:03<00:06, 251MB/s] 34%|███▍      | 817M/2.41G [00:03<00:09, 173MB/s]
+51.1s	54	 34%|███▍      | 817M/2.41G [00:03<00:09, 173MB/s] 35%|███▍      | 838M/2.41G [00:03<00:08, 175MB/s]
+51.3s	55	 35%|███▍      | 838M/2.41G [00:03<00:08, 175MB/s] 36%|███▌      | 858M/2.41G [00:03<00:10, 146MB/s]
+51.6s	56	 36%|███▌      | 858M/2.41G [00:03<00:10, 146MB/s] 36%|███▋      | 875M/2.41G [00:04<00:13, 113MB/s]
+51.7s	57	 36%|███▋      | 875M/2.41G [00:04<00:13, 113MB/s] 37%|███▋      | 893M/2.41G [00:04<00:13, 116MB/s]
+52.0s	58	 37%|███▋      | 893M/2.41G [00:04<00:13, 116MB/s] 38%|███▊      | 906M/2.41G [00:04<00:16, 93.0MB/s]
+52.1s	59	 38%|███▊      | 906M/2.41G [00:04<00:16, 93.0MB/s] 39%|███▊      | 927M/2.41G [00:04<00:13, 107MB/s] 
+52.3s	60	 39%|███▊      | 927M/2.41G [00:04<00:13, 107MB/s]  39%|███▉      | 940M/2.41G [00:04<00:16, 89.5MB/s]
+52.5s	61	 39%|███▉      | 940M/2.41G [00:04<00:16, 89.5MB/s] 40%|████      | 963M/2.41G [00:05<00:14, 100MB/s] 
+52.7s	62	 40%|████      | 963M/2.41G [00:05<00:14, 100MB/s]  40%|████      | 974M/2.41G [00:05<00:14, 95.8MB/s]
+52.8s	63	 40%|████      | 974M/2.41G [00:05<00:14, 95.8MB/s] 41%|████      | 992M/2.41G [00:05<00:12, 113MB/s] 
+53.0s	64	 41%|████      | 992M/2.41G [00:05<00:12, 113MB/s]  42%|████▏     | 1.01G/2.41G [00:05<00:14, 98.1MB/s]
+53.1s	65	 42%|████▏     | 1.01G/2.41G [00:05<00:14, 98.1MB/s] 43%|████▎     | 1.04G/2.41G [00:05<00:09, 143MB/s] 
+53.3s	66	 43%|████▎     | 1.04G/2.41G [00:05<00:09, 143MB/s]  44%|████▍     | 1.06G/2.41G [00:05<00:10, 124MB/s]
+53.4s	67	 44%|████▍     | 1.06G/2.41G [00:05<00:10, 124MB/s] 45%|████▌     | 1.09G/2.41G [00:06<00:08, 155MB/s]
+53.5s	68	 45%|████▌     | 1.09G/2.41G [00:06<00:08, 155MB/s] 46%|████▌     | 1.11G/2.41G [00:06<00:07, 169MB/s]
+53.6s	69	 46%|████▌     | 1.11G/2.41G [00:06<00:07, 169MB/s] 47%|████▋     | 1.13G/2.41G [00:06<00:08, 158MB/s]
+53.7s	70	 47%|████▋     | 1.13G/2.41G [00:06<00:08, 158MB/s] 48%|████▊     | 1.15G/2.41G [00:06<00:07, 172MB/s]
+53.8s	71	 48%|████▊     | 1.15G/2.41G [00:06<00:07, 172MB/s] 49%|████▉     | 1.17G/2.41G [00:06<00:06, 184MB/s]
+53.9s	72	 49%|████▉     | 1.17G/2.41G [00:06<00:06, 184MB/s] 50%|████▉     | 1.20G/2.41G [00:06<00:05, 205MB/s]
+54.0s	73	 50%|████▉     | 1.20G/2.41G [00:06<00:05, 205MB/s] 51%|█████     | 1.22G/2.41G [00:06<00:05, 212MB/s]
+54.1s	74	 51%|█████     | 1.22G/2.41G [00:06<00:05, 212MB/s] 52%|█████▏    | 1.25G/2.41G [00:06<00:05, 224MB/s]
+54.3s	75	 52%|█████▏    | 1.25G/2.41G [00:06<00:05, 224MB/s] 53%|█████▎    | 1.27G/2.41G [00:06<00:04, 229MB/s]
+54.4s	76	 53%|█████▎    | 1.27G/2.41G [00:06<00:04, 229MB/s] 54%|█████▍    | 1.30G/2.41G [00:06<00:04, 230MB/s]
+54.5s	77	 54%|█████▍    | 1.30G/2.41G [00:06<00:04, 230MB/s] 55%|█████▍    | 1.32G/2.41G [00:07<00:04, 230MB/s]
+54.6s	78	 55%|█████▍    | 1.32G/2.41G [00:07<00:04, 230MB/s] 56%|█████▌    | 1.35G/2.41G [00:07<00:04, 223MB/s]
+54.7s	79	 56%|█████▌    | 1.35G/2.41G [00:07<00:04, 223MB/s] 57%|█████▋    | 1.37G/2.41G [00:07<00:04, 231MB/s]
+54.8s	80	 57%|█████▋    | 1.37G/2.41G [00:07<00:04, 231MB/s] 58%|█████▊    | 1.40G/2.41G [00:07<00:04, 248MB/s]
+54.9s	81	 58%|█████▊    | 1.40G/2.41G [00:07<00:04, 248MB/s] 59%|█████▉    | 1.43G/2.41G [00:07<00:03, 249MB/s]
+55.0s	82	 59%|█████▉    | 1.43G/2.41G [00:07<00:03, 249MB/s] 60%|██████    | 1.45G/2.41G [00:07<00:03, 244MB/s]
+55.1s	83	 60%|██████    | 1.45G/2.41G [00:07<00:03, 244MB/s] 61%|██████▏   | 1.48G/2.41G [00:07<00:03, 241MB/s]
+55.2s	84	 61%|██████▏   | 1.48G/2.41G [00:07<00:03, 241MB/s] 63%|██████▎   | 1.51G/2.41G [00:07<00:03, 254MB/s]
+55.3s	85	 63%|██████▎   | 1.51G/2.41G [00:07<00:03, 254MB/s] 64%|██████▎   | 1.53G/2.41G [00:07<00:03, 245MB/s]
+55.4s	86	 64%|██████▎   | 1.53G/2.41G [00:07<00:03, 245MB/s] 65%|██████▍   | 1.56G/2.41G [00:08<00:03, 250MB/s]
+55.5s	87	 65%|██████▍   | 1.56G/2.41G [00:08<00:03, 250MB/s] 66%|██████▌   | 1.58G/2.41G [00:08<00:03, 253MB/s]
+55.6s	88	 66%|██████▌   | 1.58G/2.41G [00:08<00:03, 253MB/s] 67%|██████▋   | 1.61G/2.41G [00:08<00:02, 264MB/s]
+55.8s	89	 67%|██████▋   | 1.61G/2.41G [00:08<00:02, 264MB/s] 68%|██████▊   | 1.64G/2.41G [00:08<00:03, 222MB/s]
+55.9s	90	 68%|██████▊   | 1.64G/2.41G [00:08<00:03, 222MB/s] 69%|██████▉   | 1.67G/2.41G [00:08<00:03, 231MB/s]
+56.0s	91	 69%|██████▉   | 1.67G/2.41G [00:08<00:03, 231MB/s] 71%|███████   | 1.70G/2.41G [00:08<00:02, 253MB/s]
+56.1s	92	 71%|███████   | 1.70G/2.41G [00:08<00:02, 253MB/s] 72%|███████▏  | 1.72G/2.41G [00:08<00:02, 256MB/s]
+56.2s	93	 72%|███████▏  | 1.72G/2.41G [00:08<00:02, 256MB/s] 73%|███████▎  | 1.75G/2.41G [00:08<00:02, 267MB/s]
+56.5s	94	 73%|███████▎  | 1.75G/2.41G [00:08<00:02, 267MB/s] 74%|███████▍  | 1.78G/2.41G [00:09<00:03, 171MB/s]
+56.6s	95	 74%|███████▍  | 1.78G/2.41G [00:09<00:03, 171MB/s] 75%|███████▌  | 1.81G/2.41G [00:09<00:02, 198MB/s]
+56.8s	96	 75%|███████▌  | 1.81G/2.41G [00:09<00:02, 198MB/s] 76%|███████▋  | 1.84G/2.41G [00:09<00:03, 166MB/s]
+56.9s	97	 76%|███████▋  | 1.84G/2.41G [00:09<00:03, 166MB/s] 78%|███████▊  | 1.87G/2.41G [00:09<00:02, 191MB/s]
+57.0s	98	 78%|███████▊  | 1.87G/2.41G [00:09<00:02, 191MB/s] 79%|███████▊  | 1.89G/2.41G [00:09<00:02, 197MB/s]
+57.1s	99	 79%|███████▊  | 1.89G/2.41G [00:09<00:02, 197MB/s] 80%|███████▉  | 1.92G/2.41G [00:09<00:02, 214MB/s]
+57.2s	100	 80%|███████▉  | 1.92G/2.41G [00:09<00:02, 214MB/s] 81%|████████  | 1.94G/2.41G [00:09<00:02, 227MB/s]
+57.3s	101	 81%|████████  | 1.94G/2.41G [00:09<00:02, 227MB/s] 82%|████████▏ | 1.97G/2.41G [00:09<00:01, 248MB/s]
+57.4s	102	 82%|████████▏ | 1.97G/2.41G [00:09<00:01, 248MB/s] 83%|████████▎ | 2.00G/2.41G [00:10<00:01, 259MB/s]
+57.5s	103	 83%|████████▎ | 2.00G/2.41G [00:10<00:01, 259MB/s] 84%|████████▍ | 2.03G/2.41G [00:10<00:01, 239MB/s]
+57.6s	104	 84%|████████▍ | 2.03G/2.41G [00:10<00:01, 239MB/s] 85%|████████▌ | 2.06G/2.41G [00:10<00:01, 243MB/s]
+57.7s	105	 85%|████████▌ | 2.06G/2.41G [00:10<00:01, 243MB/s] 86%|████████▋ | 2.08G/2.41G [00:10<00:01, 245MB/s]
+57.8s	106	 86%|████████▋ | 2.08G/2.41G [00:10<00:01, 245MB/s] 88%|████████▊ | 2.11G/2.41G [00:10<00:01, 252MB/s]
+57.9s	107	 88%|████████▊ | 2.11G/2.41G [00:10<00:01, 252MB/s] 89%|████████▉ | 2.14G/2.41G [00:10<00:01, 261MB/s]
+58.0s	108	 89%|████████▉ | 2.14G/2.41G [00:10<00:01, 261MB/s] 90%|████████▉ | 2.16G/2.41G [00:10<00:00, 267MB/s]
+58.2s	109	 90%|████████▉ | 2.16G/2.41G [00:10<00:00, 267MB/s] 91%|█████████ | 2.19G/2.41G [00:10<00:00, 263MB/s]
+58.3s	110	 91%|█████████ | 2.19G/2.41G [00:10<00:00, 263MB/s] 92%|█████████▏| 2.22G/2.41G [00:10<00:00, 236MB/s]
+58.4s	111	 92%|█████████▏| 2.22G/2.41G [00:10<00:00, 236MB/s] 93%|█████████▎| 2.24G/2.41G [00:11<00:00, 237MB/s]
+58.5s	112	 93%|█████████▎| 2.24G/2.41G [00:11<00:00, 237MB/s] 94%|█████████▍| 2.27G/2.41G [00:11<00:00, 217MB/s]
+58.7s	113	 94%|█████████▍| 2.27G/2.41G [00:11<00:00, 217MB/s] 95%|█████████▌| 2.29G/2.41G [00:11<00:00, 179MB/s]
+58.8s	114	 95%|█████████▌| 2.29G/2.41G [00:11<00:00, 179MB/s] 96%|█████████▋| 2.32G/2.41G [00:11<00:00, 187MB/s]
+59.0s	115	 96%|█████████▋| 2.32G/2.41G [00:11<00:00, 187MB/s] 97%|█████████▋| 2.34G/2.41G [00:11<00:00, 207MB/s]
+59.1s	116	 97%|█████████▋| 2.34G/2.41G [00:11<00:00, 207MB/s] 99%|█████████▊| 2.37G/2.41G [00:11<00:00, 220MB/s]
+59.5s	117	 99%|█████████▊| 2.37G/2.41G [00:11<00:00, 220MB/s]100%|█████████▉| 2.39G/2.41G [00:12<00:00, 112MB/s]
+59.6s	118	100%|█████████▉| 2.39G/2.41G [00:12<00:00, 112MB/s]100%|██████████| 2.41G/2.41G [00:12<00:00, 197MB/s]
+59.7s	119	100%|██████████| 2.41G/2.41G [00:12<00:00, 197MB/s]
+59.7s	120	
+59.7s	121	
+66.9s	122	W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+66.9s	123	W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+67.1s	124	W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+67.1s	125	W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+67.1s	126	
+67.1s	127	W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+67.1s	128	W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+81.0s	129	Extracting ...
+109.6s	130	Using SECOND from /tmp/second_data/raw (2968 image pairs) | 1146.3 GB disk free, 31.7 GB RAM free
+109.6s	131	Counting class pixels in the training set ...
+109.8s	132	Image pairs                              2968
+109.8s	133	Image size                          512 x 512
+109.8s	134	Train / Validation / Test pairs    16 / 8 / 8
+109.8s	135	Changed pixels in train (%)             22.41
+111.0s	136	Downloading: "https://download.pytorch.org/models/resnet34-b627a593.pth" to /root/.cache/torch/hub/checkpoints/resnet34-b627a593.pth
+111.0s	137	  0%|          | 0.00/83.3M [00:00<?, ?B/s]
+111.1s	138	  0%|          | 0.00/83.3M [00:00<?, ?B/s]  8%|▊         | 6.62M/83.3M [00:00<00:01, 68.9MB/s]
+111.2s	139	  8%|▊         | 6.62M/83.3M [00:00<00:01, 68.9MB/s] 30%|██▉       | 24.9M/83.3M [00:00<00:00, 140MB/s] 
+111.3s	140	 30%|██▉       | 24.9M/83.3M [00:00<00:00, 140MB/s]  58%|█████▊    | 48.4M/83.3M [00:00<00:00, 188MB/s]
+111.4s	141	 58%|█████▊    | 48.4M/83.3M [00:00<00:00, 188MB/s] 87%|████████▋ | 72.2M/83.3M [00:00<00:00, 212MB/s]
+111.5s	142	 87%|████████▋ | 72.2M/83.3M [00:00<00:00, 212MB/s]100%|██████████| 83.3M/83.3M [00:00<00:00, 195MB/s]
+111.5s	143	100%|██████████| 83.3M/83.3M [00:00<00:00, 195MB/s]
+111.5s	144	
+111.5s	145	
+111.9s	146	Early Fusion               23.0 M parameters
+112.2s	147	SSCD                       24.3 M parameters
+112.6s	148	Bi-SRNet                   25.9 M parameters
+112.8s	149	Bi-SRNet-DF (proposed)     27.0 M parameters
+112.9s	150	/tmp/ipykernel_23/1270324797.py:3: RuntimeWarning: divide by zero encountered in divide
+112.9s	151	  CLASS_WEIGHT = torch.tensor(1 / np.sqrt(counts / counts.sum()), dtype=torch.float32, device=device)
+112.9s	152	
+112.9s	153	/tmp/ipykernel_23/1270324797.py:3: RuntimeWarning: divide by zero encountered in divide
+112.9s	154	  CLASS_WEIGHT = torch.tensor(1 / np.sqrt(counts / counts.sum()), dtype=torch.float32, device=device)
+121.0s	155	Kernel died while waiting for execute reply.
+121.0s	156	Traceback (most recent call last):
+121.0s	157	  File "/usr/local/lib/python3.13/dist-packages/nbclient/client.py", line 949, in async_execute_cell
+121.0s	158	    exec_reply = await self.task_poll_for_reply
+121.0s	159	                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.0s	160	  File "/usr/local/lib/python3.13/dist-packages/nbclient/client.py", line 730, in _async_poll_for_reply
+121.0s	161	    msg = await ensure_async(self.kc.shell_channel.get_msg(timeout=new_timeout))
+121.0s	162	          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.0s	163	  File "/usr/local/lib/python3.13/dist-packages/nbclient/util.py", line 96, in ensure_async
+121.0s	164	    result = await obj
+121.0s	165	             ^^^^^^^^^
+121.0s	166	  File "/usr/local/lib/python3.13/dist-packages/jupyter_client/channels.py", line 224, in get_msg
+121.0s	167	    ready = await self.socket.poll(timeout)
+121.0s	168	            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.0s	169	asyncio.exceptions.CancelledError
+121.0s	170	
+121.0s	171	During handling of the above exception, another exception occurred:
+121.0s	172	
+121.0s	173	Traceback (most recent call last):
+121.1s	174	  File "<string>", line 1, in <module>
+121.1s	175	    import sys;import papermill as pm;pm.execute_notebook("__notebook__.ipynb","__notebook__.ipynb",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)
+121.1s	176	                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.1s	177	  File "/usr/local/lib/python3.13/dist-packages/papermill/execute.py", line 116, in execute_notebook
+121.1s	178	    nb = papermill_engines.execute_notebook_with_engine(
+121.1s	179	        engine_name,
+121.1s	180	    ...<9 lines>...
+121.1s	181	        **engine_kwargs,
+121.1s	182	    )
+121.1s	183	  File "/usr/local/lib/python3.13/dist-packages/papermill/engines.py", line 49, in execute_notebook_with_engine
+121.1s	184	    return self.get_engine(engine_name).execute_notebook(nb, kernel_name, **kwargs)
+121.1s	185	           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.1s	186	  File "/usr/local/lib/python3.13/dist-packages/papermill/engines.py", line 371, in execute_notebook
+121.1s	187	    cls.execute_managed_notebook(nb_man, kernel_name, log_output=log_output, **kwargs)
+121.1s	188	    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+121.1s	189	  File "/usr/local/lib/python3.13/dist-packages/papermill/engines.py", line 443, in execute_managed_notebook
+121.1s	190	    return PapermillNotebookClient(nb_man, **final_kwargs).execute()
+121.1s	191	           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+121.1s	192	  File "/usr/local/lib/python3.13/dist-packages/papermill/clientwrap.py", line 45, in execute
+121.1s	193	    self.papermill_execute_cells()
+121.1s	194	    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+121.1s	195	  File "/usr/local/lib/python3.13/dist-packages/papermill/clientwrap.py", line 72, in papermill_execute_cells
+121.1s	196	    self.execute_cell(cell, index)
+121.1s	197	    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+121.1s	198	  File "/usr/local/lib/python3.13/dist-packages/nbclient/util.py", line 84, in wrapped
+121.1s	199	    return just_run(coro(*args, **kwargs))
+121.1s	200	  File "/usr/local/lib/python3.13/dist-packages/nbclient/util.py", line 62, in just_run
+121.1s	201	    return loop.run_until_complete(coro)
+121.1s	202	           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+121.1s	203	  File "/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+121.1s	204	    return future.result()
+121.1s	205	           ~~~~~~~~~~~~~^^
+121.1s	206	  File "/usr/local/lib/python3.13/dist-packages/nbclient/client.py", line 953, in async_execute_cell
+121.1s	207	    raise DeadKernelError("Kernel died")
+121.1s	208	nbclient.exceptions.DeadKernelError: Kernel died
+123.0s	209	/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+123.0s	210	  cells[i][c] = re.sub('\\\\\|', '|', cell)
+123.3s	211	/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+123.3s	212	  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+124.0s	213	[NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+124.1s	214	[NbConvertApp] Writing 123710 bytes to __notebook__.ipynb
+126.5s	215	[NbConvertApp] Converting notebook __notebook__.ipynb to html
+126.9s	216	[NbConvertApp] Support files will be in __results___files/
+126.9s	217	[NbConvertApp] Making directory __results___files
+126.9s	218	[NbConvertApp] Writing 532039 bytes to __results__.html

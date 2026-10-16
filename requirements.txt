@@ -1,10 +1,12 @@
-# Python 3.11. Versions used for every result in this repository.
-torch==2.14.0
-torchvision==0.29.0
-numpy==2.4.6
-scipy==1.17.1
-pillow==12.3.0
-matplotlib==3.11.2
-gdown==6.4.0
-openpyxl==3.1.5
-formulas==1.3.4
+# Training (the notebooks install what they need on Kaggle/Colab)
+torch>=2.1
+torchvision>=0.16
+numpy
+pandas
+matplotlib
+pillow
+gdown
+psutil
+openpyxl
+# Rebuilding the notebook from tools/build_512_notebook.py
+nbformat

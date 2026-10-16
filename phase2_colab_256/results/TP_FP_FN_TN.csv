@@ -1,0 +1,8 @@
+,Model,Loss,TP (True Positive),FP (False Positive),FN (False Negative),TN (True Negative),TPR (True Positive Rate) = Recall %,FPR (False Positive Rate) %,FNR (False Negative Rate) %,TNR (True Negative Rate) = Specificity %,Precision %
+1,Early,CE (Cross-Entropy),8120542,3183384,7049054,59503788,53.53,5.08,46.47,94.92,71.84
+2,SSCD,CE (Cross-Entropy),8422616,2842914,6746980,59844258,55.52,4.54,44.48,95.46,74.76
+3,Bi-SRNet,CE (Cross-Entropy),8942384,3410490,6227212,59276682,58.95,5.44,41.05,94.56,72.39
+4,Bi-SRNet,WCE (Weighted Cross-Entropy),8922956,3181696,6246640,59505476,58.82,5.08,41.18,94.92,73.72
+5,Bi-SRNet,Focal loss,8644560,2994666,6525036,59692506,56.99,4.78,43.01,95.22,74.27
+6,Bi-SRNet,CE (Cross-Entropy) + Dice,9377790,3798284,5791806,58888888,61.82,6.06,38.18,93.94,71.17
+7,Bi-SRNet,WCE (Weighted Cross-Entropy) + Dice,9914580,4714060,5255016,57973112,65.36,7.52,34.64,92.48,67.78

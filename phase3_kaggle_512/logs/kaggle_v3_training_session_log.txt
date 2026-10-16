@@ -1,0 +1,256 @@
+7.4s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.4s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.4s 3 0.00s - to python to disable frozen modules.
+7.4s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.0s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.0s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.0s 7 0.00s - to python to disable frozen modules.
+8.0s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+23.3s 9 PyTorch 2.11.0+cu128 | GPU: Tesla T4, Tesla T4 | results -> /kaggle/working/SECOND_SCD_512/results
+23.3s 10 Looking for SECOND ... 1148.8 GB disk free, 31.9 GB RAM free
+23.3s 11 SECOND not found locally - downloading from Google Drive ...
+29.6s 12 Downloading...
+29.6s 13 From (original): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc
+29.6s 14 From (redirected): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc&confirm=t&uuid=bb83d492-f50d-41d5-a8c9-d54e3fb7c55e
+29.6s 15 To: /tmp/second_data/second.rar
+29.6s 16 
+29.6s 17 Downloading...
+29.6s 18 From (original): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc
+29.6s 19 From (redirected): https://drive.google.com/uc?id=1QlAdzrHpfBIOZ6SK78yHF2i1u6tikmBc&confirm=t&uuid=bb83d492-f50d-41d5-a8c9-d54e3fb7c55e
+29.6s 20 To: /tmp/second_data/second.rar
+29.6s 21 0%|          | 0.00/2.41G [00:00<?, ?B/s]
+29.7s 22 0%|          | 0.00/2.41G [00:00<?, ?B/s]  0%|          | 5.77M/2.41G [00:00<00:42, 56.9MB/s]
+29.8s 23 0%|          | 5.77M/2.41G [00:00<00:42, 56.9MB/s]  1%|          | 24.6M/2.41G [00:00<00:17, 134MB/s]
+29.9s 24 1%|          | 24.6M/2.41G [00:00<00:17, 134MB/s]   2%|▏         | 39.8M/2.41G [00:00<00:16, 141MB/s]
+30.1s 25 2%|▏         | 39.8M/2.41G [00:00<00:16, 141MB/s]  2%|▏         | 54.0M/2.41G [00:00<00:18, 131MB/s]
+30.2s 26 2%|▏         | 54.0M/2.41G [00:00<00:18, 131MB/s]  3%|▎         | 74.4M/2.41G [00:00<00:15, 155MB/s]
+30.3s 27 3%|▎         | 74.4M/2.41G [00:00<00:15, 155MB/s]  4%|▍         | 93.3M/2.41G [00:00<00:15, 152MB/s]
+30.4s 28 4%|▍         | 93.3M/2.41G [00:00<00:15, 152MB/s]  5%|▍         | 113M/2.41G [00:00<00:13, 164MB/s]
+30.5s 29 5%|▍         | 113M/2.41G [00:00<00:13, 164MB/s]   5%|▌         | 132M/2.41G [00:00<00:13, 169MB/s]
+30.6s 30 5%|▌         | 132M/2.41G [00:00<00:13, 169MB/s]  6%|▌         | 149M/2.41G [00:00<00:14, 156MB/s]
+30.7s 31 6%|▌         | 149M/2.41G [00:00<00:14, 156MB/s]  7%|▋         | 166M/2.41G [00:01<00:14, 158MB/s]
+30.8s 32 7%|▋         | 166M/2.41G [00:01<00:14, 158MB/s]  8%|▊         | 187M/2.41G [00:01<00:12, 174MB/s]
+30.9s 33 8%|▊         | 187M/2.41G [00:01<00:12, 174MB/s]  9%|▊         | 206M/2.41G [00:01<00:12, 175MB/s]
+31.0s 34 9%|▊         | 206M/2.41G [00:01<00:12, 175MB/s]  9%|▉         | 228M/2.41G [00:01<00:11, 188MB/s]
+31.1s 35 9%|▉         | 228M/2.41G [00:01<00:11, 188MB/s] 10%|█         | 251M/2.41G [00:01<00:10, 198MB/s]
+31.4s 36 10%|█         | 251M/2.41G [00:01<00:10, 198MB/s] 11%|█▏        | 271M/2.41G [00:01<00:14, 150MB/s]
+31.5s 37 11%|█▏        | 271M/2.41G [00:01<00:14, 150MB/s] 12%|█▏        | 291M/2.41G [00:01<00:13, 159MB/s]
+31.6s 38 12%|█▏        | 291M/2.41G [00:01<00:13, 159MB/s] 13%|█▎        | 309M/2.41G [00:01<00:12, 162MB/s]
+31.7s 39 13%|█▎        | 309M/2.41G [00:01<00:12, 162MB/s] 14%|█▎        | 331M/2.41G [00:02<00:12, 171MB/s]
+31.8s 40 14%|█▎        | 331M/2.41G [00:02<00:12, 171MB/s] 15%|█▍        | 350M/2.41G [00:02<00:11, 175MB/s]
+31.9s 41 15%|█▍        | 350M/2.41G [00:02<00:11, 175MB/s] 15%|█▌        | 371M/2.41G [00:02<00:10, 186MB/s]
+32.0s 42 15%|█▌        | 371M/2.41G [00:02<00:10, 186MB/s] 16%|█▌        | 391M/2.41G [00:02<00:11, 171MB/s]
+32.1s 43 16%|█▌        | 391M/2.41G [00:02<00:11, 171MB/s] 17%|█▋        | 415M/2.41G [00:02<00:10, 190MB/s]
+32.2s 44 17%|█▋        | 415M/2.41G [00:02<00:10, 190MB/s] 18%|█▊        | 435M/2.41G [00:02<00:10, 192MB/s]
+32.3s 45 18%|█▊        | 435M/2.41G [00:02<00:10, 192MB/s] 19%|█▉        | 457M/2.41G [00:02<00:09, 199MB/s]
+32.5s 46 19%|█▉        | 457M/2.41G [00:02<00:09, 199MB/s] 20%|█▉        | 478M/2.41G [00:02<00:11, 168MB/s]
+32.6s 47 20%|█▉        | 478M/2.41G [00:02<00:11, 168MB/s] 21%|██        | 500M/2.41G [00:02<00:10, 182MB/s]
+32.7s 48 21%|██        | 500M/2.41G [00:02<00:10, 182MB/s] 22%|██▏       | 524M/2.41G [00:03<00:09, 197MB/s]
+32.8s 49 22%|██▏       | 524M/2.41G [00:03<00:09, 197MB/s] 23%|██▎       | 545M/2.41G [00:03<00:10, 180MB/s]
+32.9s 50 23%|██▎       | 545M/2.41G [00:03<00:10, 180MB/s] 23%|██▎       | 565M/2.41G [00:03<00:09, 185MB/s]
+33.1s 51 23%|██▎       | 565M/2.41G [00:03<00:09, 185MB/s] 24%|██▍       | 584M/2.41G [00:03<00:10, 170MB/s]
+33.2s 52 24%|██▍       | 584M/2.41G [00:03<00:10, 170MB/s] 25%|██▌       | 605M/2.41G [00:03<00:11, 156MB/s]
+33.3s 53 25%|██▌       | 605M/2.41G [00:03<00:11, 156MB/s] 26%|██▌       | 624M/2.41G [00:03<00:10, 166MB/s]
+33.4s 54 26%|██▌       | 624M/2.41G [00:03<00:10, 166MB/s] 27%|██▋       | 646M/2.41G [00:03<00:09, 178MB/s]
+33.5s 55 27%|██▋       | 646M/2.41G [00:03<00:09, 178MB/s] 28%|██▊       | 668M/2.41G [00:03<00:09, 189MB/s]
+33.6s 56 28%|██▊       | 668M/2.41G [00:03<00:09, 189MB/s] 29%|██▊       | 690M/2.41G [00:03<00:08, 198MB/s]
+33.7s 57 29%|██▊       | 690M/2.41G [00:03<00:08, 198MB/s] 30%|██▉       | 711M/2.41G [00:04<00:08, 200MB/s]
+34.1s 58 30%|██▉       | 711M/2.41G [00:04<00:08, 200MB/s] 30%|███       | 731M/2.41G [00:04<00:14, 114MB/s]
+34.2s 59 30%|███       | 731M/2.41G [00:04<00:14, 114MB/s] 31%|███▏      | 753M/2.41G [00:04<00:12, 133MB/s]
+34.4s 60 31%|███▏      | 753M/2.41G [00:04<00:12, 133MB/s] 32%|███▏      | 775M/2.41G [00:04<00:13, 124MB/s]
+34.5s 61 32%|███▏      | 775M/2.41G [00:04<00:13, 124MB/s] 33%|███▎      | 797M/2.41G [00:04<00:11, 143MB/s]
+34.7s 62 33%|███▎      | 797M/2.41G [00:04<00:11, 143MB/s] 34%|███▍      | 815M/2.41G [00:05<00:13, 119MB/s]
+34.9s 63 34%|███▍      | 815M/2.41G [00:05<00:13, 119MB/s] 35%|███▍      | 837M/2.41G [00:05<00:13, 117MB/s]
+35.1s 64 35%|███▍      | 837M/2.41G [00:05<00:13, 117MB/s] 35%|███▌      | 851M/2.41G [00:05<00:14, 108MB/s]
+35.2s 65 35%|███▌      | 851M/2.41G [00:05<00:14, 108MB/s] 36%|███▌      | 869M/2.41G [00:05<00:12, 121MB/s]
+35.4s 66 36%|███▌      | 869M/2.41G [00:05<00:12, 121MB/s] 37%|███▋      | 883M/2.41G [00:05<00:14, 105MB/s]
+35.5s 67 37%|███▋      | 883M/2.41G [00:05<00:14, 105MB/s] 37%|███▋      | 895M/2.41G [00:05<00:14, 104MB/s]
+35.6s 68 37%|███▋      | 895M/2.41G [00:05<00:14, 104MB/s] 38%|███▊      | 906M/2.41G [00:05<00:14, 106MB/s]
+35.7s 69 38%|███▊      | 906M/2.41G [00:05<00:14, 106MB/s] 38%|███▊      | 918M/2.41G [00:06<00:13, 107MB/s]
+35.8s 70 38%|███▊      | 918M/2.41G [00:06<00:13, 107MB/s] 39%|███▊      | 930M/2.41G [00:06<00:14, 102MB/s]
+35.9s 71 39%|███▊      | 930M/2.41G [00:06<00:14, 102MB/s] 39%|███▉      | 944M/2.41G [00:06<00:13, 109MB/s]
+36.0s 72 39%|███▉      | 944M/2.41G [00:06<00:13, 109MB/s] 40%|███▉      | 957M/2.41G [00:06<00:12, 115MB/s]
+36.1s 73 40%|███▉      | 957M/2.41G [00:06<00:12, 115MB/s] 40%|████      | 969M/2.41G [00:06<00:12, 116MB/s]
+36.3s 74 40%|████      | 969M/2.41G [00:06<00:12, 116MB/s] 41%|████      | 981M/2.41G [00:06<00:12, 115MB/s]
+36.4s 75 41%|████      | 981M/2.41G [00:06<00:12, 115MB/s] 41%|████▏     | 993M/2.41G [00:06<00:13, 107MB/s]
+36.5s 76 41%|████▏     | 993M/2.41G [00:06<00:13, 107MB/s] 42%|████▏     | 1.01G/2.41G [00:06<00:10, 133MB/s]
+36.6s 77 42%|████▏     | 1.01G/2.41G [00:06<00:10, 133MB/s] 43%|████▎     | 1.03G/2.41G [00:06<00:08, 155MB/s]
+36.7s 78 43%|████▎     | 1.03G/2.41G [00:06<00:08, 155MB/s] 44%|████▍     | 1.05G/2.41G [00:07<00:08, 164MB/s]
+36.8s 79 44%|████▍     | 1.05G/2.41G [00:07<00:08, 164MB/s] 45%|████▍     | 1.07G/2.41G [00:07<00:07, 172MB/s]
+36.9s 80 45%|████▍     | 1.07G/2.41G [00:07<00:07, 172MB/s] 45%|████▌     | 1.09G/2.41G [00:07<00:08, 149MB/s]
+37.1s 81 45%|████▌     | 1.09G/2.41G [00:07<00:08, 149MB/s] 46%|████▌     | 1.11G/2.41G [00:07<00:08, 146MB/s]
+37.2s 82 46%|████▌     | 1.11G/2.41G [00:07<00:08, 146MB/s] 47%|████▋     | 1.13G/2.41G [00:07<00:07, 163MB/s]
+37.3s 83 47%|████▋     | 1.13G/2.41G [00:07<00:07, 163MB/s] 48%|████▊     | 1.15G/2.41G [00:07<00:07, 171MB/s]
+37.4s 84 48%|████▊     | 1.15G/2.41G [00:07<00:07, 171MB/s] 48%|████▊     | 1.17G/2.41G [00:07<00:08, 152MB/s]
+37.5s 85 48%|████▊     | 1.17G/2.41G [00:07<00:08, 152MB/s] 49%|████▉     | 1.19G/2.41G [00:07<00:07, 165MB/s]
+37.9s 86 49%|████▉     | 1.19G/2.41G [00:07<00:07, 165MB/s] 50%|████▉     | 1.20G/2.41G [00:08<00:12, 98.6MB/s]
+38.0s 87 50%|████▉     | 1.20G/2.41G [00:08<00:12, 98.6MB/s] 51%|█████     | 1.22G/2.41G [00:08<00:10, 114MB/s]
+38.1s 88 51%|█████     | 1.22G/2.41G [00:08<00:10, 114MB/s]  51%|█████▏    | 1.24G/2.41G [00:08<00:09, 126MB/s]
+38.2s 89 51%|█████▏    | 1.24G/2.41G [00:08<00:09, 126MB/s] 52%|█████▏    | 1.25G/2.41G [00:08<00:09, 124MB/s]
+38.3s 90 52%|█████▏    | 1.25G/2.41G [00:08<00:09, 124MB/s] 53%|█████▎    | 1.27G/2.41G [00:08<00:08, 133MB/s]
+38.4s 91 53%|█████▎    | 1.27G/2.41G [00:08<00:08, 133MB/s] 53%|█████▎    | 1.29G/2.41G [00:08<00:08, 129MB/s]
+38.5s 92 53%|█████▎    | 1.29G/2.41G [00:08<00:08, 129MB/s] 54%|█████▍    | 1.31G/2.41G [00:08<00:07, 146MB/s]
+38.6s 93 54%|█████▍    | 1.31G/2.41G [00:08<00:07, 146MB/s] 55%|█████▌    | 1.33G/2.41G [00:08<00:06, 165MB/s]
+38.7s 94 55%|█████▌    | 1.33G/2.41G [00:08<00:06, 165MB/s] 56%|█████▌    | 1.35G/2.41G [00:09<00:06, 164MB/s]
+38.8s 95 56%|█████▌    | 1.35G/2.41G [00:09<00:06, 164MB/s] 57%|█████▋    | 1.37G/2.41G [00:09<00:05, 177MB/s]
+38.9s 96 57%|█████▋    | 1.37G/2.41G [00:09<00:05, 177MB/s] 58%|█████▊    | 1.39G/2.41G [00:09<00:05, 177MB/s]
+39.1s 97 58%|█████▊    | 1.39G/2.41G [00:09<00:05, 177MB/s] 58%|█████▊    | 1.40G/2.41G [00:09<00:05, 179MB/s]
+39.2s 98 58%|█████▊    | 1.40G/2.41G [00:09<00:05, 179MB/s] 59%|█████▉    | 1.42G/2.41G [00:09<00:05, 173MB/s]
+39.3s 99 59%|█████▉    | 1.42G/2.41G [00:09<00:05, 173MB/s] 60%|█████▉    | 1.44G/2.41G [00:09<00:05, 175MB/s]
+39.4s 100 60%|█████▉    | 1.44G/2.41G [00:09<00:05, 175MB/s] 61%|██████    | 1.46G/2.41G [00:09<00:05, 175MB/s]
+39.5s 101 61%|██████    | 1.46G/2.41G [00:09<00:05, 175MB/s] 61%|██████▏   | 1.48G/2.41G [00:09<00:05, 173MB/s]
+39.6s 102 61%|██████▏   | 1.48G/2.41G [00:09<00:05, 173MB/s] 62%|██████▏   | 1.50G/2.41G [00:09<00:04, 185MB/s]
+39.7s 103 62%|██████▏   | 1.50G/2.41G [00:09<00:04, 185MB/s] 63%|██████▎   | 1.52G/2.41G [00:10<00:04, 187MB/s]
+39.8s 104 63%|██████▎   | 1.52G/2.41G [00:10<00:04, 187MB/s] 64%|██████▍   | 1.54G/2.41G [00:10<00:04, 193MB/s]
+39.9s 105 64%|██████▍   | 1.54G/2.41G [00:10<00:04, 193MB/s] 65%|██████▍   | 1.56G/2.41G [00:10<00:04, 199MB/s]
+40.0s 106 65%|██████▍   | 1.56G/2.41G [00:10<00:04, 199MB/s] 66%|██████▌   | 1.58G/2.41G [00:10<00:04, 203MB/s]
+40.1s 107 66%|██████▌   | 1.58G/2.41G [00:10<00:04, 203MB/s] 67%|██████▋   | 1.60G/2.41G [00:10<00:04, 201MB/s]
+40.2s 108 67%|██████▋   | 1.60G/2.41G [00:10<00:04, 201MB/s] 67%|██████▋   | 1.62G/2.41G [00:10<00:03, 201MB/s]
+40.4s 109 67%|██████▋   | 1.62G/2.41G [00:10<00:03, 201MB/s] 68%|██████▊   | 1.64G/2.41G [00:10<00:04, 172MB/s]
+40.5s 110 68%|██████▊   | 1.64G/2.41G [00:10<00:04, 172MB/s] 69%|██████▉   | 1.67G/2.41G [00:10<00:04, 181MB/s]
+40.6s 111 69%|██████▉   | 1.67G/2.41G [00:10<00:04, 181MB/s] 70%|███████   | 1.69G/2.41G [00:10<00:03, 186MB/s]
+40.7s 112 70%|███████   | 1.69G/2.41G [00:10<00:03, 186MB/s] 71%|███████   | 1.70G/2.41G [00:11<00:03, 188MB/s]
+40.8s 113 71%|███████   | 1.70G/2.41G [00:11<00:03, 188MB/s] 72%|███████▏  | 1.72G/2.41G [00:11<00:03, 192MB/s]
+40.9s 114 72%|███████▏  | 1.72G/2.41G [00:11<00:03, 192MB/s] 73%|███████▎  | 1.74G/2.41G [00:11<00:03, 188MB/s]
+41.0s 115 73%|███████▎  | 1.74G/2.41G [00:11<00:03, 188MB/s] 73%|███████▎  | 1.76G/2.41G [00:11<00:03, 187MB/s]
+41.1s 116 73%|███████▎  | 1.76G/2.41G [00:11<00:03, 187MB/s] 74%|███████▍  | 1.78G/2.41G [00:11<00:03, 177MB/s]
+41.2s 117 74%|███████▍  | 1.78G/2.41G [00:11<00:03, 177MB/s] 75%|███████▍  | 1.80G/2.41G [00:11<00:03, 180MB/s]
+41.3s 118 75%|███████▍  | 1.80G/2.41G [00:11<00:03, 180MB/s] 76%|███████▌  | 1.82G/2.41G [00:11<00:03, 187MB/s]
+41.4s 119 76%|███████▌  | 1.82G/2.41G [00:11<00:03, 187MB/s] 77%|███████▋  | 1.84G/2.41G [00:11<00:03, 180MB/s]
+41.5s 120 77%|███████▋  | 1.84G/2.41G [00:11<00:03, 180MB/s] 77%|███████▋  | 1.86G/2.41G [00:11<00:03, 177MB/s]
+41.6s 121 77%|███████▋  | 1.86G/2.41G [00:11<00:03, 177MB/s] 78%|███████▊  | 1.88G/2.41G [00:11<00:03, 169MB/s]
+41.7s 122 78%|███████▊  | 1.88G/2.41G [00:11<00:03, 169MB/s] 79%|███████▉  | 1.90G/2.41G [00:12<00:02, 183MB/s]
+41.9s 123 79%|███████▉  | 1.90G/2.41G [00:12<00:02, 183MB/s] 80%|███████▉  | 1.92G/2.41G [00:12<00:02, 175MB/s]
+42.0s 124 80%|███████▉  | 1.92G/2.41G [00:12<00:02, 175MB/s] 81%|████████  | 1.94G/2.41G [00:12<00:02, 189MB/s]
+42.1s 125 81%|████████  | 1.94G/2.41G [00:12<00:02, 189MB/s] 82%|████████▏ | 1.96G/2.41G [00:12<00:02, 177MB/s]
+42.2s 126 82%|████████▏ | 1.96G/2.41G [00:12<00:02, 177MB/s] 82%|████████▏ | 1.98G/2.41G [00:12<00:02, 175MB/s]
+42.3s 127 82%|████████▏ | 1.98G/2.41G [00:12<00:02, 175MB/s] 83%|████████▎ | 2.00G/2.41G [00:12<00:02, 177MB/s]
+42.4s 128 83%|████████▎ | 2.00G/2.41G [00:12<00:02, 177MB/s] 84%|████████▍ | 2.02G/2.41G [00:12<00:02, 181MB/s]
+42.5s 129 84%|████████▍ | 2.02G/2.41G [00:12<00:02, 181MB/s] 85%|████████▍ | 2.04G/2.41G [00:12<00:02, 182MB/s]
+42.6s 130 85%|████████▍ | 2.04G/2.41G [00:12<00:02, 182MB/s] 85%|████████▌ | 2.05G/2.41G [00:12<00:02, 166MB/s]
+42.7s 131 85%|████████▌ | 2.05G/2.41G [00:12<00:02, 166MB/s] 86%|████████▌ | 2.07G/2.41G [00:13<00:02, 163MB/s]
+42.9s 132 86%|████████▌ | 2.07G/2.41G [00:13<00:02, 163MB/s] 87%|████████▋ | 2.09G/2.41G [00:13<00:02, 147MB/s]
+43.0s 133 87%|████████▋ | 2.09G/2.41G [00:13<00:02, 147MB/s] 88%|████████▊ | 2.11G/2.41G [00:13<00:01, 159MB/s]
+43.1s 134 88%|████████▊ | 2.11G/2.41G [00:13<00:01, 159MB/s] 88%|████████▊ | 2.12G/2.41G [00:13<00:01, 156MB/s]
+43.2s 135 88%|████████▊ | 2.12G/2.41G [00:13<00:01, 156MB/s] 89%|████████▉ | 2.14G/2.41G [00:13<00:01, 169MB/s]
+43.3s 136 89%|████████▉ | 2.14G/2.41G [00:13<00:01, 169MB/s] 90%|█████████ | 2.17G/2.41G [00:13<00:01, 188MB/s]
+43.4s 137 90%|█████████ | 2.17G/2.41G [00:13<00:01, 188MB/s] 91%|█████████ | 2.19G/2.41G [00:13<00:01, 190MB/s]
+43.5s 138 91%|█████████ | 2.19G/2.41G [00:13<00:01, 190MB/s] 92%|█████████▏| 2.21G/2.41G [00:13<00:01, 190MB/s]
+43.6s 139 92%|█████████▏| 2.21G/2.41G [00:13<00:01, 190MB/s] 93%|█████████▎| 2.23G/2.41G [00:13<00:00, 188MB/s]
+43.7s 140 93%|█████████▎| 2.23G/2.41G [00:13<00:00, 188MB/s] 93%|█████████▎| 2.25G/2.41G [00:14<00:00, 191MB/s]
+43.8s 141 93%|█████████▎| 2.25G/2.41G [00:14<00:00, 191MB/s] 94%|█████████▍| 2.27G/2.41G [00:14<00:00, 198MB/s]
+44.0s 142 94%|█████████▍| 2.27G/2.41G [00:14<00:00, 198MB/s] 95%|█████████▌| 2.29G/2.41G [00:14<00:00, 159MB/s]
+44.1s 143 95%|█████████▌| 2.29G/2.41G [00:14<00:00, 159MB/s] 96%|█████████▌| 2.31G/2.41G [00:14<00:00, 169MB/s]
+44.2s 144 96%|█████████▌| 2.31G/2.41G [00:14<00:00, 169MB/s] 97%|█████████▋| 2.33G/2.41G [00:14<00:00, 179MB/s]
+44.4s 145 97%|█████████▋| 2.33G/2.41G [00:14<00:00, 179MB/s] 98%|█████████▊| 2.35G/2.41G [00:14<00:00, 140MB/s]
+44.5s 146 98%|█████████▊| 2.35G/2.41G [00:14<00:00, 140MB/s] 98%|█████████▊| 2.37G/2.41G [00:14<00:00, 150MB/s]
+44.6s 147 98%|█████████▊| 2.37G/2.41G [00:14<00:00, 150MB/s] 99%|█████████▉| 2.39G/2.41G [00:14<00:00, 164MB/s]
+44.7s 148 99%|█████████▉| 2.39G/2.41G [00:14<00:00, 164MB/s]100%|█████████▉| 2.41G/2.41G [00:15<00:00, 160MB/s]
+44.7s 149 100%|█████████▉| 2.41G/2.41G [00:15<00:00, 160MB/s]100%|██████████| 2.41G/2.41G [00:15<00:00, 159MB/s]
+44.8s 150 100%|██████████| 2.41G/2.41G [00:15<00:00, 159MB/s]
+44.8s 151 
+44.8s 152 
+50.7s 153 W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+50.7s 154 W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+50.9s 155 W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+50.9s 156 W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+50.9s 157 
+50.9s 158 W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+50.9s 159 W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)
+61.4s 160 Extracting ...
+90.7s 161 Using SECOND from /tmp/second_data/raw (2968 image pairs) | 1146.3 GB disk free, 31.7 GB RAM free
+90.7s 162 Counting class pixels in the training set ...
+105.6s 163 Image pairs                                    2968
+105.6s 164 Image size                                512 x 512
+105.6s 165 Train / Validation / Test pairs    2077 / 297 / 594
+105.6s 166 Changed pixels in train (%)                   20.07
+106.4s 167 Downloading: "https://download.pytorch.org/models/resnet34-b627a593.pth" to /root/.cache/torch/hub/checkpoints/resnet34-b627a593.pth
+106.4s 168 0%|          | 0.00/83.3M [00:00<?, ?B/s]
+106.5s 169 0%|          | 0.00/83.3M [00:00<?, ?B/s] 25%|██▍       | 20.8M/83.3M [00:00<00:00, 217MB/s]
+106.6s 170 25%|██▍       | 20.8M/83.3M [00:00<00:00, 217MB/s] 50%|████▉     | 41.5M/83.3M [00:00<00:00, 203MB/s]
+106.7s 171 50%|████▉     | 41.5M/83.3M [00:00<00:00, 203MB/s] 73%|███████▎  | 61.0M/83.3M [00:00<00:00, 197MB/s]
+106.8s 172 73%|███████▎  | 61.0M/83.3M [00:00<00:00, 197MB/s] 96%|█████████▌| 79.9M/83.3M [00:00<00:00, 188MB/s]
+106.9s 173 96%|█████████▌| 79.9M/83.3M [00:00<00:00, 188MB/s]100%|██████████| 83.3M/83.3M [00:00<00:00, 194MB/s]
+106.9s 174 100%|██████████| 83.3M/83.3M [00:00<00:00, 194MB/s]
+106.9s 175 
+106.9s 176 
+107.2s 177 Early Fusion               23.0 M parameters
+107.6s 178 SSCD                       24.3 M parameters
+107.9s 179 Bi-SRNet                   25.9 M parameters
+108.1s 180 Bi-SRNet-DF (proposed)     27.0 M parameters
+189.1s 181 Early Fusion           | CE (Cross-Entropy)           | epoch  1/30 | loss 1.866 | val SeK -3.02 | val mIoU 53.44 | 80s
+266.5s 182 Early Fusion           | CE (Cross-Entropy)           | epoch  2/30 | loss 1.391 | val SeK  1.56 | val mIoU 49.42 | 77s
+343.3s 183 Early Fusion           | CE (Cross-Entropy)           | epoch  3/30 | loss 1.301 | val SeK  1.52 | val mIoU 53.25 | 76s
+419.8s 184 Early Fusion           | CE (Cross-Entropy)           | epoch  4/30 | loss 1.267 | val SeK  4.82 | val mIoU 59.62 | 76s
+496.5s 185 Early Fusion           | CE (Cross-Entropy)           | epoch  5/30 | loss 1.235 | val SeK -0.40 | val mIoU 53.35 | 76s
+573.3s 186 Early Fusion           | CE (Cross-Entropy)           | epoch  6/30 | loss 1.197 | val SeK  3.38 | val mIoU 58.97 | 76s
+650.0s 187 Early Fusion           | CE (Cross-Entropy)           | epoch  7/30 | loss 1.165 | val SeK  4.99 | val mIoU 59.72 | 76s
+726.9s 188 Early Fusion           | CE (Cross-Entropy)           | epoch  8/30 | loss 1.153 | val SeK  6.61 | val mIoU 60.86 | 76s
+804.0s 189 Early Fusion           | CE (Cross-Entropy)           | epoch  9/30 | loss 1.142 | val SeK  8.25 | val mIoU 63.46 | 77s
+880.8s 190 Early Fusion           | CE (Cross-Entropy)           | epoch 10/30 | loss 1.111 | val SeK  9.02 | val mIoU 63.82 | 76s
+957.2s 191 Early Fusion           | CE (Cross-Entropy)           | epoch 11/30 | loss 1.088 | val SeK  8.28 | val mIoU 63.09 | 76s
+1033.6s 192 Early Fusion           | CE (Cross-Entropy)           | epoch 12/30 | loss 1.073 | val SeK  9.84 | val mIoU 63.76 | 76s
+1109.7s 193 Early Fusion           | CE (Cross-Entropy)           | epoch 13/30 | loss 1.051 | val SeK  8.38 | val mIoU 62.71 | 76s
+1185.0s 194 Early Fusion           | CE (Cross-Entropy)           | epoch 14/30 | loss 1.031 | val SeK 10.24 | val mIoU 64.02 | 75s
+1260.1s 195 Early Fusion           | CE (Cross-Entropy)           | epoch 15/30 | loss 1.015 | val SeK 10.75 | val mIoU 64.89 | 75s
+1335.6s 196 Early Fusion           | CE (Cross-Entropy)           | epoch 16/30 | loss 0.998 | val SeK 11.90 | val mIoU 65.67 | 75s
+1410.5s 197 Early Fusion           | CE (Cross-Entropy)           | epoch 17/30 | loss 0.987 | val SeK 11.48 | val mIoU 64.80 | 74s
+1486.3s 198 Early Fusion           | CE (Cross-Entropy)           | epoch 18/30 | loss 0.961 | val SeK 12.52 | val mIoU 66.39 | 76s
+1562.1s 199 Early Fusion           | CE (Cross-Entropy)           | epoch 19/30 | loss 0.956 | val SeK 11.98 | val mIoU 65.29 | 75s
+1638.0s 200 Early Fusion           | CE (Cross-Entropy)           | epoch 20/30 | loss 0.939 | val SeK 11.76 | val mIoU 65.07 | 75s
+1713.9s 201 Early Fusion           | CE (Cross-Entropy)           | epoch 21/30 | loss 0.920 | val SeK 12.87 | val mIoU 66.54 | 76s
+1790.1s 202 Early Fusion           | CE (Cross-Entropy)           | epoch 22/30 | loss 0.915 | val SeK 12.97 | val mIoU 66.32 | 76s
+1866.2s 203 Early Fusion           | CE (Cross-Entropy)           | epoch 23/30 | loss 0.902 | val SeK 13.67 | val mIoU 66.93 | 76s
+1942.6s 204 Early Fusion           | CE (Cross-Entropy)           | epoch 24/30 | loss 0.898 | val SeK 13.49 | val mIoU 66.25 | 76s
+2018.5s 205 Early Fusion           | CE (Cross-Entropy)           | epoch 25/30 | loss 0.885 | val SeK 13.30 | val mIoU 66.44 | 76s
+2094.5s 206 Early Fusion           | CE (Cross-Entropy)           | epoch 26/30 | loss 0.877 | val SeK 12.17 | val mIoU 65.27 | 76s
+2170.6s 207 Early Fusion           | CE (Cross-Entropy)           | epoch 27/30 | loss 0.868 | val SeK 12.47 | val mIoU 65.76 | 76s
+2246.2s 208 Early Fusion           | CE (Cross-Entropy)           | epoch 28/30 | loss 0.864 | val SeK 12.61 | val mIoU 65.65 | 75s
+2322.6s 209 Early Fusion           | CE (Cross-Entropy)           | epoch 29/30 | loss 0.858 | val SeK 13.05 | val mIoU 66.16 | 76s
+2398.5s 210 Early Fusion           | CE (Cross-Entropy)           | epoch 30/30 | loss 0.860 | val SeK 11.70 | val mIoU 64.99 | 76s
+2531.3s 211 SSCD                   | CE (Cross-Entropy)           | epoch  1/30 | loss 1.560 | val SeK  5.15 | val mIoU 60.33 | 107s
+2638.0s 212 SSCD                   | CE (Cross-Entropy)           | epoch  2/30 | loss 1.216 | val SeK  8.96 | val mIoU 62.22 | 106s
+2744.9s 213 SSCD                   | CE (Cross-Entropy)           | epoch  3/30 | loss 1.143 | val SeK 10.55 | val mIoU 64.66 | 106s
+2851.5s 214 SSCD                   | CE (Cross-Entropy)           | epoch  4/30 | loss 1.101 | val SeK 11.25 | val mIoU 64.93 | 106s
+2958.4s 215 SSCD                   | CE (Cross-Entropy)           | epoch  5/30 | loss 1.064 | val SeK 10.19 | val mIoU 64.64 | 106s
+3064.8s 216 SSCD                   | CE (Cross-Entropy)           | epoch  6/30 | loss 1.025 | val SeK 12.95 | val mIoU 65.66 | 106s
+3171.4s 217 SSCD                   | CE (Cross-Entropy)           | epoch  7/30 | loss 1.011 | val SeK 13.93 | val mIoU 66.89 | 106s
+3278.5s 218 SSCD                   | CE (Cross-Entropy)           | epoch  8/30 | loss 0.988 | val SeK 14.02 | val mIoU 66.82 | 107s
+3385.2s 219 SSCD                   | CE (Cross-Entropy)           | epoch  9/30 | loss 0.974 | val SeK 13.48 | val mIoU 66.68 | 106s
+3491.1s 220 SSCD                   | CE (Cross-Entropy)           | epoch 10/30 | loss 0.954 | val SeK 16.27 | val mIoU 68.63 | 105s
+3598.6s 221 SSCD                   | CE (Cross-Entropy)           | epoch 11/30 | loss 0.928 | val SeK 14.75 | val mIoU 66.78 | 107s
+3705.5s 222 SSCD                   | CE (Cross-Entropy)           | epoch 12/30 | loss 0.921 | val SeK 15.58 | val mIoU 67.53 | 106s
+3812.2s 223 SSCD                   | CE (Cross-Entropy)           | epoch 13/30 | loss 0.895 | val SeK 15.98 | val mIoU 68.08 | 106s
+3919.3s 224 SSCD                   | CE (Cross-Entropy)           | epoch 14/30 | loss 0.886 | val SeK 16.58 | val mIoU 68.27 | 107s
+4026.4s 225 SSCD                   | CE (Cross-Entropy)           | epoch 15/30 | loss 0.869 | val SeK 17.17 | val mIoU 68.97 | 107s
+4133.7s 226 SSCD                   | CE (Cross-Entropy)           | epoch 16/30 | loss 0.856 | val SeK 17.80 | val mIoU 69.74 | 107s
+4240.8s 227 SSCD                   | CE (Cross-Entropy)           | epoch 17/30 | loss 0.841 | val SeK 17.40 | val mIoU 69.23 | 107s
+4348.0s 228 SSCD                   | CE (Cross-Entropy)           | epoch 18/30 | loss 0.824 | val SeK 17.82 | val mIoU 69.26 | 107s
+4454.6s 229 SSCD                   | CE (Cross-Entropy)           | epoch 19/30 | loss 0.815 | val SeK 17.96 | val mIoU 69.60 | 106s
+4561.7s 230 SSCD                   | CE (Cross-Entropy)           | epoch 20/30 | loss 0.805 | val SeK 17.75 | val mIoU 69.27 | 107s
+4668.4s 231 SSCD                   | CE (Cross-Entropy)           | epoch 21/30 | loss 0.781 | val SeK 18.25 | val mIoU 70.12 | 106s
+4774.4s 232 SSCD                   | CE (Cross-Entropy)           | epoch 22/30 | loss 0.782 | val SeK 18.71 | val mIoU 70.33 | 105s
+4881.1s 233 SSCD                   | CE (Cross-Entropy)           | epoch 23/30 | loss 0.760 | val SeK 18.73 | val mIoU 70.18 | 106s
+4988.0s 234 SSCD                   | CE (Cross-Entropy)           | epoch 24/30 | loss 0.757 | val SeK 18.62 | val mIoU 70.01 | 106s
+5094.4s 235 SSCD                   | CE (Cross-Entropy)           | epoch 25/30 | loss 0.747 | val SeK 18.79 | val mIoU 70.10 | 106s
+5201.8s 236 SSCD                   | CE (Cross-Entropy)           | epoch 26/30 | loss 0.746 | val SeK 19.05 | val mIoU 70.32 | 107s
+5308.4s 237 SSCD                   | CE (Cross-Entropy)           | epoch 27/30 | loss 0.731 | val SeK 18.89 | val mIoU 70.24 | 106s
+5414.5s 238 SSCD                   | CE (Cross-Entropy)           | epoch 28/30 | loss 0.728 | val SeK 18.59 | val mIoU 70.02 | 106s
+5520.0s 239 SSCD                   | CE (Cross-Entropy)           | epoch 29/30 | loss 0.730 | val SeK 18.90 | val mIoU 70.22 | 105s
+5626.1s 240 SSCD                   | CE (Cross-Entropy)           | epoch 30/30 | loss 0.723 | val SeK 18.84 | val mIoU 70.30 | 106s
+5781.6s 241 Bi-SRNet               | CE (Cross-Entropy)           | epoch  1/30 | loss 1.786 | val SeK  5.70 | val mIoU 61.14 | 128s
+5909.3s 242 Bi-SRNet               | CE (Cross-Entropy)           | epoch  2/30 | loss 1.412 | val SeK 10.27 | val mIoU 63.46 | 127s
+6038.3s 243 Bi-SRNet               | CE (Cross-Entropy)           | epoch  3/30 | loss 1.330 | val SeK 11.30 | val mIoU 65.87 | 128s
+6167.0s 244 Bi-SRNet               | CE (Cross-Entropy)           | epoch  4/30 | loss 1.277 | val SeK 11.24 | val mIoU 65.08 | 128s
+6296.4s 245 Bi-SRNet               | CE (Cross-Entropy)           | epoch  5/30 | loss 1.229 | val SeK 11.89 | val mIoU 65.59 | 129s
+6762.8s 246 Killed
+6765.6s 247 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+6765.6s 248 cells[i][c] = re.sub('\\\\\|', '|', cell)
+6766.0s 249 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+6766.0s 250 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+6767.8s 251 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+6767.9s 252 [NbConvertApp] Writing 131681 bytes to __notebook__.ipynb
+6770.4s 253 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+6770.8s 254 [NbConvertApp] Support files will be in __results___files/
+6770.8s 255 [NbConvertApp] Making directory __results___files
+6770.8s 256 [NbConvertApp] Writing 540086 bytes to __results__.html
